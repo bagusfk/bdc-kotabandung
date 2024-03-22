@@ -11,25 +11,25 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-200">
                     <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                         <img class="w-4 mr-2" src="{{ asset('assets/house-solid.svg') }}">
                         {{ __('Home') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-200">
                     <x-nav-link :href="route('company_profile')" :active="request()->routeIs('company_profile')">
                         <img class="w-3 mr-2" src="{{ asset('assets/building-solid.svg') }}">
                         {{ __('Company') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-200">
                     <x-nav-link :href="route('dashboard')">
                         <img class="w-4 mr-2" src="{{ asset('assets/newspaper-solid.svg') }}">
                         {{ __('E-Catalog') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-110 duration-200">
                     <x-nav-link :href="route('dashboard')">
                         <img class="w-4 mr-2" src="{{ asset('assets/users-solid.svg') }}">
                         {{ __('Event') }}
@@ -40,7 +40,81 @@
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
 
-                {{-- <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a> --}}
+                @if (Route::has('login'))
+                    @auth
+                        <button id="modalLink" class="hidden font-semibold text-g ray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Log in</button>
+                @else
+                        <button id="modalLink" class="text-white py-[.5rem] dark:text-gray-400 dark:hover:text-white bg-[#50c2ff] hover:bg-transparent hover:border-[#50c2ff] hover:text-[#50c2ff] hover:border px-[1rem] rounded-md">Login</button>
+                    @endauth
+                @endif
+                <div id="myModal" class="modal absolute w-full justify-center items-center h-screen left-0 bg-black bg-opacity-50 top-0 z-20 hidden">
+                    <div class="modal-content w-full h-screen flex justify-center items-center fixed">
+                        <div class="h-fit max-md:w-full lg:w-96 px-6 py-4 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+                            <div class="w-full flex justify-end">
+                                <button id="modalCloseBtn" class="cursor-pointer">
+                                    <img class="w-4 mr-2" src="{{ asset('assets/xmark-solid.svg') }}">
+                                </button>
+                            </div>
+                            <!-- Session Status -->
+                            <x-auth-session-status class="mb-4" :status="session('status')" />
+                            <div class="flex justify-center">
+                                <img class="w-20" src="{{ asset('assets/xmark-solid.svg') }}" alt="">
+                            </div>
+                            <h2 class="text-[1rem] text-center my-5">Silahkan Masuk</h2>
+
+                            <form method="POST" action="{{ route('login') }}">
+                                @csrf
+
+                                <!-- Email Address -->
+                                <div>
+                                    {{-- <x-input-label for="email" :value="__('Email')" /> --}}
+                                    <x-input-user id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Username" icon="{{ asset('assets/user-solid.svg') }}" />
+
+                                    {{-- <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Username" icon="{{ asset('assets/user-solid.svg') }}" /> --}}
+                                    {{-- <img src="{{ asset('assets/user-solid.svg')}}"> --}}
+                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                </div>
+
+                                <!-- Password -->
+                                <div class="mt-4">
+                                    {{-- <x-input-label for="password" :value="__('Password')" /> --}}
+
+                                    <x-input-user id="password" class="block mt-1 w-full"
+                                                    type="password"
+                                                    name="password"
+                                                    required autocomplete="current-password"
+                                                    placeholder="Password" icon="{{ asset('assets/key-solid.svg') }}" />
+
+                                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                                </div>
+
+                                <!-- Remember Me -->
+                                {{-- <div class="block mt-4">
+                                    <label for="remember_me" class="inline-flex items-center">
+                                        <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
+                                        <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+                                    </label>
+                                </div> --}}
+
+                                <div class="grid grid-cols-2 gap-2 mt-4">
+                                    {{-- @if (Route::has('password.request'))
+                                        <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
+                                            {{ __('Forgot your password?') }}
+                                        </a>
+                                    @endif --}}
+                                    <a href="/register" class="relative h-10 inline-flex items-center justify-center px-3 rounded-md border border-[#50c2ff] font-medium text-[#50c2ff]">
+                                        {{-- <img class="w-4 mr-2" src="{{ asset('assets/user-plus-solid.svg') }}"> --}}
+                                        Daftar
+                                    </a>
+                                    <button type="submit" class="relative h-10 inline-flex items-center justify-center px-3 rounded-md border border-transparent font-medium text-white bg-[#50c2ff]">
+                                        {{-- <img class="w-4 mr-2" src="{{ asset('assets/power-off-solid.svg') }}"> --}}
+                                        Login
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         @if (Route::has('login'))
@@ -54,14 +128,12 @@
                                         </svg>
                                     </div>
                                 </button>
-                            @else
-                                <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
+
                                 {{-- @if (Route::has('register'))
                                     <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
                                 @endif --}}
                             @endauth
                         @endif
-
                     </x-slot>
 
                     <x-slot name="content">
@@ -82,6 +154,7 @@
                                 </x-dropdown-link>
                             </form>
                         @endauth
+                    @else
                     @endif
                     </x-slot>
                 </x-dropdown>
@@ -133,3 +206,20 @@
         </div>
     </div> --}}
 </nav>
+<script>
+    // Ambil elemen tautan, modal, dan tombol tutup
+    var modalLink = document.getElementById("modalLink");
+    var modal = document.getElementById("myModal");
+    var modalCloseBtn = document.getElementById("modalCloseBtn");
+
+    // Tambahkan event listener untuk tautan
+    modalLink.addEventListener("click", function(event) {
+        event.preventDefault(); // Mencegah tindakan default tautan
+        modal.classList.remove("hidden"); // Tampilkan modal saat tautan diklik
+    });
+
+    // Tambahkan event listener untuk tombol tutup modal
+    modalCloseBtn.addEventListener("click", function(event) {
+        modal.classList.add("hidden"); // Sembunyikan modal saat tombol tutup diklik
+    });
+</script>

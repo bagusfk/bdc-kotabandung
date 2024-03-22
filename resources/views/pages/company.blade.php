@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </section>
-            <section class="py-[2.5rem]">
+            {{-- <section class="py-[2.5rem]">
                 <div class="grid grid-cols-3 shadow-lg rounded-lg">
                     <div class="">
                         <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
@@ -40,6 +40,28 @@
                     </div>
                     <div class="">
                         <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+                    </div>
+                </div>
+            </section> --}}
+            <section class="py-[2.5rem]">
+                <!-- Swiper -->
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+                        </div>
+                        <div class="swiper-slide">
+                            <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+                        </div>
+                        <div class="swiper-slide">
+                            <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+                        </div>
+                        <div class="swiper-slide">
+                            <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+                        </div>
+                        <div class="swiper-slide">
+                            <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+                        </div>
                     </div>
                 </div>
             </section>
@@ -91,3 +113,44 @@
 
     {{-- <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script> --}}
 </x-app-layout>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    // Fungsi untuk menangani perubahan media query
+    function handleMediaQuery(mediaQuery) {
+      if (mediaQuery.matches) {
+        // Jika lebar maksimum layar adalah 768px atau kurang
+        swiper.params.slidesPerView = 1; // Ubah jumlah slide yang ditampilkan menjadi 1
+        swiper.params.spaceBetween = 10; // Sesuaikan ruang antara slide
+      } else {
+        // Jika lebar layar lebih dari 768px
+        swiper.params.slidesPerView = 3; // Kembalikan jumlah slide yang ditampilkan menjadi 3
+        swiper.params.spaceBetween = 0; // Kembalikan ruang antara slide seperti semula
+      }
+      swiper.update(); // Update swiper instance setelah melakukan perubahan
+    }
+
+    // Inisialisasi Swiper
+    var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 3,
+      spaceBetween: 0,
+      loop: true,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      // Tambahkan transisi untuk efek yang mulus
+      effect: "slide",
+      speed: 500,
+    });
+
+    // Cek media query pada inisialisasi dan ketika layar berubah
+    var mediaQuery = window.matchMedia("(max-width: 768px)");
+    handleMediaQuery(mediaQuery); // Panggil fungsi handleMediaQuery saat inisialisasi
+    mediaQuery.addListener(handleMediaQuery); // Tambahkan listener untuk memantau perubahan pada media query
+  </script>
