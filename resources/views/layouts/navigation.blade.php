@@ -9,25 +9,25 @@
                 </a>
                 <div class="sm:flex sm:relative max-lg:absolute max-lg:-left-[12px] sm:top-0 top-16 hidden w-full" id="navbar-sticky">
                     <div class="max-sm:border-b max-sm:bg-white border-slate-500 space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110 duration-200">
-                        <x-nav-link :href="route('welcome')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#50c2ff]" :active="request()->routeIs('welcome')">
+                        <x-nav-link :href="route('dashboard')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]" :active="request()->routeIs('welcome')">
                             <img class="w-4 mr-2 " src="{{ asset('assets/house-solid.svg') }}">
                             {{ __('Home') }}
                         </x-nav-link>
                     </div>
                     <div class="max-sm:border-b max-sm:bg-white border-slate-500 space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110 duration-200">
-                        <x-nav-link :href="route('company_profile')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#50c2ff]" :active="request()->routeIs('company_profile')">
+                        <x-nav-link :href="route('company_profile')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]" :active="request()->routeIs('company_profile')">
                             <img class="w-3 mr-2 " src="{{ asset('assets/building-solid.svg') }}">
                             {{ __('Company') }}
                         </x-nav-link>
                     </div>
                     <div class="max-sm:border-b max-sm:bg-white border-slate-500 space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110 duration-200">
-                        <x-nav-link :href="route('dashboard')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#50c2ff]">
+                        <x-nav-link :href="route('dashboard')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]">
                            <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
                             {{ __('E-Catalog') }}
                         </x-nav-link>
                     </div>
                     <div class="max-sm:border-b max-sm:bg-white border-slate-500 space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110 duration-200">
-                        <x-nav-link :href="route('dashboard')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#50c2ff]">
+                        <x-nav-link :href="route('dashboard')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]">
                            <img class="w-4 mr-2 " src="{{ asset('assets/users-solid.svg') }}">
                             {{ __('Event') }}
                         </x-nav-link>
@@ -44,7 +44,7 @@
                             @auth
                                 <button id="modalLink" class="hidden font-semibold text-g ray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Log in</button>
                         @else
-                                <button id="modalLink" class="text-white py-[.5rem] dark:text-gray-400 dark:hover:text-white bg-[#50c2ff] hover:bg-transparent hover:border-[#50c2ff] hover:text-[#50c2ff] hover:border px-[1rem] rounded-md">Login</button>
+                                <button id="modalLink" class="text-white py-[.5rem] dark:text-gray-400 dark:hover:text-white bg-[#04a7ff] hover:bg-transparent hover:border-[#04a7ff] hover:text-[#04a7ff] hover:border px-[1rem] rounded-md">Login</button>
                             @endauth
                         @endif
                         <div id="myModal" class="modal absolute w-full justify-center items-center h-screen left-0 bg-black bg-opacity-50 top-0 z-20 hidden">
@@ -102,11 +102,11 @@
                                                     {{ __('Forgot your password?') }}
                                                 </a>
                                             @endif --}}
-                                            <a href="/register" class="relative h-10 inline-flex items-center justify-center px-3 rounded-md border border-[#50c2ff] font-medium text-[#50c2ff]">
+                                            <a href="/register" class="relative h-10 inline-flex items-center justify-center px-3 rounded-md border border-[#04a7ff] font-medium text-[#04a7ff]">
                                                 {{-- <img class="w-4 mr-2" src="{{ asset('assets/user-plus-solid.svg') }}"> --}}
                                                 Daftar
                                             </a>
-                                            <button type="submit" class="relative h-10 inline-flex items-center justify-center px-3 rounded-md border border-transparent font-medium text-white bg-[#50c2ff]">
+                                            <button type="submit" class="relative h-10 inline-flex items-center justify-center px-3 rounded-md border border-transparent font-medium text-white bg-[#04a7ff]">
                                                 {{-- <img class="w-4 mr-2" src="{{ asset('assets/power-off-solid.svg') }}"> --}}
                                                 Login
                                             </button>
