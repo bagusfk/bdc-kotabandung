@@ -97,11 +97,11 @@
                     <div class="my-4">
                         <div class="flex items-center h-10 lg:pl-[5rem]">
                             <img class="w-10" src="{{ asset('assets/instagram.svg') }}" alt="">
-                            <span class="align-middle ml-4">@bdjbandungjuara</span>
+                            <a href="https://www.instagram.com/bdc.bandungjuara/" target="_blank" class="align-middle ml-4 hover:underline">@bdjbandungjuara</a>
                         </div>
                         <div class="flex items-center h-10 my-4 lg:pl-[5rem]">
                             <img class="w-10" src="{{ asset('assets/whatsapp.svg') }}" alt="">
-                            <span class="align-middle ml-4">0812-2254-1485</span>
+                            <a href="whatsapp://send?phone=6281222541485" target="_blank" class="align-middle ml-4 hover:underline">0812-2254-1485</a>
                         </div>
                     </div>
                 </div>

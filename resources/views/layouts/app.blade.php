@@ -32,12 +32,42 @@
                 height: 100%;
                 object-fit: cover;
             }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
+
+            .fade-in {
+                animation: fadeIn 0.3s ease-in-out; /* Sesuaikan durasi dan efek animasi sesuai kebutuhan */
+            }
+
+            .fade-out {
+                animation: fadeOut 0.3s ease-in-out; /* Sesuaikan durasi dan efek animasi sesuai kebutuhan */
+            }
         </style>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
+        {{-- Loader --}}
+        <div id="loader" class="fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 hidden">
+            <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
+        </div>
         <div class="w-full fixed z-20">
             @include('layouts.navigation')
         </div>
@@ -57,5 +87,20 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+                // Tampilkan loader saat halaman dimuat
+                document.getElementById('loader').classList.remove('hidden');
+            });
+
+            window.addEventListener('load', function () {
+                // Sembunyikan loader setelah halaman selesai dimuat
+                setTimeout(function() {
+                    document.getElementById('loader').classList.add('hidden');
+                }, 2000);
+            });
+        </script>
+
     </body>
 </html>
