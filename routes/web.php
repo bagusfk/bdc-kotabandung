@@ -19,6 +19,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+Route::get('/e-catalog', function () {
+    return view('pages.catalog');
+})->name('catalog');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');

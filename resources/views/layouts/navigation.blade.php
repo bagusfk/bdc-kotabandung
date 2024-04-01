@@ -21,7 +21,7 @@
                         </x-nav-link>
                     </div>
                     <div class="max-sm:border-b max-sm:bg-white border-slate-500 space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110 duration-200">
-                        <x-nav-link :href="route('dashboard')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]">
+                        <x-nav-link :href="route('catalog')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]">
                            <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
                             {{ __('E-Catalog') }}
                         </x-nav-link>

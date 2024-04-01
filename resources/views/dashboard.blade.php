@@ -71,7 +71,7 @@
             </section>
             <section class="mt-[6rem] max-sm:px-[1rem]">
                 <h2 class="mb-[2rem] text-[2rem] font-medium">Kontak BDC</h2>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.9506796705073!2d108.5400036992966!3d-6.653035652151949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6ee3575ed4d223%3A0xaf2c763949d55b50!2sMaspur%20Studio!5e0!3m2!1sid!2sid!4v1711202110747!5m2!1sid!2sid" width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.830295763747!2d107.61016529999999!3d-6.910885199999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e7fe4ca299d5%3A0x7a57d46fa44a1e73!2sAuditorium%20-%20Balaikota%20Bandung!5e0!3m2!1sid!2sid!4v1711332034799!5m2!1sid!2sid" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </section>
         </div>
     </div>
