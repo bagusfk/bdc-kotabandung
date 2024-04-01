@@ -35,7 +35,9 @@ class AuthenticatedSessionController extends Controller
         if (Auth::user()->hasRole() == 'pembeli') {
             return redirect()->intended('/pembeli');
         }
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // return redirect()->intended(RouteServiceProvider::HOME);
+        // return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->back();
     }
 
     /**
@@ -49,6 +51,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // return redirect('/');
+        return redirect()->back();
     }
 }
