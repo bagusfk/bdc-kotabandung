@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rules\Enum;
 
 return new class extends Migration
 {
@@ -13,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('role_id');
-            $table->string('username');
+            $table->string('role')->enum('admin', 'kepalabagian', 'ksm', 'pembeli')->default('pembeli');
+            $table->string('name');
             $table->string('password');
             $table->string('no_wa');
             $table->string('email')->unique();
