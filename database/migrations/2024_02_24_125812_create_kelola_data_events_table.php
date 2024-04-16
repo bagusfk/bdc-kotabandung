@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('kelola_data_events', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_event')->nullable();
-            $table->string('deskripsi')->nullable();
-            $table->date('tanggal_event')->nullable();
+            $table->string('event_name')->nullable();
+            $table->string('event_organizer')->nullable();
+            $table->date('event_date')->nullable();
+            $table->string('event_poster')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

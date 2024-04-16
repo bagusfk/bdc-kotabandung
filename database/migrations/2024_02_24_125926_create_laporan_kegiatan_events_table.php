@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('laporan_kegiatan_events', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_peserta')->nullable();
-            $table->string('nama_event')->nullable();
-            $table->double('hasil_penjualan')->nullable();
+            $table->string('participants_name')->nullable();
+            $table->string('event_name')->nullable();
+            $table->double('sales_result')->nullable();
             $table->timestamps();
         });
     }

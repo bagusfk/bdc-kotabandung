@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StokbarangController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +21,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::get('/e-catalog', function () {
-    return view('pages.catalog');
-})->name('catalog');
+Route::get('/e-catalog', [StokbarangController::class, 'index'])->name('catalog');
+Route::get('/e-catalog/{id}', [StokbarangController::class, 'detail'])->name('detail_catalog');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -37,6 +38,21 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin', function () {
             return view('welcomeadmin');
         });
+        // items
+        Route::get('/kelola-barang', [AdminController::class, 'kelolabarang'])->name('kelola-barang');
+        Route::get('/tambah-barang', [AdminController::class, 'add_item'])->name('add-item');
+        Route::put('/create-item', [AdminController::class, 'create_item'])->name('create-item');
+        Route::get('/edit-item/{id}', [AdminController::class, 'edit_item'])->name('edit-item');
+        Route::put('/update-item', [AdminController::class, 'update_item'])->name('update-item');
+        Route::delete('/delete-item/{id}', [AdminController::class, 'delete_item'])->name('delete-item');
+        // barang
+        Route::get('/kelola-ksm', [AdminController::class, 'kelola_ksm'])->name('kelola-ksm');
+        Route::get('/edit-ksm/{id}', [AdminController::class, 'edit_ksm'])->name('edit-ksm');
+        Route::put('/update-ksm', [AdminController::class, 'update_ksm'])->name('update-ksm');
+        Route::delete('/delete-ksm/{id}', [AdminController::class, 'delete_ksm'])->name('delete-ksm');
+        // event
+        Route::get('/kelola-event', [AdminController::class, 'kelola_event'])->name('kelola-event');
+
     });
 
     Route::middleware('role:kepalabagian')->group(function () {

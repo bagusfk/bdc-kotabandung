@@ -30,19 +30,6 @@
                     </div>
                 </div>
             </section>
-            {{-- <section class="py-[2.5rem]">
-                <div class="grid grid-cols-3 shadow-lg rounded-lg">
-                    <div class="">
-                        <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
-                    </div>
-                    <div class="">
-                        <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
-                    </div>
-                    <div class="">
-                        <img class="w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
-                    </div>
-                </div>
-            </section> --}}
             <section class="py-[2.5rem] max-sm:px-[1rem]">
                 <!-- Swiper -->
                 <div class="swiper mySwiper">

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('kelola_data_penjualans', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal')->nullable();
-            $table->string('keterangan')->nullable();
-            $table->double('mutasi')->nullable();
+            $table->date('date')->nullable();
+            $table->string('information')->nullable();
+            $table->double('mutation')->nullable();
             $table->timestamps();
         });
     }

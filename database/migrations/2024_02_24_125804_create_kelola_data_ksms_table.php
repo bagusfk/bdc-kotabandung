@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('kelola_data_ksms', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->nullable();
-            $table->date('tanggal_daftar')->nullable();
+            $table->string('business_name', 128)->nullable();
+            $table->string('owner', 128)->nullable();
+            $table->string('no_whatsapp', 15)->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->text('address')->nullable();
+            $table->date('registration_date')->nullable();
             $table->timestamps();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

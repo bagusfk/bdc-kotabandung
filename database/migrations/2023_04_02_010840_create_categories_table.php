@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('laporan_stokbarangs', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('item')->nullable();
-            $table->date('date')->nullable();
-            $table->integer('first_stock')->nullable();
-            $table->integer('last_stock')->nullable();
+            $table->string('category', 128)->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('laporan_stokbarangs');
+        Schema::dropIfExists('categories');
     }
 };

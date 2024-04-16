@@ -3,7 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\category;
+use App\Models\Stokbarang;
 use App\Models\Role;
+use App\Models\Kelola_data_ksm;
+use App\Models\Kelola_data_event;
 
 use Database\Seeders\user\UserSeeder;
 use Database\Seeders\user\RoleSeeder;
@@ -31,6 +35,22 @@ class DatabaseSeeder extends Seeder
 
         if (User::count() == 0) {
             $seeder[] = UserSeeder::class;
+        }
+
+        if (category::count() == 0) {
+            $seeder[] = CategorySeeder::class;
+        }
+
+        if (Stokbarang::count() == 0) {
+            $seeder[] = ItemSeeder::class;
+        }
+
+        if (Kelola_data_ksm::count() == 0) {
+            $seeder[] = KsmSeeder::class;
+        }
+
+        if (Kelola_data_event::count() == 0) {
+            $seeder[] = EventSeeder::class;
         }
         // if (Role::count() == 0) {
         //     $seeder[] = RoleSeeder::class;

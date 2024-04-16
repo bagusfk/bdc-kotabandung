@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('belis', function (Blueprint $table) {
             $table->id();
-            $table->string('keranjang', 128)->nullable();
-            $table->string('pengguna', 128)->nullable();
-            $table->string('alamat_pengiriman', 128)->nullable();
-            $table->string('metode_pembayaran', 128)->nullable();
-            $table->double('bayar')->nullable();
-            $table->enum('proses_pesanan', ['proses', 'selesai', 'batal'])->default('proses');
+            $table->string('cart', 128)->nullable();
+            $table->integer('user_id')->nullable();
+            $table->string('shipping_address', 128)->nullable();
+            $table->string('payment_method', 128)->nullable();
+            $table->double('pay')->nullable();
+            $table->enum('order_process', ['process', 'finish', 'cancel'])->default('process');
             $table->timestamps();
         });
     }

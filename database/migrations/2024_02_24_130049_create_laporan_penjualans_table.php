@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('laporan_penjualans', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal')->nullable();
-            $table->string('produk')->nullable();
-            $table->integer('jumlah')->nullable();
-            $table->double('total_harga')->nullable();
+            $table->date('date')->nullable();
+            $table->string('product')->nullable();
+            $table->integer('total_product')->nullable();
+            $table->double('total_price')->nullable();
             $table->timestamps();
         });
     }

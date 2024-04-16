@@ -3,30 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\category;
-use App\Models\Stokbarang;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class StokbarangController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data['categories'] = category::all();
-        $data['items'] = Stokbarang::all();
-
-        return view('pages.catalog.view', $data);
-    }
-
-    public function detail($id)
-    {
-        $data['item'] = Stokbarang::find($id);
-        $data['seller'] = User::where('id', $data['item']->seller_id)->first();
-        $data['items'] = Stokbarang::where('seller_id', $data['seller']->id)->get();
-
-        return view('pages.catalog.detailproduct', $data);
+        //
     }
 
     /**
@@ -48,7 +34,7 @@ class StokbarangController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Stokbarang $stokbarang)
+    public function show(category $category)
     {
         //
     }
@@ -56,7 +42,7 @@ class StokbarangController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Stokbarang $stokbarang)
+    public function edit(category $category)
     {
         //
     }
@@ -64,7 +50,7 @@ class StokbarangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Stokbarang $stokbarang)
+    public function update(Request $request, category $category)
     {
         //
     }
@@ -72,7 +58,7 @@ class StokbarangController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Stokbarang $stokbarang)
+    public function destroy(category $category)
     {
         //
     }

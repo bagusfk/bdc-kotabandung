@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
             'name' => 'admin',
             'no_wa' => '089123456789',
+            'address' => 'Jl. Setia Budi No. 15A',
             'password' => bcrypt('admin'),
             'email' => 'admin@admin.com',
         ]);
@@ -26,6 +27,7 @@ class UserSeeder extends Seeder
             'name' => 'kepalabagian',
             'password' => bcrypt('kepalabagian'),
             'no_wa' => '089123456789',
+            'address' => 'Jl. Setia Budi No. 15B',
             'email' => 'kepalabagian@kepalabagian.com',
         ]);
 
@@ -34,6 +36,7 @@ class UserSeeder extends Seeder
             'name' => 'ksm',
             'password' => bcrypt('ksm'),
             'no_wa' => '089123456789',
+            'address' => 'Jl. Setia Budi No. 15C',
             'email' => 'ksm@ksm.com',
         ]);
 
@@ -42,6 +45,7 @@ class UserSeeder extends Seeder
             'name' => 'pembeli',
             'password' => bcrypt('pembeli'),
             'no_wa' => '089123456789',
+            'address' => 'Jl. Setia Budi No. 15D',
             'email' => 'pembeli@pembeli.com',
         ]);
     }
