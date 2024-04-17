@@ -18,15 +18,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+    return view('dashboard');
+})->name('dashboard');
 
 Route::get('/e-catalog', [StokbarangController::class, 'index'])->name('catalog');
 Route::get('/e-catalog/{id}', [StokbarangController::class, 'detail'])->name('detail_catalog');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
 // ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:pembeli')->group(function () {
         Route::get('/pembeli', function () {
-            return view('welcomepembeli');
+            return view('dashboard');
         });
     });
 });
