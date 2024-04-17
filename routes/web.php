@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StokbarangController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,9 +72,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/pembeli', function () {
             return view('welcomepembeli');
         });
+        Route::get('/cart', [CartController::class, 'index'])->name('cart');
     });
 });
 
 Route::get('/comapny-profile', [CompanyController::class, 'index'])->name('company_profile');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
