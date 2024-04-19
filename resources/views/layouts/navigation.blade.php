@@ -20,42 +20,57 @@
                             {{ __('Company') }}
                         </x-nav-link>
                     </div>
-                    <div class="max-sm:border-b max-sm:bg-white border-slate-500 space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110 duration-200">
 
-                        @if (Auth::user())
-                            @if (Auth::user()->role == 'pembeli')
-                                {{-- <div class="inline-flex items-center px-1 pt-1 border-b-2 border-[#50c2ff] dark:border-[#50c2ff] text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none max-sm:border-0 focus:border-[#50c2ff] transition duration-150 ease-in-out max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]">
-                                    <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
-                                    {{ __('E-E') }}
-                                </div> --}}
-                                <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="flex items-center justify-between w-full py-2 px-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">Dropdown <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
-                                </button>
-                                <!-- Dropdown menu -->
-                                <div id="dropdownNavbar" class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownLargeButton">
-                                        <li>
-                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                                        </li>
-                                        <li>
-                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                                        </li>
-                                        <li>
-                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                                        </li>
-                                    </ul>
-                                    <div class="py-1">
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-                                    </div>
-                                </div>
-                            @endif
-                        @else
+                    @if (Auth::user())
+                        @if (Auth::user()->role == 'pembeli')
+                            <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-slate-500 text-sm text-center inline-flex items-center space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex" type="button">
+                                {{ __('E-Catalogs') }}
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                                <li>
+                                    <x-nav-link :href="route('catalog')" class="block w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff] px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
+                                        {{ __('E-Catalog') }}
+                                    </x-nav-link>
+                                </li>
+                                <li>
+                                    <x-nav-link :href="route('cart')" class="block w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff] px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
+                                        {{ __('Keranjang') }}
+                                    </x-nav-link>
+                                    {{-- <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Keranjang</a> --}}
+                                </li>
+                                <li>
+                                    <x-nav-link :href="route('catalog')" class="block w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff] px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
+                                        {{ __('Pesanan Saya') }}
+                                    </x-nav-link>
+                                    {{-- <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Pesanan Saya</a> --}}
+                                </li>
+                                <li>
+                                    <x-nav-link :href="route('catalog')" class="block w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff] px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
+                                        {{ __('Lacak Pesanan') }}
+                                    </x-nav-link>
+                                    {{-- <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Lacak Pesanan</a> --}}
+                                </li>
+                                </ul>
+                            </div>
+                        @endif
+                    @else
+                        <div class="max-sm:border-b max-sm:bg-white border-slate-500 space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110 duration-200">
                             <x-nav-link :href="route('catalog')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]">
                                 <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
                                 {{ __('E-Catalog') }}
                             </x-nav-link>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                     <div class="max-sm:border-b max-sm:bg-white border-slate-500 space-x-8 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110 duration-200">
                         <x-nav-link :href="route('dashboard')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]">
                             <svg class="w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>
