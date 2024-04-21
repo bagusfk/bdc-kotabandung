@@ -47,19 +47,19 @@
                                     {{-- <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Keranjang</a> --}}
                                 </li>
                                 <li>
-                                    <x-nav-link :href="route('catalog')" class="block w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff] px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    <x-nav-link :href="route('my-order')" class="block w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff] px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                         <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
                                         {{ __('Pesanan Saya') }}
                                     </x-nav-link>
                                     {{-- <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Pesanan Saya</a> --}}
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <x-nav-link :href="route('catalog')" class="block w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff] px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                         <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}">
                                         {{ __('Lacak Pesanan') }}
                                     </x-nav-link>
-                                    {{-- <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Lacak Pesanan</a> --}}
-                                </li>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Lacak Pesanan</a>
+                                </li> --}}
                                 </ul>
                             </div>
                         @endif

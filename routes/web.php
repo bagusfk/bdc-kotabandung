@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StokbarangController;
 use Illuminate\Support\Facades\Route;
@@ -73,6 +74,7 @@ Route::middleware(['auth','revalidate'])->group(function () {
             return view('dashboard');
         });
         Route::get('/cart', [CartController::class, 'index'])->name('cart');
+        Route::get('/my-order', [OrderController::class, 'index'])->name('my-order');
     });
 });
 
