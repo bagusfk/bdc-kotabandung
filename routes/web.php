@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OrderController;
@@ -81,3 +82,5 @@ Route::middleware(['auth','revalidate'])->group(function () {
 Route::get('/comapny-profile', [CompanyController::class, 'index'])->name('company_profile');
 
 require __DIR__ . '/auth.php';
+Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
+

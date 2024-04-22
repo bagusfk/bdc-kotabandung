@@ -48,4 +48,9 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    public function createKsm(): View
+    {
+        return view('auth.register-ksm');
+    }
 }

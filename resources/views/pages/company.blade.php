@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
         </h2>
     </x-slot>
 
     <div class="pt-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-4 bg-zinc-200 max-sm:px-[1rem]">
                 <div class="sm:px-[2rem] sm:py-[2rem]">
                     <h2 class="text-[2rem] font-medium">Profile Perusahaan</h2>
@@ -17,13 +17,13 @@
             </div>
 
             <section class="py-[2.5rem]">
-                <div class="flex w-full justify-center py-3">
+                <div class="flex justify-center w-full py-3">
                     <div class="lg:w-1/2 max-lg:px-[2rem]">
                         <h2 class="text-[2rem] font-medium text-center">VISI</h2>
                         <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt esse provident repellendus explicabo, eveniet in maiores quod ratione voluptas, iure quaerat et blanditiis ipsam iste laudantium dignissimos consectetur sit molestiae?Minus ratione excepturi eaque hic at atque dolor, suscipit iusto quidem odio eos exercitationem doloribus tempora laboriosam earum, aliquid ut beatae incidunt quam deserunt maiores ipsum velit. Accusantium, laboriosam dolorem.</p>
                     </div>
                 </div>
-                <div class="flex w-full justify-center">
+                <div class="flex justify-center w-full">
                     <div class="lg:w-1/2 max-lg:px-[2rem]">
                         <h2 class="text-[2rem] font-medium text-center">MISI</h2>
                         <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt esse provident repellendus explicabo, eveniet in maiores quod ratione voluptas, iure quaerat et blanditiis ipsam iste laudantium dignissimos consectetur sit molestiae?Minus ratione excepturi eaque hic at atque dolor, suscipit iusto quidem odio eos exercitationem doloribus tempora laboriosam earum, aliquid ut beatae incidunt quam deserunt maiores ipsum velit. Accusantium, laboriosam dolorem.</p>
@@ -55,7 +55,7 @@
             <section class="py-[2.5rem] pb-[16rem] max-sm:px-[1rem]">
                 <h2 class="text-[2rem] font-medium">Perkembangan dan Fungsi BDC</h2>
                 <br>
-                <div class="grid md:grid-cols-2 gap-4">
+                <div class="grid gap-4 md:grid-cols-2">
                     <div>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem quos, pariatur fugiat earum quasi laudantium vero assumenda voluptatum minus! Ipsa officia quo veniam in voluptas expedita illum. Dolore, tempora et.</p>
                     </div>
