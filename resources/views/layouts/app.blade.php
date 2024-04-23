@@ -65,18 +65,18 @@
     </head>
     <body class="font-sans antialiased">
         {{-- Loader --}}
-        <div id="loader" class="fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 hidden">
-            <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
+        <div id="loader" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+            <div class="w-32 h-32 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
         </div>
-        <div class="w-full fixed z-20">
+        <div class="fixed z-20 w-full">
             @include('layouts.navigation')
         </div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-white dark:bg-gray-900">
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="bg-white shadow dark:bg-gray-800">
+                    <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
