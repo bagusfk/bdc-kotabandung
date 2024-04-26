@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->text('address')->nullable();
             $table->date('registration_date')->nullable();
+            $table->enum('cluster', ['A', 'B', 'C', 'D'])->nullable();
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });

@@ -35,23 +35,32 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::middleware('role:admin')->group(function () {
-        Route::get('/admin', function () {
-            return view('welcomeadmin');
-        });
+        Route::get('/dashboard-admin', [AdminController::class, 'index'])->name('index');
         // items
-        Route::get('/kelola-barang', [AdminController::class, 'kelolabarang'])->name('kelola-barang');
+        Route::get('/kelola-barang', [AdminController::class, 'manage_items'])->name('manage-items');
         Route::get('/tambah-barang', [AdminController::class, 'add_item'])->name('add-item');
         Route::put('/create-item', [AdminController::class, 'create_item'])->name('create-item');
         Route::get('/edit-item/{id}', [AdminController::class, 'edit_item'])->name('edit-item');
         Route::put('/update-item', [AdminController::class, 'update_item'])->name('update-item');
         Route::delete('/delete-item/{id}', [AdminController::class, 'delete_item'])->name('delete-item');
         // barang
-        Route::get('/kelola-ksm', [AdminController::class, 'kelola_ksm'])->name('kelola-ksm');
+        Route::get('/kelola-ksm', [AdminController::class, 'manage_ksm'])->name('manage-ksm');
         Route::get('/edit-ksm/{id}', [AdminController::class, 'edit_ksm'])->name('edit-ksm');
         Route::put('/update-ksm', [AdminController::class, 'update_ksm'])->name('update-ksm');
         Route::delete('/delete-ksm/{id}', [AdminController::class, 'delete_ksm'])->name('delete-ksm');
         // event
-        Route::get('/kelola-event', [AdminController::class, 'kelola_event'])->name('kelola-event');
+        Route::get('/kelola-event', [AdminController::class, 'manage_event'])->name('manage-event');
+        Route::get('/tambah-event', [AdminController::class, 'add_event'])->name('add-event');
+        Route::put('/create-event', [AdminController::class, 'create_event'])->name('create-event');
+        Route::get('/edit-event/{id}', [AdminController::class, 'edit_event'])->name('edit-event');
+        Route::put('/update-event', [AdminController::class, 'update_event'])->name('update-event');
+        Route::delete('/delete-event/{id}', [AdminController::class, 'delete_event'])->name('delete-event');
+        Route::get('/dokumentasi-event', [AdminController::class, 'event_document'])->name('event-document');
+        Route::put('/addorupdate', [AdminController::class, 'addOrUpdate'])->name('addorupdate');
+        // penjualan
+        Route::get('/kelola-penjualan', [AdminController::class, 'manage_sales'])->name('manage-sales');
+        // keuangan
+        Route::get('/kelola-keuangan', [AdminController::class, 'manage_finance'])->name('manage-finance');
 
     });
 

@@ -104,7 +104,7 @@
       spaceBetween: 180,
       loop: true,
       autoplay: {
-        delay: 2500,
+        delay: 0,
         disableOnInteraction: false,
       },
       pagination: {
@@ -113,7 +113,7 @@
       },
       // Tambahkan transisi untuk efek yang mulus
       effect: "slide",
-      speed: 500,
+      speed: 2000,
     });
 
     var swiper2 = new Swiper(".mySwiper2", {
@@ -121,7 +121,7 @@
       spaceBetween: 180,
       loop: true,
       autoplay: {
-        delay: 2500,
+        delay: 0,
         reverseDirection: true,
         disableOnInteraction: false,
       },
@@ -131,7 +131,7 @@
       },
       // Tambahkan transisi untuk efek yang mulus
       effect: "slide",
-      speed: 500,
+      speed: 2000,
     });
 
     // Cek media query pada inisialisasi dan ketika layar berubah

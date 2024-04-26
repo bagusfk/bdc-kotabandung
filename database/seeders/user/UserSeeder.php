@@ -38,6 +38,7 @@ class UserSeeder extends Seeder
             'no_wa' => '089123456789',
             'address' => 'Jl. Setia Budi No. 15C',
             'email' => 'ksm@ksm.com',
+            'ksm_id' => 3,
         ]);
 
         User::create([
@@ -47,6 +48,24 @@ class UserSeeder extends Seeder
             'no_wa' => '089123456789',
             'address' => 'Jl. Setia Budi No. 15D',
             'email' => 'pembeli@pembeli.com',
+        ]);
+
+        User::create([
+            'role' => 'pembeli',
+            'name' => 'pembeli2',
+            'password' => bcrypt('pembeli2'),
+            'no_wa' => '089123456789',
+            'address' => 'Jl. Setia Budi No. 15E',
+            'email' => 'pembeli2@pembeli2.com',
+        ]);
+
+        User::create([
+            'role' => 'pembeli',
+            'name' => 'pembeli3',
+            'password' => bcrypt('pembeli3'),
+            'no_wa' => '089123456789',
+            'address' => 'Jl. Setia Budi No. 15F',
+            'email' => 'pembeli3@pembeli3.com',
         ]);
     }
 }

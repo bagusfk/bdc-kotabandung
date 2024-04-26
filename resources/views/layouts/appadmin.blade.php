@@ -8,6 +8,11 @@
         <title>
             @yield('title')
         </title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <div class="flex justify-between">
@@ -39,39 +44,39 @@
             </a>
             <ul class="space-y-2 font-medium">
                 <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 group">
+                    <a href="{{ route('index') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('dashboard') ?  'border-b-2 border-white' : '' }} group">
                         <img class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" src="{{ asset('assets/database-solid.svg')}}" alt="">
                         <span class="ms-3 text-slate-50">Dashboard Admin</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('kelola-barang') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-barang') ?  'border-b-2 border-white' : '' }} group">
+                    <a href="{{ route('manage-items') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-barang') ?  'border-b-2 border-white' : '' }} group">
                         <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" src="{{ asset('assets/briefcase-solid.svg')}}" alt="">
                         <span class="flex-1 ms-3 text-white whitespace-nowrap">Kelola Barang</span>
                         {{-- <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span> --}}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('kelola-ksm') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-ksm') ?  'border-b-2 border-white' : '' }} group">
+                    <a href="{{ route('manage-ksm') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-ksm') ?  'border-b-2 border-white' : '' }} group">
                         <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" src="{{ asset('assets/joomla.svg')}}" alt="">
                         <span class="flex-1 ms-3 text-slate-50 whitespace-nowrap">Kelola KSM</span>
                         {{-- <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span> --}}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('kelola-event') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-event') ?  'border-b-2 border-white' : '' }} group">
+                    <a href="{{ route('manage-event') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-event') ?  'border-b-2 border-white' : '' }} group">
                         <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" src="{{ asset('assets/users-solid.svg')}}" alt="">
                         <span class="flex-1 ms-3 text-slate-50 whitespace-nowrap">Kelola Event</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 group">
+                    <a href="{{ route('manage-sales') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-penjualan') ?  'border-b-2 border-white' : '' }} group">
                         <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" src="{{ asset('assets/paypal.svg')}}" alt="">
                         <span class="flex-1 ms-3 text-slate-50 whitespace-nowrap">Kelola Penjualan</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 group">
+                    <a href="{{ route('manage-finance') }}" class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-keuangan') ?  'border-b-2 border-white' : '' }} group">
                         <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" src="{{ asset('assets/money-bill-1-regular.svg')}}" alt="">
                         <span class="flex-1 ms-3 text-slate-50 whitespace-nowrap">Kelola Keuangan</span>
                     </a>

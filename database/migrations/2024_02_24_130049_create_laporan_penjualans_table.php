@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('laporan_penjualans', function (Blueprint $table) {
             $table->id();
-            $table->date('date')->nullable();
+            $table->date('report_date')->nullable();
             $table->string('product')->nullable();
             $table->integer('total_product')->nullable();
             $table->double('total_price')->nullable();
