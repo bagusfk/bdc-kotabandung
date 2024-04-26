@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StokbarangController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,21 +19,21 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+    return view('dashboard');
+})->name('dashboard');
 
 Route::get('/e-catalog', [StokbarangController::class, 'index'])->name('catalog');
 Route::get('/e-catalog/{id}', [StokbarangController::class, 'detail'])->name('detail_catalog');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
 // ->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','revalidate'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -78,11 +82,16 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:pembeli')->group(function () {
         Route::get('/pembeli', function () {
-            return view('welcomepembeli');
+            return view('dashboard');
         });
+        Route::get('/cart', [CartController::class, 'index'])->name('cart');
+        Route::get('/my-order', [OrderController::class, 'index'])->name('my-order');
     });
 });
 
 Route::get('/comapny-profile', [CompanyController::class, 'index'])->name('company_profile');
+Route::get('/event', [EventController::class, 'index'])->name('event');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
+
