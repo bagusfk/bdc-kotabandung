@@ -54,4 +54,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Stokbarang::class);
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    public function registeredEvents()
+    {
+        return $this->belongsToMany(Event::class);
+    }
+
+    public function ksm()
+    {
+        return $this->hasOne(Kelola_data_ksm::class);
+    }
 }

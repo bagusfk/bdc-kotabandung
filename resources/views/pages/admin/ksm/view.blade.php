@@ -101,7 +101,7 @@
     </div>
 
     <div class="w-fit mt-[1rem]">
-        <h2 class="text-lg font-semibold border-b-2 border-black">Pendaftar KSM Baru</h2>
+        <h2 class="text-lg font-semibold border-b-2 border-black">Data Anggota KSM</h2>
     </div>
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-[1rem]">
@@ -128,6 +128,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Alamat KSM
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Cluster KSM
                     </th>
                     <th scope="col" class="px-6 py-3">
                         #
@@ -160,6 +163,9 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->address }}
+                        </td>
+                        <td class="px-6 py-4">
+                            -
                         </td>
                         <td class="px-6 py-4 flex">
                             <a href="{{ url('/edit-ksm/' . $data->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>

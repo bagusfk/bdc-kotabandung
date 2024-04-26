@@ -18,11 +18,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('password');
             $table->string('no_wa');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedBigInteger('ksm_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->foreign('ksm_id')->references('id')->on('kelola_data_ksms')->onDelete('cascade');
         });
     }
 

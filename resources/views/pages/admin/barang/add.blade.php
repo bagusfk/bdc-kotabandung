@@ -16,7 +16,6 @@
                     @endforeach
                 </select>
             </div>
-            <input type="hidden" name="seller_id" value="{{ $seller->id }}">
             <div class="mt-[1rem]">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Barang</label>
                 <input type="text" name="name" id="name" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -27,6 +26,17 @@
             <div class="mt-[1rem]">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga</label>
                 <input type="number" name="price" id="price" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                @error('price')
+                    <span class="text-red-500 text-sm"><br />{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="mt-[1rem]">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Pemilik</label>
+                <select id="seller" name="seller_id" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @foreach ($seller as $sellers)
+                    <option value="{{ $sellers->id }}">{{ $sellers->name }}</option>
+                    @endforeach
+                </select>
                 @error('price')
                     <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                 @enderror
@@ -70,7 +80,7 @@
         </div>
     </div>
     <div class="flex justify-end">
-        <a href="{{ route('kelola-barang') }}" class="text-sm font-medium text-primary p-2.5 bg-white border border-primary rounded-lg mt-[1rem] mr-2">Batal</a>
+        <a href="{{ route('manage-items') }}" class="text-sm font-medium text-primary p-2.5 bg-white border border-primary rounded-lg mt-[1rem] mr-2">Batal</a>
         <button type="submit" class="text-sm font-medium text-white p-2.5 bg-primary rounded-lg mt-[1rem]">Simpan</button>
     </div>
 </form>

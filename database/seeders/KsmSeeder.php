@@ -15,19 +15,12 @@ class KsmSeeder extends Seeder
     {
 
         Kelola_data_ksm::create([
+            'id' => 3,
             'business_name' => 'Kripik Jaya',
             'owner' => 'Sholeh',
             'no_whatsapp' => '08123456789',
             'category_id' => '1',
             'address' => 'Jl. Fatahillah No.90',
-        ]);
-
-        Kelola_data_ksm::create([
-            'business_name' => 'Fisher Seazone',
-            'owner' => 'Joseph',
-            'no_whatsapp' => '08219876541',
-            'category_id' => '5',
-            'address' => 'Jl. Kalijaga No.120',
         ]);
     }
 }

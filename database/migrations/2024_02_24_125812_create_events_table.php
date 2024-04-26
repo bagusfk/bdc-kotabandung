@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelola_data_events', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('event_name')->nullable();
             $table->string('event_organizer')->nullable();
-            $table->date('event_date')->nullable();
+            $table->date('event_date_start')->nullable();
+            $table->date('event_date_end')->nullable();
             $table->string('event_poster')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelola_data_events');
+        Schema::dropIfExists('events');
     }
 };

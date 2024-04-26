@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="flex justify-end">
-        <a href="{{ route('kelola-barang') }}" class="text-sm font-medium text-primary p-2.5 bg-white border border-primary rounded-lg mt-[1rem] mr-2">Batal</a>
+        <a href="{{ route('manage-items') }}" class="text-sm font-medium text-primary p-2.5 bg-white border border-primary rounded-lg mt-[1rem] mr-2">Batal</a>
         <button type="submit" class="text-sm font-medium text-white p-2.5 bg-primary rounded-lg mt-[1rem]">Simpan</button>
     </div>
 </form>
