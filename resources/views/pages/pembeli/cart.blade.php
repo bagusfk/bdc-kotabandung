@@ -63,7 +63,7 @@
                     <span>Rp.500.000</span>
                 </div>
                 <button class="w-full p-2 px-5 text-white rounded bg-primary">
-                    Bayar
+                    Pesan Sekarang
                 </button>
             </div>
         </div>

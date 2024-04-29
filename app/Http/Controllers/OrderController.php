@@ -13,9 +13,13 @@ class OrderController extends Controller
     public function index()
     {
         //
-        return view('pages.pembeli.my-order');
+        return view('pages.pembeli.transaction.index');
     }
 
+    public function myOrder()
+    {
+        return view('pages.pembeli.my-order');
+    }
     /**
      * Show the form for creating a new resource.
      */

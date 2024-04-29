@@ -85,7 +85,8 @@ Route::middleware(['auth','revalidate'])->group(function () {
             return view('dashboard');
         });
         Route::get('/cart', [CartController::class, 'index'])->name('cart');
-        Route::get('/my-order', [OrderController::class, 'index'])->name('my-order');
+        Route::get('/order', [OrderController::class, 'index'])->name('order');
+        Route::get('/my-order', [OrderController::class, 'myOrder'])->name('my-order');
     });
 });
 
