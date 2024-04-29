@@ -23,10 +23,21 @@ class AdminController extends Controller
     public function index()
     {
         // Menghitung total pengguna berdasarkan peran "pembeli" dan hari pembuatan
-        $userCountsByRoleAndDay = User::where('role', 'pembeli')
-            ->selectRaw('role, DAY(created_at) as day, COUNT(*) as total_users')
+        $userCountsByRoleAndDay = User::selectRaw('role, DAY(created_at) as day, COUNT(*) as total_users')
             ->groupBy('role', 'day')
             ->get();
+
+        $items = Stokbarang::selectRaw('DAY(created_at) as day, COUNT(*) as total_items')
+            ->groupBy('day')
+            ->get();
+
+        $events = Event::selectRaw('event_name, COUNT(*) as total_events')
+        ->groupBy('event_name')
+        ->get();
+
+        $register_events = Register_event::selectRaw('event_id, COUNT(*) as total_register_events')
+        ->groupBy('event_id')
+        ->get();
 
         // Memformat data untuk ditampilkan di view
         $data['userData'] = $userCountsByRoleAndDay->map(function ($item) {
@@ -36,7 +47,29 @@ class AdminController extends Controller
                 'total_users' => $item->total_users,
             ];
         });
-        $data['total_users'] = User::where('role', 'pembeli')->count();
+
+        $data['items'] = $items->map(function ($item) {
+            return [
+                'day' => $item->day,
+                'total_items' => $item->total_items,
+            ];
+        });
+
+        $data['events'] = $events->map(function ($item) {
+            return [
+                'event' => $item->event_name,
+                'total_events' => $item->total_events,
+            ];
+        });
+
+        $data['register_events'] = $register_events->map(function ($item) {
+            return [
+                'event_id' => $item->event->event_name,
+                'total_register_events' => $item->total_register_events,
+            ];
+        });
+
+        $data['total_users'] = User::count();
 
         // Mengirimkan data ke view
         return view('welcomeadmin', $data);
