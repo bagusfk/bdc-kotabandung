@@ -84,8 +84,9 @@ Route::middleware(['auth','revalidate'])->group(function () {
         Route::get('/pembeli', function () {
             return view('dashboard');
         });
+        Route::post('/cart/add/{item}', [CartController::class, 'addTocart'])->name('cart.add');
         Route::get('/cart', [CartController::class, 'index'])->name('cart');
-        Route::get('/order', [OrderController::class, 'index'])->name('order');
+        Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
         Route::get('/my-order', [OrderController::class, 'myOrder'])->name('my-order');
     });
 });

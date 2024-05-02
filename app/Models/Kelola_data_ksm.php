@@ -16,4 +16,9 @@ class Kelola_data_ksm extends Model
     {
         return $this->belongsTo(category::class);
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

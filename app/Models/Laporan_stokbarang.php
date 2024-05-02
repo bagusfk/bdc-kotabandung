@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Laporan_stokbarang extends Model
 {
     use HasFactory;
+
+
 }

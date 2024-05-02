@@ -5,20 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class Transaction extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
         'buyer_id',
-        'qty',
+        'invoice',
+        'address',
+        'phone',
+        'total_qty',
         'total_price',
+        'shipping_cost',
+        'payment_method',
+        'payment_status',
+        'order_status',
     ];
 
-    public function stokbarang()
+    public function orders()
     {
-        return $this->belongsTo(Stokbarang::class, 'product_id');
+        return $this->hasMany(Order::class);
     }
 
     public function user()
