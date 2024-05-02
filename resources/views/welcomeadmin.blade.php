@@ -15,7 +15,7 @@
         <div class="grid grid-cols-2 gap-4 bg-green-700 items-center  rounded dark:bg-gray-800 p-[1rem]">
             <div class="">
                 <label class="flex" for="">User</label>
-                {{-- <span>{{ $totalUsers }}</span> --}}
+                <span>{{ $total_users }}</span>
             </div>
             <div class="">
                 <div class="opacity-50">
@@ -48,32 +48,20 @@
     </div>
     <div class="grid grid-cols-2 gap-4 mb-4">
         <div class="flex items-center justify-center rounded bg-gray-50 h-fit dark:bg-gray-800">
-            <canvas id="chart_user_pembeli"></canvas>
+            <canvas id="line_user_pembeli"></canvas>
         </div>
-        <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-            <canvas id="chartLine"></canvas>
+        <div class="flex items-center justify-center rounded bg-gray-50 h-fit dark:bg-gray-800">
+            <canvas id="line_items"></canvas>
         </div>
-        <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-            <p class="text-2xl text-gray-400 dark:text-gray-500">
-                <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                </svg>
-            </p>
+        <div class="flex items-center justify-center rounded bg-gray-50 h-fit dark:bg-gray-800">
+            <canvas id="line_events"></canvas>
         </div>
-        <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-            <p class="text-2xl text-gray-400 dark:text-gray-500">
-                <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                </svg>
-            </p>
+        <div class="flex items-center justify-center rounded bg-gray-50 h-fit dark:bg-gray-800">
+            <canvas id="line_user_ksm"></canvas>
         </div>
     </div>
-    <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-            <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-            </svg>
-        </p>
+    <div class="flex items-center justify-center h-fit mb-4 rounded bg-gray-50 dark:bg-gray-800">
+        <canvas id="line_register_events"></canvas>
     </div>
     <div class="grid grid-cols-2 gap-4">
         <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
@@ -112,25 +100,23 @@
 
         // Mendefinisikan warna untuk peran
         const color = 'rgb(54, 162, 235)'; // Warna biru untuk peran 'pembeli'
+        const itemColor = ['rgb(0, 0, 255)', 'rgb(255, 0, 0)'];
 
-        // Menyaring data untuk peran yang diinginkan (misalnya, 'pembeli') dan hari yang sama dengan hari saat ini
-        const userRoleData = userData.filter(item => {
-            return item.role === 'pembeli';
-        });
+        const userPembeliData = userData.filter(item => item.role === 'pembeli');
 
         // Membuat data untuk grafik
-        const labels = userRoleData.map(item => item.day);
-        const dataValues = userRoleData.map(item => item.total_users);
-    const totalSemuaUser = dataValues.reduce((a, b) => a + b, 0); // Menghitung jumlah total pengguna
+        const labels = userPembeliData.map(item => item.day);
+        const dataValues = userPembeliData.map(item => item.total_users);
+        const totalSemuaUser = dataValues.reduce((a, b) => a + b, 0); // Menghitung jumlah total pengguna
 
-        const line = document.getElementById('chart_user_pembeli');
+        const line = document.getElementById('line_user_pembeli');
 
         new Chart(line, {
             type:'line',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: `Data Pembeli (Total: ${totalSemuaUser})`,
+                    label: `Data Akun Pembeli (Total: ${totalSemuaUser})`,
                     data: dataValues,
                     fill: true,
                     borderColor: color,
@@ -145,6 +131,114 @@
                 }
             }
         });
+
+        const items = @json($items);
+        const day = items.map(item => item.day);
+        const itemValues = items.map(item => item.total_items);
+        const lineItems = document.getElementById('line_items');
+
+        new Chart(lineItems, {
+            type:'bar',
+            data: {
+                labels: day,
+                datasets: [{
+                    label: `Data Barang`,
+                    data: itemValues,
+                    fill: false,
+                    backgroundColor: itemColor,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const events = @json($events);
+        const event = events.map(item => item.event);
+        const eventValues = events.map(item => item.total_events);
+        const lineEvents = document.getElementById('line_events');
+
+        new Chart(lineEvents, {
+            type:'bar',
+            data: {
+                labels: event,
+                datasets: [{
+                    label: `Data Event`,
+                    data: eventValues,
+                    fill: false,
+                    backgroundColor: itemColor,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const userKsmData = userData.filter(item => item.role === 'ksm');
+        const labelKsms = userKsmData.map(item => item.day);
+        const dataKsms = userKsmData.map(item => item.total_users);
+
+        const lineKsms = document.getElementById('line_user_ksm');
+
+        new Chart(lineKsms, {
+            type:'bar',
+            data: {
+                labels: labelKsms,
+                datasets: [{
+                    label: `Data Akun Ksm`,
+                    data: dataKsms,
+                    fill: true,
+                    borderColor: color,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const register_events = @json($register_events);
+        const labelRegisters = register_events.map(item => item.event_id);
+        const dataRegisters = register_events.map(item => item.total_register_events);
+
+        const lineRegister = document.getElementById('line_register_events');
+
+        new Chart(lineRegister, {
+            type:'bar',
+            data: {
+                labels: labelRegisters,
+                datasets: [{
+                    label: `Data Pendaftar Event`,
+                    data: dataRegisters,
+                    fill: true,
+                    backgroundColor: color,
+                    borderColor: color,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
     </script>
 
 @endsection()
