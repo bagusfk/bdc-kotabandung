@@ -35,36 +35,54 @@ class OrderController extends Controller
             'invoice' => $invoice,
         ]);
 
-        // dd($transaction);
-        $totalPrice = 0;
+        // dd($selectedProducts);
+
+        $subTotalPrice = 0;
         // Simpan data yang diterima dari form
-        foreach ($selectedProducts as $index => $productId) {
+        foreach ($selectedProducts as $productId) {
             // dd($productId);
             $quantity = $quantities[$productId];
             $items = Stokbarang::find($productId);
 
+            // dd($items);
             // Lakukan sesuatu dengan $productId dan $quantity, seperti menyimpan ke dalam database
             $transaction->orders()->create([
-                'product_id' => $productId,
+                'product_id' => $items->id,
                 'qty' => $quantity,
                 'price' => $items->price,
                 'total_price' => $quantity * $items->price,
             ]);
 
             // Hitung total harga dengan menambahkan total harga dari setiap produk
-            $totalPrice += $quantity * $items->price;
+            $subTotalPrice += $quantity * $items->price;
         }
 
         // dd($transaction, $totalPrice);
 
-        $order = Order::with('transaction')
+        $order = Order::with('item','transaction')
         ->where('transaction_id', $transaction->id)
         ->get()
-        ->groupBy(function($items) {
-            return $items->item->user->ksm->business_name.'_'.$items->transaction->id;
+        ->groupBy(function($item) {
+            return $item->item->user->ksm->business_name;
         });
 
-        return view('pages.pembeli.transaction.index' , compact('totalPrice', 'order'));
+        // Menghitung total harga dari produk di setiap toko
+        // $totalPrices = [];
+        // foreach ($order as $sellerName => $products) {
+        //     $totalPrice = $products->sum('price');
+        //     $totalPrices[$sellerName] = $totalPrice;
+        // }
+        // Menghitung total harga dan total qty dari produk di setiap toko
+        $totals = [];
+        foreach ($order as $sellerName => $orders) {
+            $totalPrice = $orders->sum(function ($order) {
+                return $order->item->price;
+            });
+            $totalQty = $orders->sum('qty');
+            $totals[$sellerName] = ['totalPrice' => $totalPrice, 'totalQty' => $totalQty];
+        }
+
+        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals'));
     }
 
     public function myOrder()
