@@ -138,3 +138,12 @@
 
 </body>
 </html>
+{{--
+address
+phone
+total_qty
+total_price
+shipping_cost
+payment_method
+payment_status
+order_status --}}

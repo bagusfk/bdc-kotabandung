@@ -22,7 +22,7 @@
     </div> --}}
     <div class="grid grid-cols-12 gap-4 px-8 py-6 my-8">
         <div class="sticky flex flex-col col-span-12 gap-2 w-fit md:col-span-2 top-4 h-fit">
-            <button class="flex items-center justify-between px-4 py-2 bg-white border rounded-full border-primary">
+            <a href="/" class="flex items-center justify-between px-4 py-2 bg-white border rounded-full border-primary">
                 {{-- <svg class="w-6 h-6 text-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
                 </svg> --}}
@@ -33,7 +33,7 @@
                 <div class="text-primary">
                     Kembali dan Batal
                 </div>
-            </button>
+            </a>
         </div>
         {{-- <div class="h-[2000px] bg-[#f0f0f0] px-8 py-4 col-span-12 gap-2 md:col-span-7 ">
             <div class="text-[36px] font-bold text-slate-600">
@@ -107,7 +107,7 @@
                 </form>
             </div>
         </section>
-        <div class="sticky top-4 h-[500px] bg-[#f0f0f0] flex items-center justify-center col-span-12 gap-2 md:col-span-3">3</div>
+        <div class="sticky top-4 h-[500px] flex items-center justify-center col-span-12 gap-2 md:col-span-3"></div>
     </div>
 </body>
 </html>

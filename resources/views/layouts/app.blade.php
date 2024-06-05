@@ -58,6 +58,16 @@
             .fade-out {
                 animation: fadeOut 0.3s ease-in-out; /* Sesuaikan durasi dan efek animasi sesuai kebutuhan */
             }
+
+            .bg-pattern {
+                --s: 100px; /* control the size*/
+                --c1: #ffffff;
+                --c2: #f5f5f5;
+
+                background:
+                    repeating-conic-gradient(var(--c1) 0 45deg,var(--c2) 0 90deg)
+                    0/var(--s) var(--s);
+            }
         </style>
 
         <!-- Scripts -->
@@ -65,7 +75,7 @@
     </head>
     <body class="font-sans antialiased">
         {{-- Loader --}}
-        <div id="loader" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+        <div id="loader" class="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50">
             <div class="w-32 h-32 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
         </div>
         <div class="fixed z-20 w-full">
