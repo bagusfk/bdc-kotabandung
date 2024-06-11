@@ -82,7 +82,8 @@
                             <div class="font-medium">Rp <span class="ongkir">0</span></div>
                         </div>
                     </div>
-                    <div class="container p-2 bg-white border-2 border-gray-100 rounded-lg">
+                    <form action="{{ route('payment') }}" method="POST" class="container p-2 bg-white border-2 border-gray-100 rounded-lg">
+                        @csrf
                         <h1 class="mb-3 font-extrabold">Ringkasan Belanja</h1>
                         <div>
                             <div class="flex justify-between">
@@ -98,10 +99,21 @@
                                 <div class="text-2xl font-semibold text-primary">0</div>
                             </div>
                         </div>
-                        <button class="w-full p-2 px-5 mt-2 text-white rounded bg-primary">
+                        <input type="hidden" value="{{ $transaction_id }}" name="transaction_id">
+                        <input type="hidden" value="{{ Auth::user()->address }}" name="address">
+                        <input type="hidden" value="{{ Auth::user()->no_wa }}" name="phone">
+                        <input type="hidden" value="{{ $totals[$sellerName]['totalQty'] }}" name="total_qty">
+                        <input type="hidden" value="{{ $totals[$sellerName]['totalPrice'] }}" name="total_price">
+                        {{-- Belum ada data kurir --}}
+                        {{-- <input type="hidden" value="JNE" name="expedition"> --}}
+                        <input type="hidden" value="9000" name="shipping_cost">
+                        {{-- <input type="hidden" value="bank" name="payment_method"> --}}
+                        {{-- <input type="hidden" value="pending" name="payment_status"> --}}
+                        {{-- <input type="hidden" value="payment" name="order_status"> --}}
+                        <button type="submit" class="w-full p-2 px-5 mt-2 text-white rounded bg-primary">
                             Pilih Pembayaran
                         </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -138,6 +150,7 @@
 
 </body>
 </html>
+
 {{--
 address
 phone
@@ -145,5 +158,5 @@ total_qty
 total_price
 shipping_cost
 payment_method
-payment_status
-order_status --}}
+payment_status(update)
+order_status(update) --}}

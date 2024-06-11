@@ -82,7 +82,32 @@ class OrderController extends Controller
             $totals[$sellerName] = ['totalPrice' => $totalPrice, 'totalQty' => $totalQty];
         }
 
-        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals'));
+        $transaction_id = $transaction->id;
+
+        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id'));
+    }
+
+    public function payment(Request $request)
+    {
+        $request->validate([
+            'transaction_id' =>'required',
+            'address' =>'required',
+            'phone' =>'required',
+            'total_qty' =>'required',
+            'total_price' =>'required',
+            'shipping_cost' =>'required'
+        ]);
+
+        $transaction = Transaction::find($request->transaction_id);
+        $transaction->update([
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'total_qty' => $request->total_qty,
+            'total_price' => $request->total_price,
+            'shipping_cost' => $request->shipping_cost,
+        ]);
+
+        return view('pages.pembeli.transaction.payment');
     }
 
     public function myOrder()
