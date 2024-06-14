@@ -4,10 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\category;
+use App\Models\cities;
 use App\Models\Stokbarang;
 use App\Models\Kelola_data_ksm;
 use App\Models\Event;
-use App\Models\Beli;
+//cities
+use Database\Seeders\CitySeeder;
 
 use Database\Seeders\user\UserSeeder;
 // use Database\Seeders\user\RoleSeeder;
@@ -39,6 +41,10 @@ class DatabaseSeeder extends Seeder
 
         if (Kelola_data_ksm::count() == 0) {
             $seeder[] = KsmSeeder::class;
+        }
+
+        if (cities::count() == 0) {
+            $seeder[] = CitySeeder::class;
         }
 
         if (User::count() == 0) {

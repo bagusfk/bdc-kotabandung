@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     @vite(['resources/css/app.css','resources/js/app.js'])
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key')}}"></script>
 </head>
 <body class="overflow-y-auto scroll">
     {{-- navbar --}}
@@ -54,37 +57,35 @@
                             </div>
                         </div>
                     @endforeach
-                        <div class="py-2 font-medium text-gray-500 border-t text-end">Total Pesanan ({{$totals[$sellerName]['totalQty']}}) <span class="font-semibold text-primary"> Rp{{ $totals[$sellerName]['totalPrice'] }}</span></div>
+                        <div class="py-2 font-medium text-gray-500 border-t text-end">Total Pesanan ({{$totals[$sellerName]['totalQty']}}) <span class="font-semibold text-primary"> Rp{{ $subTotalPrice }}</span></div>
                     </div>
                 @endforeach
                 </div>
                 <div class="w-full">
                     <div class="flex flex-col w-full px-4 py-3 mb-4 bg-white border-2 border-gray-200 rounded-xl">
                         <form class="max-w-sm">
-                            <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi</label>
-                            <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option selected>-- Pilih Ekspedisi --</option>
-                                <option value="JNE">JNE</option>
-                                <option value="JNT">JNT</option>
-                                <option value="Sicepat">Sicepat</option>
+                            <label for="courier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi</label>
+                            <select id="courier" name="courier" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">-- Pilih Ekspedisi --</option>
+                                <option value="jne">JNE</option>
+                                <option value="pos">POS</option>
+                                <option value="tiki">Tiki</option>
                             </select>
                         </form>
                         <form class="max-w-sm mt-2">
-                            <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option selected>-- Pilih Waktu Pengiriman --</option>
-                                <option value="JNE">Regular</option>
-                                <option value="JNT">JNE YES</option>
-                                <option value="Sicepat">Kargo</option>
+                            <label for="service" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Pengiriman</label>
+                            <select id="service" name="service" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </select>
                         </form>
                         <div class="flex items-center justify-between px-2 pt-3">
                             <div class="font-bold text-gray-500">Ongkos Kirim</div>
-                            <div class="font-medium">Rp <span class="ongkir">0</span></div>
+                            <div class="font-medium">Rp <span id="cost-details" class="ongkir">0</span></div>
                         </div>
                     </div>
-                    <form action="{{ route('payment') }}" method="POST" class="container p-2 bg-white border-2 border-gray-100 rounded-lg">
-                        @csrf
-                        <h1 class="mb-3 font-extrabold">Ringkasan Belanja</h1>
+
+                    <form id="form-payment" class="container p-2 bg-white border-2 border-gray-100 rounded-lg">
+                        {{-- @csrf --}}
+                        <h1 class="mb-3 font-extrabold text-gray-600">Ringkasan Belanja</h1>
                         <div>
                             <div class="flex justify-between">
                                 <div class="font-medium text-gray-500">Subtotal Produk</div>
@@ -96,21 +97,23 @@
                             </div>
                             <div class="flex justify-between pt-2 mt-2 border-t border-gray-400">
                                 <div class="font-semibold text-gray-500">Total Bayar</div>
-                                <div class="text-2xl font-semibold text-primary">0</div>
+                                <div class="text-2xl font-semibold text-primary">Rp<span id="totalPrice">{{ $subTotalPrice }}</span></div>
                             </div>
                         </div>
-                        <input type="hidden" value="{{ $transaction_id }}" name="transaction_id">
-                        <input type="hidden" value="{{ Auth::user()->address }}" name="address">
-                        <input type="hidden" value="{{ Auth::user()->no_wa }}" name="phone">
-                        <input type="hidden" value="{{ $totals[$sellerName]['totalQty'] }}" name="total_qty">
-                        <input type="hidden" value="{{ $totals[$sellerName]['totalPrice'] }}" name="total_price">
+                        <input type="hidden" value="{{ $transaction_id }}" name="transaction_id" id="transaction_id">
+                        <input type="hidden" value="{{ Auth::user()->address }}" name="address" id="address">
+                        <input type="hidden" value="{{ Auth::user()->no_wa }}" name="phone" id="phone">
+                        <input type="hidden" value="{{ $totals[$sellerName]['totalQty'] }}" name="total_qty" id="total_qty">
+                        {{-- total price + ongkir --}}
+                        {{-- <input type="hidden" id="totalPrice" value="{{ $subTotalPrice }}" name="total_price"> --}}
                         {{-- Belum ada data kurir --}}
                         {{-- <input type="hidden" value="JNE" name="expedition"> --}}
-                        <input type="hidden" value="9000" name="shipping_cost">
+                        {{-- <input type="hidden" value="OKE" name="expedition_type"> --}}
+                        {{-- <input type="hidden" value="9000" name="shipping_cost"> --}}
                         {{-- <input type="hidden" value="bank" name="payment_method"> --}}
                         {{-- <input type="hidden" value="pending" name="payment_status"> --}}
                         {{-- <input type="hidden" value="payment" name="order_status"> --}}
-                        <button type="submit" class="w-full p-2 px-5 mt-2 text-white rounded bg-primary">
+                        <button type="submit" id="pay-button" class="w-full p-2 px-5 mt-2 text-white rounded bg-primary">
                             Pilih Pembayaran
                         </button>
                     </form>
@@ -148,6 +151,165 @@
         <p class="text-center pb-[1rem]">&copy; 2024 BDC Bandung</p>
     </div>
 
+    <script>
+        // $(document).ready(function() {});
+
+        function getCourierServices() {
+            var courier = $('#courier').val();
+            var origin = 22;
+            var destination = {{ Auth::user()->city_id }};
+
+            /////////////////////////////////////////////////////
+            //belum ada di database
+            var weight = 700; // replace with actual weight in grams
+            //////////////////////////////////////////////////////
+
+            if (!courier) {
+                return;
+            }
+            console.log(courier, origin, destination, weight);
+
+            $.ajax({
+                url: '{{ route('getCourierServices') }}',
+                method: 'post',
+                data: {
+                    // "_token": "{{ csrf_token() }}",
+                    "origin": origin,
+                    "destination": destination,
+                    "weight": weight,
+                    "courier": courier,
+                    "_token": $('meta[name="csrf-token"]').attr('content'),
+                },
+
+                success: function(response) {
+                    $('#service').empty();
+                    $('#cost-details').empty();
+
+                    $.each(response, function(index, courier) {
+
+                        console.log(courier.code);
+                        $('#form-payment').append(`<input type="hidden" value="${courier.code}" name="expedition" id="expedition">`)
+
+                        $.each(courier.costs, function(index, cost) {
+                            $('#service').append(`<option value="${cost.service}" data-cost="${cost.cost[0].value}" data-etd="${cost.cost[0].etd}">${cost.service} - ${cost.cost[0].value} IDR ( ${cost.cost[0].etd} hari)</option>`);
+                        });
+                    });
+
+                    // Update cost details for the first service
+                    updateCostDetails();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+        function updateCostDetails() {
+            var selectedService = $('#service option:selected');
+            var cost = selectedService.data('cost');
+            var etd = selectedService.data('etd');
+            var service = selectedService.val();
+
+            $('#cost-details').html(`${cost}`);
+            $('#ongkir').html(cost);
+            $('#totalPrice').html(parseInt(cost) + parseInt({{ $subTotalPrice }}));
+
+            console.log(service);
+            $('#form-payment').append(`<input type="hidden" value="${service}" name="expedition_type" id="expedition_type">`);
+            console.log(cost);
+            $('#form-payment').append(`<input type="hidden" value="${cost}" name="shipping_cost" id="shipping_cost">`);
+            console.log(parseInt(cost) + parseInt({{ $subTotalPrice }}));
+            $('#form-payment').append(`<input type="hidden" id="total_price" value="${parseInt(cost) + parseInt({{ $subTotalPrice }})}" name="total_price">`);
+        }
+
+        $('#courier').on('change', function() {
+            getCourierServices();
+        });
+
+        $('#service').on('change', updateCostDetails);
+
+        // Trigger change to populate services for the initial courier
+        $('#courier').trigger('change');
+    </script>
+
+    <script>
+        // const paymentButton = document.getElementById('pay-button');
+        // let formData = new FormData();
+        // const paymentForm = document.getElementById('payment-form');
+
+        // paymentButton.addEventListener('click', function(event) {
+        //     formData.append('payment_form', JSON.stringify(paymentForm));
+        //     console.log(json_decode(formData.get('payment_form')));
+        // });
+
+        $(document).ready(function() {
+            // Mengatur token CSRF untuk semua permintaan AJAX
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('#form-payment').on('submit', function(e) {
+                e.preventDefault(); // Mencegah submit form secara default
+
+                let inputData = {
+                    transaction_id: $('#transaction_id').val(),
+                    address: $('#address').val(),
+                    phone: $('#phone').val(),
+                    total_qty :$('#total_qty').val(),
+                    expedition: $('#expedition').val(),
+                    expedition_type: $('#expedition_type').val(),
+                    total_price: $('#total_price').val(),
+                    shipping_cost: $('#shipping_cost').val()
+                };
+
+                console.log(inputData);
+
+                $.ajax({
+                    url: '/payment', // URL endpoint controller Anda
+                    type: 'POST',
+                    data: inputData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#responseMessage').text('Snap Token: ' + response.snapToken);
+                            snap.pay(response.snapToken);
+                        } else {
+                            $('#responseMessage').text('Failed to fetch snap token.');
+                        }
+                    },
+                    error: function(xhr) {
+                        $('#responseMessage').text('Error: ' + xhr.status + ' ' + xhr.statusText);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    {{-- @if (session('success')) {
+        <script>
+            function (response) {
+                if (response.snapToken) {
+                    window.snap.pay(response.snapToken);
+
+                    $.ajax({
+                        url: '{{ route('payment') }}',
+                        method: 'post',
+                        data: {
+                            "token": response.snapToken,
+                        },
+                        success: function (serverResponse) {
+                            // console.log(serverResponse);
+                    window.snap.pay(response.snapToken);
+
+                        },
+                    });
+                }
+            }
+        </script>
+    }
+    @endif --}}
 </body>
 </html>
 

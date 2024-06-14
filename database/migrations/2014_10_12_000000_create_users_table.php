@@ -22,9 +22,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->unsignedBigInteger('ksm_id')->nullable();
+            $table->unsignedBigInteger('city_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            // $table->foreignId('city_id')->constrained('cities')->onDelete('cascade')->default(null);
             $table->foreign('ksm_id')->references('id')->on('kelola_data_ksms')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
         });
     }
 
