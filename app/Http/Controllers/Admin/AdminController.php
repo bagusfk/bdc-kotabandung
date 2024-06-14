@@ -27,11 +27,11 @@ class AdminController extends Controller
     public function index()
     {
         // Menghitung total pengguna berdasarkan peran "pembeli" dan hari pembuatan
-        $userCountsByRoleAndDay = User::selectRaw('role, DAY(created_at) as day, COUNT(*) as total_users')
+        $userCountsByRoleAndDay = User::selectRaw('role, DATE_FORMAT(created_at, "%Y-%m-%d") as day, COUNT(*) as total_users')
             ->groupBy('role', 'day')
             ->get();
 
-        $items = Stokbarang::selectRaw('DAY(created_at) as day, COUNT(*) as total_items')
+        $items = Stokbarang::selectRaw('DATE_FORMAT(created_at, "%Y-%m-%d") as day, COUNT(*) as total_items')
             ->groupBy('day')
             ->get();
 
@@ -40,6 +40,7 @@ class AdminController extends Controller
             ->get();
 
         $register_events = Register_event::selectRaw('event_id, COUNT(*) as total_register_events')
+            ->with('event')
             ->groupBy('event_id')
             ->get();
 
@@ -68,7 +69,7 @@ class AdminController extends Controller
 
         $data['register_events'] = $register_events->map(function ($item) {
             return [
-                'event_id' => $item->event->event_name,
+                'event_id' => $item->event->event_name ?? 'Unknown Event',
                 'total_register_events' => $item->total_register_events,
             ];
         });
@@ -78,6 +79,7 @@ class AdminController extends Controller
         // Mengirimkan data ke view
         return view('welcomeadmin', $data);
     }
+
 
     public function manage_items()
     {
@@ -203,7 +205,7 @@ class AdminController extends Controller
             'business_description' => 'required',
         ]);
 
-        $id = $request->get('id');
+        $id = $request->get('ksm_id');
         $ksm = Kelola_data_ksm::findOrFail($id);
 
         DB::transaction(function () use ($ksm, $data, $request) {
@@ -223,11 +225,11 @@ class AdminController extends Controller
     {
         if ($request->hasFile($fileInputName)) {
             $newImagePath = $request->file($fileInputName)->store("public/$fileInputName");
-            $newImagePath = str_replace('public/', '', $newImagePath);
+            $newImagePath = str_replace('public/', 'storage/', $newImagePath);
 
             // Remove old image if exists and not default
             if ($ksm->$dbColumnName && $ksm->$dbColumnName !== 'storage/default.jpg') {
-                $oldImage = str_replace('storage/', '', $ksm->$dbColumnName);
+                $oldImage = str_replace('storage/', 'public/', $ksm->$dbColumnName);
                 Storage::delete($oldImage);
             }
 
@@ -254,14 +256,48 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    public function manage_event()
+    public function list_event()
     {
-        $data['image_event'] = Picture_event::all();
         $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
         $data['events'] = Event::paginate(3, ['*'], 'events');
         $data['ksm'] = Kelola_data_ksm::paginate(3, ['*'], 'ksm');
-        return view('pages.admin.event.view', $data);
+        return view('pages.admin.event.list.view', $data);
     }
+
+    public function daftar_event()
+    {
+        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
+
+        return view('pages.admin.event.daftar.view', $data);
+    }
+
+    public function laporan_event()
+    {
+        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
+        $data['events'] = Event::paginate(3, ['*'], 'events');
+        $data['ksm'] = Kelola_data_ksm::paginate(3, ['*'], 'ksm');
+
+        return view('pages.admin.event.laporan.view', $data);
+    }
+
+    public function dokumentasi_event()
+    {
+        $data['image_event'] = Picture_event::all();
+
+        return view('pages.admin.event.dokumentasi.view', $data);
+    }
+
+    public function tambah_laporan_event()
+    {
+        return view('pages.admin.event.laporan.add');
+    }
+
+    // public function create_laporan_event(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         ""
+    //     ])
+    //  }
 
     public function agree($id)
     {
@@ -309,7 +345,7 @@ class AdminController extends Controller
         $event->description = $request->description;
         $event->save();
 
-        return redirect('/kelola-event');
+        return redirect('/list-event');
     }
 
     public function edit_event($id)
@@ -357,7 +393,7 @@ class AdminController extends Controller
             $event->save();
         }
 
-        return redirect('/kelola-event');
+        return redirect('/list-event');
     }
 
     public function delete_event($id)
@@ -423,7 +459,7 @@ class AdminController extends Controller
         $picture_event->save();
 
         // Redirect atau kembalikan respon sesuai kebutuhan aplikasi Anda
-        return redirect('/kelola-event');
+        return redirect('/dokumentasi-event');
     }
 
     public function update_document(Request $request, Picture_event $picture_event)
@@ -458,7 +494,7 @@ class AdminController extends Controller
         $picture_event->save();
 
         // Redirect atau kembalikan respon sesuai kebutuhan aplikasi Anda
-        return redirect('/kelola-event');
+        return redirect('/dokumentasi-event');
     }
 
     private function deleteOldFiles(Picture_event $picture_event)

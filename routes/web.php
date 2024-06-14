@@ -47,21 +47,31 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/edit-item/{id}', [AdminController::class, 'edit_item'])->name('edit-item');
         Route::put('/update-item', [AdminController::class, 'update_item'])->name('update-item');
         Route::delete('/delete-item/{id}', [AdminController::class, 'delete_item'])->name('delete-item');
-        // barang
+        // ksm
         Route::get('/kelola-ksm', [AdminController::class, 'manage_ksm'])->name('manage-ksm');
         Route::get('/edit-ksm/{id}', [AdminController::class, 'edit_ksm'])->name('edit-ksm');
         Route::put('/update-ksm', [AdminController::class, 'update_ksm'])->name('update-ksm');
         Route::delete('/delete-ksm/{id}', [AdminController::class, 'delete_ksm'])->name('delete-ksm');
         // event
-        Route::get('/kelola-event', [AdminController::class, 'manage_event'])->name('manage-event');
+        //list
+        Route::get('/list-event', [AdminController::class, 'list_event'])->name('list-event');
         Route::get('/tambah-event', [AdminController::class, 'add_event'])->name('add-event');
         Route::put('/create-event', [AdminController::class, 'create_event'])->name('create-event');
         Route::get('/edit-event/{id}', [AdminController::class, 'edit_event'])->name('edit-event');
         Route::put('/update-event', [AdminController::class, 'update_event'])->name('update-event');
         Route::delete('/delete-event/{id}', [AdminController::class, 'delete_event'])->name('delete-event');
-        Route::get('/dokumentasi-event', [AdminController::class, 'event_document'])->name('event-document');
-        Route::put('/addorupdate', [AdminController::class, 'addOrUpdate'])->name('addorupdate');
+        //daftar
+        Route::get('/daftar-event', [AdminController::class, 'daftar_event'])->name('daftar-event');
         Route::put('/agree/{id}', [AdminController::class, 'agree']);
+        //laporan
+        Route::get('/laporan-event', [AdminController::class, 'laporan_event'])->name('laporan-event');
+        Route::get('/tambah-laporan', [AdminController::class, 'tambah_laporan_event'])->name('tambah-laporan-event');
+        Route::get('/create-laporan', [AdminController::class, 'create_laporan_event'])->name('create-laporan-event');
+        //dokumentasi
+        Route::get('/dokumentasi-event', [AdminController::class, 'dokumentasi_event'])->name('dokumentasi-event');
+        Route::get('/edit-gambar', [AdminController::class, 'event_document'])->name('event-document');
+        Route::put('/addorupdate', [AdminController::class, 'addOrUpdate'])->name('addorupdate');
+
         // penjualan
         Route::get('/kelola-penjualan', [AdminController::class, 'manage_sales'])->name('manage-sales');
         // keuangan

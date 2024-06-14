@@ -102,8 +102,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Penjelasan
                             Mengenai Usaha <span class="text-red-500">*</span></label>
                         <textarea id="business_description" name="business_description" rows="8"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                            value="{{ $ksm->busines_description }}"></textarea>
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">{{ $ksm->business_description }}</textarea>
                         @error('business_description')
                             <span class="text-red-500 text-sm">Penjelasan mengenai usaha harus diisi.</span>
                         @enderror

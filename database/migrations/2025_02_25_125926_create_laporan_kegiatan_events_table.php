@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('laporan_kegiatan_events', function (Blueprint $table) {
             $table->id();
-            $table->string('participants_name')->nullable();
-            $table->string('event_name')->nullable();
+            $table->foreignId('regist_id')->constrained('register_events')->onDelete('cascade');
             $table->double('sales_result')->nullable();
             $table->timestamps();
         });
