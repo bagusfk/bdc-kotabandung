@@ -33,7 +33,7 @@ Route::get('/e-catalog/{id}', [StokbarangController::class, 'detail'])->name('de
 // })->name('dashboard');
 // ->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth','revalidate'])->group(function () {
+Route::middleware(['auth', 'revalidate'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -61,11 +61,17 @@ Route::middleware(['auth','revalidate'])->group(function () {
         Route::delete('/delete-event/{id}', [AdminController::class, 'delete_event'])->name('delete-event');
         Route::get('/dokumentasi-event', [AdminController::class, 'event_document'])->name('event-document');
         Route::put('/addorupdate', [AdminController::class, 'addOrUpdate'])->name('addorupdate');
+        Route::put('/agree/{id}', [AdminController::class, 'agree']);
         // penjualan
         Route::get('/kelola-penjualan', [AdminController::class, 'manage_sales'])->name('manage-sales');
         // keuangan
         Route::get('/kelola-keuangan', [AdminController::class, 'manage_finance'])->name('manage-finance');
-
+        Route::get('/tambah-kolom', [AdminController::class, 'neraca'])->name('neraca');
+        // Route::match(['get', 'post'], '/neraca-store', [AdminController::class, 'neraca_store'])->name('neraca_store');
+        Route::put('/neraca-store', [AdminController::class, 'neraca_store'])->name('neraca_store');
+        Route::get('/tambah', [AdminController::class, 'add_neraca'])->name('add_neraca');
+        Route::put('/neraca_update/{id}', [AdminController::class, 'neraca_update'])->name('neraca_update');
+        Route::delete('/neraca_destroy/{id}', [AdminController::class, 'neraca_destroy'])->name('neraca_destroy');
     });
 
     Route::middleware('role:kepalabagian')->group(function () {
@@ -78,6 +84,7 @@ Route::middleware(['auth','revalidate'])->group(function () {
         Route::get('/ksm', function () {
             return 'KSM Page';
         });
+        Route::get('/register-event/{id}', [EventController::class, 'store'])->name('register_event');
     });
 
     Route::middleware('role:pembeli')->group(function () {
@@ -95,4 +102,5 @@ Route::get('/event', [EventController::class, 'index'])->name('event');
 
 require __DIR__ . '/auth.php';
 Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
-
+Route::put('/store-ksm', [RegisteredUserController::class, 'storeKsm'])->name('store-ksm');
+// Route::get('/straight/{id}', [RegisteredUserController::class, 'straight_ksm']);

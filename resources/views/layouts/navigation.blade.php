@@ -84,12 +84,17 @@
 
                     <!-- Settings Dropdown -->
                     <div class="flex sm:items-center sm:ms-6">
-
+                        @php
+                            $currentUrl = Request::url();
+                        @endphp
                         @if (Route::has('login'))
                             @auth
                                 <button id="modalLink" class="hidden font-semibold text-g ray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Log in</button>
                         @else
-                                <button id="modalLink" class="text-white py-[.5rem] dark:text-gray-400 dark:hover:text-white bg-[#04a7ff] hover:bg-transparent hover:border-[#04a7ff] hover:text-[#04a7ff] hover:border px-[1rem] rounded-md">Login</button>
+                                @if (strpos($currentUrl, '/login') !== false)
+                                @else
+                                    <button id="modalLink" class="text-white py-[.5rem] dark:text-gray-400 dark:hover:text-white bg-[#04a7ff] hover:bg-transparent hover:border-[#04a7ff] hover:text-[#04a7ff] hover:border px-[1rem] rounded-md">Login</button>
+                                @endif
                             @endauth
                         @endif
                         <div id="myModal" class="absolute top-0 left-0 z-20 items-center justify-center hidden w-full h-screen bg-black bg-opacity-50 modal">

@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use DataTables;
 use App\Models\Kelola_data_ksm;
+use App\Models\Beli;
+use App\Models\Neraca;
 use App\Models\Laporan_penjualan;
 use App\Models\Event;
 use App\Models\Picture_event;
@@ -32,12 +36,12 @@ class AdminController extends Controller
             ->get();
 
         $events = Event::selectRaw('event_name, COUNT(*) as total_events')
-        ->groupBy('event_name')
-        ->get();
+            ->groupBy('event_name')
+            ->get();
 
         $register_events = Register_event::selectRaw('event_id, COUNT(*) as total_register_events')
-        ->groupBy('event_id')
-        ->get();
+            ->groupBy('event_id')
+            ->get();
 
         // Memformat data untuk ditampilkan di view
         $data['userData'] = $userCountsByRoleAndDay->map(function ($item) {
@@ -110,7 +114,7 @@ class AdminController extends Controller
         $stokbarang->id = $request->id;
         $stokbarang->category_id = $request->category_id;
         $stokbarang->seller_id = $request->seller_id;
-        $stokbarang->picture_product = 'storage/'.$imagePath;
+        $stokbarang->picture_product = 'storage/' . $imagePath;
         $stokbarang->name = $request->name;
         $stokbarang->stock = $request->stock;
         $stokbarang->price = $request->price;
@@ -172,8 +176,8 @@ class AdminController extends Controller
 
     public function manage_ksm()
     {
-        $data['ksm1'] = Kelola_data_ksm::paginate(1, ['*'], 'ksm1');
-        $data['ksm2'] = Kelola_data_ksm::paginate(1, ['*'], 'ksm2');
+        $data['ksm1'] = Kelola_data_ksm::paginate(5, ['*'], 'ksm1');
+        $data['ksm2'] = Kelola_data_ksm::paginate(5, ['*'], 'ksm2');
         return view('pages.admin.ksm.view', $data);
     }
 
@@ -187,33 +191,89 @@ class AdminController extends Controller
     public function update_ksm(Request $request)
     {
         $data = $request->validate([
-            'business_name' => 'required',
             'owner' => 'required',
-            'no_whatsapp' => 'required',
+            'brand_name' => 'required',
             'category_id' => 'required',
+            'no_wa' => 'required',
+            'link_ig' => 'nullable',
+            'nib' => 'nullable',
+            'business_entity' => 'nullable',
             'address' => 'required',
+            'product_sales_address' => 'nullable',
+            'business_description' => 'required',
         ]);
 
         $id = $request->get('id');
         $ksm = Kelola_data_ksm::findOrFail($id);
-        $ksm->update($data);
+
+        DB::transaction(function () use ($ksm, $data, $request) {
+            $ksm->update($data);
+
+            // Handle file uploads
+            $this->handleFileUpload($request, 'owner_picture', $ksm, 'owner_picture');
+            $this->handleFileUpload($request, 'logo_image', $ksm, 'logo_image');
+            $this->handleFileUpload($request, 'nib_document', $ksm, 'nib_document');
+            $this->handleFileUpload($request, 'permission_letter', $ksm, 'permission_letter');
+        });
 
         return redirect('/kelola-ksm');
     }
 
+    private function handleFileUpload(Request $request, $fileInputName, $ksm, $dbColumnName)
+    {
+        if ($request->hasFile($fileInputName)) {
+            $newImagePath = $request->file($fileInputName)->store("public/$fileInputName");
+            $newImagePath = str_replace('public/', '', $newImagePath);
+
+            // Remove old image if exists and not default
+            if ($ksm->$dbColumnName && $ksm->$dbColumnName !== 'storage/default.jpg') {
+                $oldImage = str_replace('storage/', '', $ksm->$dbColumnName);
+                Storage::delete($oldImage);
+            }
+
+            // Update the ksm with the new image path
+            $ksm->$dbColumnName = $newImagePath;
+            $ksm->save();
+        }
+    }
+
     public function delete_ksm($id)
     {
-        Kelola_data_ksm::findOrFail($id)->delete();
+        $user = User::find($id);
+        $user->role = 'pembeli';
+        $user->ksm_id = null;
+
+        // Simpan perubahan
+        $user->save();
+
+        $kelolaDataKsm = Kelola_data_ksm::where('id', $id)->first();
+        if ($kelolaDataKsm) {
+            $kelolaDataKsm->delete();
+        }
+
         return redirect()->back();
     }
 
     public function manage_event()
     {
         $data['image_event'] = Picture_event::all();
-        $data['register_event'] = Register_event::all();
-        $data['events'] = Event::paginate(2);
-        $data['ksm'] = Kelola_data_ksm::paginate(2);
+        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
+        $data['events'] = Event::paginate(3, ['*'], 'events');
+        $data['ksm'] = Kelola_data_ksm::paginate(3, ['*'], 'ksm');
         return view('pages.admin.event.view', $data);
+    }
+
+    public function agree($id)
+    {
+        $data = Register_event::find($id);
+        if (!$data) {
+            return response()->json(['error' => 'Data not found'], 404);
+        }
+
+        $data->status_validation = 'agree';
+        $data->save();
+
+        return response()->json(['message' => 'Status updated successfully'], 200);
     }
 
     public function add_event()
@@ -245,7 +305,7 @@ class AdminController extends Controller
         // Gunakan timestamp yang sudah dikonversi sebagai nilai tanggal
         $event->event_date_start = date('Y-d-m', $startTimestamp);
         $event->event_date_end = date('Y-d-m', $endTimestamp);
-        $event->event_poster = 'storage/'.$imagePath;
+        $event->event_poster = 'storage/' . $imagePath;
         $event->description = $request->description;
         $event->save();
 
@@ -434,20 +494,148 @@ class AdminController extends Controller
     public function manage_sales()
     {
         $data['penjualan'] = Laporan_penjualan::all();
+        $data['penjual'] = Stokbarang::all();
+        $data['pembeli'] = Beli::all();
+
+        // Inisialisasi array untuk labels dan data
+        $labels = [];
+        $qty = [];
+        $ksm = [];
+
+        $ksmCounts = [];
+        $labelCount = [];
+        $ksmTotalCounts = [];
+
+        // Loop melalui data pembelian untuk mendapatkan nama produk dan kuantitas
+        foreach ($data['pembeli'] as $pembeli) {
+            $productName = $pembeli->product->name;
+            $quantity = $pembeli->qty;
+            $ksmName = $pembeli->product->user->ksms->brand_name;
+
+            $labels[] = $productName;
+            $qty[] = $quantity;
+            $ksm[] = $ksmName;
+
+            if (!isset($ksmCounts[$ksmName])) {
+                $ksmCounts[$ksmName] = 0;
+                $ksmTotalCounts[$ksmName] = 0;
+            }
+
+            if (!isset($labelCount[$productName])) {
+                $labelCount[$productName] = 0;
+            }
+            $ksmCounts[$ksmName] += $quantity;
+            $labelCount[$productName] += $quantity;
+        }
+        // Siapkan data untuk chart
+        $data['chartSale'] = [
+            'labels' => $labels,
+            'qty' => $qty,
+            'ksmCount' => array_keys($ksmCounts),
+            'labelCount' => array_keys($labelCount),
+            'qtyCount' => array_values($labelCount),
+            'ksm' => $ksm,
+            'ksmTotalCounts' => array_values($ksmCounts) // Total per KSM
+        ];
+
         return view('pages.admin.sale.view', $data);
     }
 
     public function manage_finance()
     {
-        return view('pages.admin.finance.view');
+        $data['neraca'] = Neraca::all();
+        return view('pages.admin.finance.view', $data);
     }
+
+    public function neraca()
+    {
+        $data['neraca'] = Neraca::all();
+        return view('pages.admin.finance.neraca.add', $data);
+    }
+
+    public function getData()
+    {
+        $neracas = Neraca::select(['input_date', 'cash', 'receivables', 'supplies', 'equipment', 'debt', 'capital', 'information']);
+        return DataTables::of($neracas)
+            ->editColumn('input_date', function ($neraca) {
+                return date('d-m-Y', strtotime($neraca->input_date));
+            })
+            ->make(true);
+    }
+
+    public function neraca_update(Request $request, $id)
+    {
+        // dd($id);
+
+        $input_dates = $request->input('input_date');
+        $cashes = $request->input('cash');
+        $receivables = $request->input('receivables');
+        $supplies = $request->input('supplies');
+        $equipment = $request->input('equipment');
+        $debts = $request->input('debt');
+        $capitals = $request->input('capital');
+        $informations = $request->input('information');
+
+        $neraca = Neraca::findOrFail($id);
+        $neraca->input_date = $input_dates;
+        $neraca->cash = $cashes;
+        $neraca->receivables = $receivables;
+        $neraca->supplies = $supplies;
+        $neraca->equipment = $equipment;
+        $neraca->debt = $debts;
+        $neraca->capital = $capitals;
+        $neraca->information = $informations;
+
+        $neraca->update();
+
+        return redirect()->back()->with('status', 'Data Telah Diperbarui');
+    }
+
+    public function neraca_store(Request $request)
+    {
+        $input_dates = $request->input('input_date');
+        $cashes = $request->input('cash');
+        $receivables = $request->input('receivables');
+        $supplies = $request->input('supplies');
+        $equipment = $request->input('equipment');
+        $debts = $request->input('debt');
+        $capitals = $request->input('capital');
+        $informations = $request->input('information');
+
+        $neraca = new Neraca();
+        $neraca->input_date = $input_dates;
+        $neraca->cash = $cashes;
+        $neraca->receivables = $receivables;
+        $neraca->supplies = $supplies;
+        $neraca->equipment = $equipment;
+        $neraca->debt = $debts;
+        $neraca->capital = $capitals;
+        $neraca->information = $informations;
+
+        if ($neraca->save()) {
+            // return redirect()->route('sse'); // Redirect to SSE route on success
+            return redirect()->back()->with('status', 'Data Berhasil Ditambahkan');
+        }
+
+        return redirect()->back()->with('error', 'Failed to save data');
+    }
+
+    public function neraca_destroy($id)
+    {
+        $transaction = Neraca::findOrFail($id);
+        $transaction->delete();
+
+        return redirect()->back()->with('delete', 'Data Berhasil Dihapus');
+        // return response()->json(['success' => 'Transaction deleted successfully']);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    // public function store(Request $request)
+    // {
+    //     //
+    // }
 
     /**
      * Display the specified resource.
@@ -468,16 +656,16 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    // public function update(Request $request, string $id)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    // public function destroy(string $id)
+    // {
+    //     //
+    // }
 }

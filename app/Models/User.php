@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Kelola_data_ksm::class);
     }
+
+    public function ksms()
+    {
+        return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id');
+    }
 }

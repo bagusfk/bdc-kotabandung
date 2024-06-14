@@ -10,7 +10,7 @@ class Kelola_data_ksm extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'business_name', 'owner', 'no_whatsapp', 'category_id', 'address'];
+    protected $fillable = ['id', 'brand_name', 'owner', 'no_wa', 'category_id', 'address'];
 
     public function category()
     {

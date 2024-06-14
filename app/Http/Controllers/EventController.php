@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
+use App\Models\Register_event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -12,7 +15,11 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('pages.event.index');
+        $ksmId = Auth::id();
+        $data['register_event'] = Register_event::where('ksm_id', $ksmId)->get();
+        $data['users'] = User::all();
+        $data['event'] = Event::all();
+        return view('pages.event.index', $data);
     }
 
     /**
@@ -26,9 +33,15 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        //
+        $user = Auth::id();
+        $event = new Register_event();
+        $event->ksm_id = $user;
+        $event->event_id = $id;
+        $event->save();
+
+        return redirect()->back();
     }
 
     /**

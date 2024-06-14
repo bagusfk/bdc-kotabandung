@@ -14,11 +14,15 @@ return new class extends Migration
         Schema::create('belis', function (Blueprint $table) {
             $table->id();
             $table->string('cart', 128)->nullable();
-            $table->integer('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->integer('qty')->nullable();
             $table->string('shipping_address', 128)->nullable();
             $table->string('payment_method', 128)->nullable();
             $table->double('pay')->nullable();
             $table->enum('order_process', ['process', 'finish', 'cancel'])->default('process');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('stokbarangs')->onDelete('cascade');
             $table->timestamps();
         });
     }
