@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Transaction;
+use App\Models\Stokbarang;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -10,10 +13,101 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function checkout(Request $request)
     {
-        //
-        return view('pages.pembeli.transaction.index');
+        $request->validate([
+            'selected_products.*' => 'required|exists:stokbarangs,id',
+            'qty.*' => 'required|integer|min:1'
+        ]);
+
+        // dd($request->all());
+
+        $selectedProducts = $request->input('selected_products', []);
+        $quantities = $request->input('qty', []);
+
+        $buyer_id = Auth::user()->id;
+        // Membuat invoice
+        $invoice = 'INV-'.uniqid().'-'.time().$buyer_id;
+        // dd($invoice);
+
+        $transaction = Transaction::create([
+            'buyer_id' => $buyer_id,
+            'invoice' => $invoice,
+        ]);
+
+        // dd($selectedProducts);
+
+        $subTotalPrice = 0;
+        // Simpan data yang diterima dari form
+        foreach ($selectedProducts as $productId) {
+            // dd($productId);
+            $quantity = $quantities[$productId];
+            $items = Stokbarang::find($productId);
+
+            // dd($items);
+            // Lakukan sesuatu dengan $productId dan $quantity, seperti menyimpan ke dalam database
+            $transaction->orders()->create([
+                'product_id' => $items->id,
+                'qty' => $quantity,
+                'price' => $items->price,
+                'total_price' => $quantity * $items->price,
+            ]);
+
+            // Hitung total harga dengan menambahkan total harga dari setiap produk
+            $subTotalPrice += $quantity * $items->price;
+        }
+
+        // dd($transaction, $totalPrice);
+
+        $order = Order::with('item','transaction')
+        ->where('transaction_id', $transaction->id)
+        ->get()
+        ->groupBy(function($item) {
+            return $item->item->user->ksm->business_name;
+        });
+
+        // Menghitung total harga dari produk di setiap toko
+        // $totalPrices = [];
+        // foreach ($order as $sellerName => $products) {
+        //     $totalPrice = $products->sum('price');
+        //     $totalPrices[$sellerName] = $totalPrice;
+        // }
+        // Menghitung total harga dan total qty dari produk di setiap toko
+        $totals = [];
+        foreach ($order as $sellerName => $orders) {
+            $totalPrice = $orders->sum(function ($order) {
+                return $order->item->price;
+            });
+            $totalQty = $orders->sum('qty');
+            $totals[$sellerName] = ['totalPrice' => $totalPrice, 'totalQty' => $totalQty];
+        }
+
+        $transaction_id = $transaction->id;
+
+        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id'));
+    }
+
+    public function payment(Request $request)
+    {
+        $request->validate([
+            'transaction_id' =>'required',
+            'address' =>'required',
+            'phone' =>'required',
+            'total_qty' =>'required',
+            'total_price' =>'required',
+            'shipping_cost' =>'required'
+        ]);
+
+        $transaction = Transaction::find($request->transaction_id);
+        $transaction->update([
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'total_qty' => $request->total_qty,
+            'total_price' => $request->total_price,
+            'shipping_cost' => $request->shipping_cost,
+        ]);
+
+        return view('pages.pembeli.transaction.payment');
     }
 
     public function myOrder()

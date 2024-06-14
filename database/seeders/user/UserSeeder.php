@@ -42,6 +42,16 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
+            'role' => 'ksm',
+            'name' => 'ksm2',
+            'password' => bcrypt('ksm2'),
+            'no_wa' => '089123456789',
+            'address' => 'Jl. Setia Budi No. 15C',
+            'email' => 'ksm2@ksm2.com',
+            'ksm_id' => 4,
+        ]);
+
+        User::create([
             'role' => 'pembeli',
             'name' => 'pembeli',
             'password' => bcrypt('pembeli'),

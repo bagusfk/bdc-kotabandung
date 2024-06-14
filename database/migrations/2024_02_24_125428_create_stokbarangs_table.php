@@ -13,16 +13,14 @@ return new class extends Migration
     {
         Schema::create('stokbarangs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->unsignedBigInteger('seller_id')->nullable();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
             $table->string('picture_product', 128)->nullable();
             $table->string('name', 128)->nullable();
             $table->integer('stock')->nullable();
             $table->integer('price')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('seller_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

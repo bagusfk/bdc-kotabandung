@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
+        'name',
         'email',
         'no_wa',
         'password',
@@ -55,6 +55,16 @@ class User extends Authenticatable
         return $this->hasMany(Stokbarang::class);
     }
 
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public function events()
     {
         return $this->hasMany(Event::class);
@@ -67,7 +77,7 @@ class User extends Authenticatable
 
     public function ksm()
     {
-        return $this->hasOne(Kelola_data_ksm::class);
+        return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id');
     }
 
     public function ksms()

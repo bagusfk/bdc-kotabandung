@@ -26,7 +26,7 @@ Route::get('/', function () {
 })->name('dashboard');
 
 Route::get('/e-catalog', [StokbarangController::class, 'index'])->name('catalog');
-Route::get('/e-catalog/{id}', [StokbarangController::class, 'detail'])->name('detail_catalog');
+Route::get('/e-catalog/detail/{id}', [StokbarangController::class, 'detail'])->name('detail_catalog');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -91,16 +91,21 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/pembeli', function () {
             return view('dashboard');
         });
+        Route::post('/cart/add/{item}', [CartController::class, 'addTocart'])->name('cart.add');
         Route::get('/cart', [CartController::class, 'index'])->name('cart');
-        Route::get('/order', [OrderController::class, 'index'])->name('order');
+        Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+        Route::post('/payment-methode', [OrderController::class, 'payment'])->name('payment');
         Route::get('/my-order', [OrderController::class, 'myOrder'])->name('my-order');
+        Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
+        Route::put('/store-ksm', [RegisteredUserController::class, 'storeKsm'])->name('store-ksm');
     });
 });
 
-Route::get('/comapny-profile', [CompanyController::class, 'index'])->name('company_profile');
+Route::get('/e-catalog/search', [StokbarangController::class, 'searchBarang'])->name('search.barang');
+Route::get('/e-catalog/search-category', [StokbarangController::class, 'searchCategory'])->name('search.category');
+Route::get('/company-profile', [CompanyController::class, 'index'])->name('company_profile');
 Route::get('/event', [EventController::class, 'index'])->name('event');
 
 require __DIR__ . '/auth.php';
-Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
-Route::put('/store-ksm', [RegisteredUserController::class, 'storeKsm'])->name('store-ksm');
+// Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
 // Route::get('/straight/{id}', [RegisteredUserController::class, 'straight_ksm']);

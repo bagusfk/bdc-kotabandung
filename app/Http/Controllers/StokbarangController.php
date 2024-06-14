@@ -29,6 +29,40 @@ class StokbarangController extends Controller
         return view('pages.catalog.detailproduct', $data);
     }
 
+    public function searchBarang(Request $request)
+    {
+        $data['query'] = $request->search;
+        $data['categories'] = category::all();
+        $data['items'] = Stokbarang::where('name', 'like', '%'. $request->search. '%')->get();
+
+        return view('pages.catalog.view', $data);
+    }
+
+    public function searchCategory(Request $request)
+    {
+        $search = $request->input('search');
+        $category_id = $request->category_id;
+
+        $data = Stokbarang::query();
+
+        if($category_id){
+            $data->where('category_id', $category_id)->get();
+        }
+
+        if($search){
+            $data->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $items = $data->get();
+
+        $categories = category::all();
+
+        // dd($data);
+
+        return view('pages.catalog.view', compact('items', 'search', 'category_id', 'categories') );
+    }
     /**
      * Show the form for creating a new resource.
      */
