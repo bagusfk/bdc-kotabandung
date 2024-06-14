@@ -4,59 +4,57 @@
         </h2>
     </x-slot>
     <h1 class="w-48 pt-10 mb-5 ml-8 text-3xl">Pesanan Saya</h1>
-    <div class="grid grid-cols-3 gap-6 mx-auto mb-4 max-w-7xl">
-        <div class="flex-col w-full col-span-2 bag1">
-            <div class="px-3 py-2 mt-2 bg-white border rounded-lg select_with_store border-slate-300">
-                <div class="flex items-center justify-between gap-3 py-2 border-b-2">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <div class="font-bold">Nama Toko</div>
-                        <div class="text-sm">INV0180912983172041924</div>
-                        <div class="px-2 py-1 text-sm text-blue-500 border border-blue-500 rounded-md">Belum dibayar</div>
-                        <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Dikemas</div>
-                        <div class="px-2 py-1 text-sm text-white bg-yellow-300 rounded-md">Shipping</div>
-                        <div class="px-2 py-1 text-sm text-white bg-green-500 rounded-md">Selesai</div>
-                        <div class="px-2 py-1 text-sm text-white bg-red-500 rounded-md">Cancle</div>
-                    </div>
-                    <a href="" class="text-primary">Lacak Pesanan></a>
-                </div>
-                <div class="flex justify-between py-4">
-                    <div class="flex items-start gap-3">
-                        <img src="{{asset('storage/img/kursi.png')}}" alt="" class="w-16 h-16">
-                        <div>
-                            <div class="font-bold">Nama Barang</div>
-                            <div class="">1x Barang Rp15.000</div>
+    <div class="grid grid-cols-3 gap-6 mx-auto mb-4 max-w-7xl bg-slate-500">
+        @foreach($transactions as $transaction)
+            <div class="flex-col w-full col-span-2 bag1">
+                <div class="px-3 py-2 mt-2 bg-white border rounded-lg select_with_store border-slate-300">
+                    <div class="flex items-center justify-between gap-3 py-2 border-b-2">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="font-bold">{{$transaction->orders->first()->item->user->ksm->business_name}}</div>
+                            <div class="text-sm">{{ $transaction->invoice }}</div>
+                            @if ($transaction->payment_status == 'unpaid')
+                                <div class="px-2 py-1 text-sm text-red-500 border border-red-500 rounded-md">Belum dibayar</div>
+                            @elseif ($transaction->payment_status == 'paid' && $transaction->status == 'dikemas')
+                                <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Dikemas</div>
+                            @elseif ($transaction->payment_status == 'paid' && $transaction->status =='dikirim')
+                                <div class="px-2 py-1 text-sm text-white bg-yellow-300 rounded-md">Shipping</div>
+                            @elseif ($transaction->payment_status == 'paid' && $transaction->status =='selesai')
+                                <div class="px-2 py-1 text-sm text-white bg-green-500 rounded-md">Selesai</div>
+                            @elseif ($transaction->status == 'cancel')
+                                <div class="px-2 py-1 text-sm text-white bg-red-500 rounded-md">Cancle</div>
+                            @endif
                         </div>
+                        <a href="" class="text-primary">Lacak Pesanan></a>
                     </div>
-                    <div class="">
-                        <div class="font-bold">Total Belanja</div>
-                        <span class="price">Rp.500.000</span>
+
+                        <div class="flex justify-between py-4">
+                            <div class="flex items-start gap-3">
+                                <img src="{{asset( $transaction->orders->first()->item->picture_product )}}" alt="" class="w-16 h-16">
+                                <div>
+                                    <div class="font-bold">{{ $transaction->orders->first()->item->name }}</div>
+                                    <div class="text-sm text-gray-600">{{ $transaction->orders->first()->qty }} x Rp {{ $transaction->orders->first()->item->price }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    @if($transaction->orders->count() > 1)
+                        <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="flex items-center justify-center w-full gap-3 py-2 border-t-2 border-b-2 hover:bg-slate-50" type="button">
+                            Tampilkan barang lainnya
+                        </button>
+                    @endif
+                    <div class="flex items-center justify-between gap-8 py-3">
+                        <div class="flex items-center gap-2">
+                            <div class="font-bold">Total Belanja:</div>
+                            <span class="price">Rp{{ $transaction->total_price }}</span>
+                        </div>
+                        <!-- Modal toggle -->
+                        <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-primary hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800" type="button">
+                            Lihat Detail Transaksi
+                        </button>
                     </div>
-                </div>
-                <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="flex items-center justify-center w-full gap-3 py-2 border-t-2 border-b-2 hover:bg-slate-50" type="button">
-                    Tampilkan barang lainnya
-                </button>
-                <div class="flex items-center justify-end gap-8 py-3">
-                    <!-- Modal toggle -->
-                    <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-primary hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800" type="button">
-                        Lihat Detail Transaksi
-                    </button>
                 </div>
             </div>
-        </div>
-        {{-- <div class="flex-col w-full col-span-1 bag2">
-            <div class="container p-2 bg-white border rounded-lg border-slate-300">
-                <h1 class="mb-3 font-extrabold">Ringkasan Belanja</h1>
-                <div class="flex justify-between mb-3">
-                    <span>Total Belanja</span>
-                    <span>Rp.500.000</span>
-                </div>
-                <button class="w-full p-2 px-5 text-white rounded bg-primary">
-                    Bayar
-                </button>
-            </div>
-        </div> --}}
-        {{-- <div class="h-10 col-span-2 bg-red-400"></div>
-        <div class="h-10 col-span-1 bg-red-400"></div> --}}
+        @endforeach
     </div>
 
     <!-- Main modal -->

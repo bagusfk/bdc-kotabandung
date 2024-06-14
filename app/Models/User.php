@@ -79,4 +79,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id');
     }
+    public function cities()
+    {
+        return $this->belongsTo(cities::class, 'city_id');
+    }
 }

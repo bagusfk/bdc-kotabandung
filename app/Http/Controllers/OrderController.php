@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Transaction;
 use App\Models\Stokbarang;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Midtrans\Config;
+
 
 class OrderController extends Controller
 {
@@ -15,11 +19,14 @@ class OrderController extends Controller
      */
     public function checkout(Request $request)
     {
-        $request->validate([
-            'selected_products.*' => 'required|exists:stokbarangs,id',
-            'qty.*' => 'required|integer|min:1'
-        ]);
+        $req = $request->validate([
+                    'selected_products.*' => 'required|exists:stokbarangs,id',
+                    'qty.*' => 'required|integer|min:1'
+                ]);
 
+        if (!$req) {
+            return redirect()->route('my-order');
+        }
         // dd($request->all());
 
         $selectedProducts = $request->input('selected_products', []);
@@ -87,32 +94,135 @@ class OrderController extends Controller
         return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id'));
     }
 
+    function getCourierServices(Request $request)
+    {
+        $origin = 22;
+        $destination = $request->input('destination');
+        $weight = $request->input('weight');
+        $courier = $request->input('courier');
+
+        // dd($origin, $destination, $weight, $courier);
+
+        // $response = Http::withHeaders([
+        //     'key' => config('services.rajaongkir.api_key'),
+        //     'Content-Type' => 'application/x-www-form-urlencoded'
+        // ])->post('https://api.rajaongkir.com/starter/cost', [
+        //     // 'origin' => $origin,
+        //     'origin' => $request->input('origin'),
+        //     'destination' => $request->input('destination'),
+        //     'weight' => $request->input('weight'),
+        //     'courier' => $request->input('courier')
+        // ]);
+
+        $req = "origin=501&destination=114&weight=1700&courier=jne";
+        $req = 'origin='.$origin.'&destination='.$destination.'&weight='.$weight.'&courier=' . $courier;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $req,
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/x-www-form-urlencoded",
+                "key:".config('services.rajaongkir.api_key')
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        // dd(json_decode($response,true)['rajaongkir']['results']);
+
+        if ($err) {
+        echo "cURL Error #:" . $err;
+        } else {
+            $data = json_decode($response,true)['rajaongkir']['results'];
+            return $data;
+        }
+
+        // dd($response->json());
+
+    }
+
     public function payment(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'transaction_id' =>'required',
             'address' =>'required',
             'phone' =>'required',
             'total_qty' =>'required',
+            'expedition' => 'required',
+            'expedition_type' => 'required',
             'total_price' =>'required',
             'shipping_cost' =>'required'
         ]);
 
+        $user = Auth::user();
+
+        //data yang belum ada di database
+        $desa = 'cicukur';
+        $kec = 'cikarang barat';
+
+        $address = $request->input('address').', desa '.$desa.', kec.'.$kec.', '.$user->cities->type.' '.$user->cities->city_name.', '.$user->cities->province;
+
+        // dd($address);
+
         $transaction = Transaction::find($request->transaction_id);
         $transaction->update([
-            'address' => $request->address,
+            'address' => $address,
             'phone' => $request->phone,
             'total_qty' => $request->total_qty,
+            'expedition' => $request->expedition,
+            'expedition_type' => $request->expedition_type,
             'total_price' => $request->total_price,
             'shipping_cost' => $request->shipping_cost,
         ]);
 
-        return view('pages.pembeli.transaction.payment');
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = config('services.midtrans.server_key');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+
+        $params =[
+            'transaction_details'=>[
+                'order_id' => uniqid(),
+                'gross_amount' => $transaction->total_price,
+            ]
+        ];
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        $response = response()->json([ 'status' => 'success', 'snapToken' => $snapToken ]);
+
+        // return view('pages.pembeli.transaction.payment', compact('snapToken'));
+        return $response;
+    }
+
+    public function finishPayment()
+    {
+        return view('pages.pembeli.transaction.finish-payment');
     }
 
     public function myOrder()
     {
-        return view('pages.pembeli.my-order');
+        $buyer_id = Auth::user()->id;
+
+        $transactions = Transaction::where('buyer_id', $buyer_id)->with('orders')->get();
+        // dd($transaction);
+        return view('pages.pembeli.my-order', compact('transactions'));
     }
     /**
      * Show the form for creating a new resource.

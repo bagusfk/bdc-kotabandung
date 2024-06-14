@@ -15,6 +15,8 @@ class Transaction extends Model
         'address',
         'phone',
         'total_qty',
+        'expedition',
+        'expedition_type',
         'total_price',
         'shipping_cost',
         'payment_method',
