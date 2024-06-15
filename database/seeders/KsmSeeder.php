@@ -16,17 +16,18 @@ class KsmSeeder extends Seeder
 
         Kelola_data_ksm::create([
             'id' => 3,
-            'business_name' => 'Kripik Jaya',
+            'brand_name' => 'Kripik Jaya',
             'owner' => 'Sholeh',
-            'no_whatsapp' => '08123456789',
+            'no_wa' => '08123456789',
             'category_id' => '1',
+            'cluster' => 'B',
             'address' => 'Jl. Fatahillah No.90',
         ]);
         Kelola_data_ksm::create([
             'id' => 4,
-            'business_name' => 'Kripik Jaya',
+            'brand_name' => 'Kripik Jaya',
             'owner' => 'Sholeh',
-            'no_whatsapp' => '08123456789',
+            'no_wa' => '08123456789',
             'category_id' => '1',
             'address' => 'Jl. Fatahillah No.90',
         ]);

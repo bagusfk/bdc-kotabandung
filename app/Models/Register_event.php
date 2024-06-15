@@ -20,6 +20,11 @@ class Register_event extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function ksm()
+    {
+        return $this->belongsTo(Kelola_data_ksm::class);
+    }
+
     public function event()
     {
         return $this->belongsTo(Event::class);

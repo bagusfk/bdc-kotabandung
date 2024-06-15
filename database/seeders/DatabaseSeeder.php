@@ -6,14 +6,13 @@ use App\Models\User;
 use App\Models\category;
 use App\Models\cities;
 use App\Models\Stokbarang;
-use App\Models\Role;
 use App\Models\Kelola_data_ksm;
 use App\Models\Event;
 //cities
 use Database\Seeders\CitySeeder;
 
 use Database\Seeders\user\UserSeeder;
-use Database\Seeders\user\RoleSeeder;
+// use Database\Seeders\user\RoleSeeder;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -32,8 +31,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         /**
-     * Run the database seeds.
-     */
+         * Run the database seeds.
+         */
         $seeder = [];
 
         if (category::count() == 0) {
@@ -59,9 +58,10 @@ class DatabaseSeeder extends Seeder
         if (Event::count() == 0) {
             $seeder[] = EventSeeder::class;
         }
-        // if (Role::count() == 0) {
-        //     $seeder[] = RoleSeeder::class;
-        // }
+
+        if (Beli::count() == 0) {
+            $seeder[] = BeliSeeder::class;
+        }
 
         $this->call($seeder);
     }
