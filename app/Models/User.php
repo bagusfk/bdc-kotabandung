@@ -50,11 +50,6 @@ class User extends Authenticatable
         return $this->role;
     }
 
-    public function item()
-    {
-        return $this->hasMany(Stokbarang::class);
-    }
-
     public function cart()
     {
         return $this->hasMany(Cart::class);
@@ -75,10 +70,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Event::class);
     }
 
+    // public function ksm()
+    // {
+    //     return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id');
+    // }
     public function ksm()
     {
-        return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id');
+        return $this->hasMany(Kelola_data_ksm::class);
     }
+
     public function cities()
     {
         return $this->belongsTo(cities::class, 'city_id');

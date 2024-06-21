@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\KelolaDataKsmController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StokbarangController;
@@ -91,13 +92,14 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
     });
 
     Route::middleware('role:ksm')->group(function () {
-        Route::get('/ksm', function () {
-            return 'KSM Page';
-        });
+        // Route::get('/ksm', function () {
+        //     return 'KSM Page';
+        // });
+        Route::get('/dashboard-ksm', [KelolaDataKsmController::class, 'index'])->name('dashboard_ksm');
         Route::get('/register-event/{id}', [EventController::class, 'store'])->name('register_event');
     });
 
-    Route::middleware('role:pembeli')->group(function () {
+    Route::middleware('role:pembeli,ksm')->group(function () {
         Route::get('/pembeli', function () {
             return view('dashboard');
         });
@@ -109,7 +111,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::match(['get','post','put'], '/finish-payment', [OrderController::class, 'finishPayment'])->name('finish-payment');
         Route::get('/my-order', [OrderController::class, 'myOrder'])->name('my-order');
         Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
-        Route::put('/store-ksm', [RegisteredUserController::class, 'storeKsm'])->name('store-ksm');
+        Route::put('/create-ksm', [RegisteredUserController::class, 'storeKsm'])->name('store-ksm');
     });
 });
 

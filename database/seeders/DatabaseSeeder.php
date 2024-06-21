@@ -39,16 +39,16 @@ class DatabaseSeeder extends Seeder
             $seeder[] = CategorySeeder::class;
         }
 
-        if (Kelola_data_ksm::count() == 0) {
-            $seeder[] = KsmSeeder::class;
-        }
-
         if (cities::count() == 0) {
             $seeder[] = CitySeeder::class;
         }
 
         if (User::count() == 0) {
             $seeder[] = UserSeeder::class;
+        }
+
+        if (Kelola_data_ksm::count() == 0) {
+            $seeder[] = KsmSeeder::class;
         }
 
         if (Stokbarang::count() == 0) {
@@ -59,9 +59,9 @@ class DatabaseSeeder extends Seeder
             $seeder[] = EventSeeder::class;
         }
 
-        if (Beli::count() == 0) {
-            $seeder[] = BeliSeeder::class;
-        }
+        // if (Beli::count() == 0) {
+        //     $seeder[] = BeliSeeder::class;
+        // }
 
         $this->call($seeder);
     }

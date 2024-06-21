@@ -18,9 +18,9 @@ class Stokbarang extends Model
         return $this->belongsTo(category::class, 'category_id');
     }
 
-    public function user()
+    public function ksm()
     {
-        return $this->belongsTo(User::class, 'seller_id');
+        return $this->belongsTo(kelola_data_ksm::class, 'seller_id');
     }
 
     public function cart()

@@ -36,7 +36,7 @@
                 </svg>
 
                 <div class="text-primary">
-                    Kembali dan Batal
+                    Kembali
                 </div>
             </a>
         </div>
@@ -48,11 +48,11 @@
         <section class="col-span-12 bg-white dark:bg-gray-900 md:col-span-7 ">
             <div class="max-w-2xl px-4 pb-8 mx-auto lg:pb-16">
                 <h2 class="mb-4 text-3xl font-bold text-gray-900 dark:text-white">Registrasi KSM</h2>
-                <i class="text-red-500 text-xs">* Wajib diisi</i>
+                <i class="text-xs text-red-500">* ( Wajib diisi )</i>
                 <form method="POST" action="{{ route('store-ksm') }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <input type="text" class="hidden" name="ksm_id" value="{{ Auth::id() }}">
+                    {{-- <input type="text" class="hidden" name="ksm_id" value="{{ Auth::id() }}"> --}}
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="sm:col-span-2">
                             <label for="owner"
@@ -62,15 +62,18 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                                 placeholder="Ketik nama lengkap pemilik usaha">
                             @error('owner')
-                                <span class="text-red-500 text-sm">Nama lengkap pemilik usaha harus diisi</span>
+                                <span class="text-sm text-red-500">Nama lengkap pemilik usaha harus diisi</span>
                             @enderror
                         </div>
                         <div class="sm:col-span-2">
                             <label for="brand_name"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Brand</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Brand Usaha <span class="text-red-500">*</span></label>
                             <input type="text" name="brand_name" id="brand_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                                 placeholder="Ketik nama brand">
+                            @error('brand_name')
+                                <span class="text-sm text-red-500">Nama Brand Usaha harus diisi</span>
+                            @enderror
                         </div>
                         <div class="sm:col-span-2">
                             <label for="category"
@@ -78,12 +81,14 @@
                                     class="text-red-500">*</span></label>
                             <select id="category" name="category_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
-                                <option selected="">-- Pilih --</option>
+                                <option>-- Pilih --</option>
                                 @foreach ($category as $data)
-                                    <option value="{{ $data->id }}">
-                                        {{ $data->category }}</option>
+                                    <option value="{{ $data->id }}">{{ $data->category }}</option>
                                 @endforeach
                             </select>
+                            @error('category_id')
+                                <span class="text-sm text-red-500">Kategori harus dipilih</span>
+                            @enderror
                         </div>
                         <div class="w-full">
                             <label for="no_wa"
@@ -93,64 +98,65 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                                 placeholder="Masukan Nomor WhatsApp">
                             @error('no_wa')
-                                <span class="text-red-500 text-sm">No whatsapp harus diisi</span>
+                                <span class="text-sm text-red-500">No whatsapp harus diisi</span>
                             @enderror
                         </div>
                         <div class="w-full">
                             <label for="link_ig"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Link Instagram
-                                Usaha <span class="text-red-500">*</span></label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Link Instagram Usaha</label>
                             <input type="text" name="link_ig" id="link_ig"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                                placeholder="Masukan Link Instagram">
-                            @error('link_ig')
-                                <span class="text-red-500 text-sm">Link ig harus diisi</span>
+                                placeholder="Masukan Link Instagram (jika ada)">
+                        </div>
+                        <div>
+                            <label for="business_entity"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bentuk Badan Usaha <span class="text-red-500">*</span></label>
+                            <select id="business_entity" name="business_entity"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
+                                <option >-- Pilih --</option>
+                                <option value="reseller">Reseller</option>
+                                <option value="br">Bisnis Rumahan</option>
+                                <option value="toko">Toko/Warung</option>
+                                <option value="po">Perusahaan Perseorangan</option>
+                                <option value="koperasi">Koperasi</option>
+                                <option value="persero">Perusahaan Perseroan (Persero)</option>
+                                <option value="fa">Firma (Fa)</option>
+                                <option value="cv">Commanditaire Vennootschap (CV)</option>
+                                <option value="pt">Perseroan Terbatas (PT)</option>
+                            </select>
+                            @error('business_entity')
+                                <span class="text-sm text-red-500">Bentuk Badan Usaha harus dipilih</span>
                             @enderror
                         </div>
                         <div class="w-full">
                             <label for="nib"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Induk
-                                Berusaha</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Induk Berusaha</label>
                             <input type="text" name="nib" id="nib"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                                placeholder="Masukan NIB">
-                        </div>
-                        <div>
-                            <label for="business_entity"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bentuk Badan
-                                Usaha</label>
-                            <select id="business_entity"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
-                                <option selected="">-- Pilih --</option>
-                                <option value="CV">CV</option>
-                                <option value="PT">PT</option>
-                            </select>
+                                placeholder="Masukan NIB (jika ada)">
                         </div>
                         <div class="sm:col-span-2">
                             <label for="address"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Tempat Usaha
-                                Sesuai NIB</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Tempat Usaha Sesuai NIB</label>
                             <input type="text" name="address" id="address"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                                placeholder="Ketik alamat lengkap">
+                                placeholder="Ketik alamat lengkap sesuai NIB (jika ada)">
                         </div>
                         <div class="sm:col-span-2">
                             <label for="product_sales_address"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Penjualanan
-                                Produk (di Kota Bandung)</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Penjualanan Produk (di Kota Bandung) <span class="text-red-500">*</span></label>
                             <input type="text" name="product_sales_address" id="product_sales_address"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                                 placeholder="Ketik alamat lengkap">
                         </div>
                         <div class="sm:col-span-2">
                             <label for="business_description"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Penjelasan
-                                Mengenai Usaha <span class="text-red-500">*</span></label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi Mengenai Brand / Usaha <span class="text-red-500">*</span></label>
                             <textarea id="business_description" name="business_description" rows="8"
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                                 placeholder="Your description here"></textarea>
                             @error('business_description')
-                                <span class="text-red-500 text-sm">Penjelasan mengenai usaha harus diisi.</span>
+                                <span class="text-sm text-red-500">Deskripsi harus diisi.</span>
                             @enderror
                         </div>
                         <div class="w-full">
@@ -162,7 +168,7 @@
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG,
                                 JPG or GIF (MAX. 800x400px).</p>
                             @error('owner_picture')
-                                <span class="text-red-500 text-sm">Foto pemilik usaha harus diisi</span>
+                                <span class="text-sm text-red-500">Foto pemilik usaha harus diisi</span>
                             @enderror
                         </div>
                         <div class="w-full">
