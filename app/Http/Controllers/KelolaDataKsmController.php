@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kelola_data_ksm;
+use App\Models\Stokbarang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,10 +16,16 @@ class KelolaDataKsmController extends Controller
     {
         $user_id = Auth::user()->id;
         // dd($user_id);
-        $users = Kelola_data_ksm::with('item')->where('user_id', $user_id )->get();
+        $ksm = Kelola_data_ksm::where('user_id', $user_id )->with('item')->get();
+        // $ksm = Transaction::where('buyer_id', $buyer_id)->with('orders')->get();
 
-        dd($users);
-        return view('pages.ksm.dashboard');
+
+        // dd($ksm);
+
+        // $product = Stokbarang::with('ksm')->get();
+
+        // dd($product);
+        return view('pages.ksm.dashboard', compact('ksm'));
     }
 
     /**

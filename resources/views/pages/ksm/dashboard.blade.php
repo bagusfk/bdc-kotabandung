@@ -129,10 +129,14 @@
         <div class="flex flex-col col-span-3 gap-4">
             <div class="px-4 py-4 text-lg font-bold leading-none text-gray-800 bg-white rounded-xl">Daftar Brand Anda</div>
             <div class="grid w-full grid-cols-2 gap-4">
-                <div class="w-full bg-white rounded-xl h-44"></div>
-                <div class="w-full bg-white rounded-xl h-44"></div>
-                <div class="w-full bg-white rounded-xl h-44"></div>
-                <div class="w-full bg-white rounded-xl h-44"></div>
+                @foreach($ksm as $brand)
+                    <div class="w-full bg-white rounded-xl h-44">
+                        <div>{{ $brand->id }}</div>
+                        @foreach ($brand->item() as $produk)
+                            <div>{{$produk->id}}</div>
+                        @endforeach
+                    </div>
+                @endforeach
                 <a href="" class="flex items-center justify-center w-full border-2 border-gray-500 border-dashed rounded-xl h-44 hover:bg-white">
                     <svg class="w-[30px] h-[30px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12h14m-7 7V5"/>
