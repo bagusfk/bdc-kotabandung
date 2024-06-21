@@ -25,11 +25,11 @@ class KsmSeeder extends Seeder
         ]);
         Kelola_data_ksm::create([
             'id' => 4,
-            'brand_name' => 'Kripik Jaya',
-            'owner' => 'Sholeh',
-            'no_wa' => '08123456789',
+            'brand_name' => 'Kripik Buaya',
+            'owner' => 'Nugi',
+            'no_wa' => '0812345123',
             'category_id' => '1',
-            'address' => 'Jl. Fatahillah No.90',
+            'address' => 'Jl. Fatahillah No.103',
         ]);
     }
 }

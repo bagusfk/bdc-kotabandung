@@ -8,6 +8,7 @@ use App\Models\cities;
 use App\Models\Stokbarang;
 use App\Models\Kelola_data_ksm;
 use App\Models\Event;
+use App\Models\Beli;
 //cities
 use Database\Seeders\CitySeeder;
 

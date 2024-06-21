@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('ksm_id')->nullable();
             $table->unsignedBigInteger('event_id')->nullable();
-            $table->enum('status_validation', ['prosess','agree','disagree'])->default('prosess');
+            $table->enum('status_validation', ['prosess', 'agree', 'disagree'])->default('prosess');
+            $table->string('report')->default('no');
             $table->timestamps();
             $table->foreign('ksm_id')->references('id')->on('kelola_data_ksms')->onDelete('cascade');
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');

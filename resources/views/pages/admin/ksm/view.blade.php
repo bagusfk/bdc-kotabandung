@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="w-fit mt-[1rem]">
-        <h2 class="text-lg font-semibold border-b-2 border-black">Pendaftar KSM Baru</h2>
+        <h2 class="text-lg font-semibold border-b-2 border-black">Pendaftar KSM Baru Harian</h2>
     </div>
 
     <div class="relative overflow-x-auto mt-[1rem]">
@@ -41,12 +41,12 @@
             </thead>
             <tbody id="dataList">
                 @php
-                    $no = ($ksm1->currentPage() - 1) * $ksm1->perPage() + 1;
+                    $no1 = 1;
                 @endphp
                 @foreach ($ksm1 as $data)
                     <tr>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $no++ }}
+                            {{ $no1++ }}
                         </th>
                         <td class="px-6 py-4">
                             {{ $data->brand_name }}
@@ -114,12 +114,12 @@
             </thead>
             <tbody id="dataList2">
                 @php
-                    $no = ($ksm2->currentPage() - 1) * $ksm2->perPage() + 1;
+                    $no2 = 1;
                 @endphp
                 @foreach ($ksm2 as $data)
                     <tr>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $no++ }}
+                            {{ $no2++ }}
                         </th>
                         <td class="px-6 py-4">
                             {{ $data->brand_name }}

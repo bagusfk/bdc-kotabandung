@@ -54,6 +54,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::delete('/delete-ksm/{id}', [AdminController::class, 'delete_ksm'])->name('delete-ksm');
         // event
         //list
+        Route::get('/table_list', [AdminController::class, 'table_list'])->name('table_list');
         Route::get('/list-event', [AdminController::class, 'list_event'])->name('list-event');
         Route::get('/tambah-event', [AdminController::class, 'add_event'])->name('add-event');
         Route::put('/create-event', [AdminController::class, 'create_event'])->name('create-event');
@@ -66,7 +67,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         //laporan
         Route::get('/laporan-event', [AdminController::class, 'laporan_event'])->name('laporan-event');
         Route::get('/tambah-laporan', [AdminController::class, 'tambah_laporan_event'])->name('tambah-laporan-event');
-        Route::get('/create-laporan', [AdminController::class, 'create_laporan_event'])->name('create-laporan-event');
+        Route::put('/create-laporan', [AdminController::class, 'create_laporan_event'])->name('create-laporan-event');
         //dokumentasi
         Route::get('/dokumentasi-event', [AdminController::class, 'dokumentasi_event'])->name('dokumentasi-event');
         Route::get('/edit-gambar', [AdminController::class, 'event_document'])->name('event-document');
@@ -106,7 +107,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
         Route::post('/getCourierServices', [OrderController::class, 'getCourierServices'])->name('getCourierServices');
         Route::post('/payment', [OrderController::class, 'payment'])->name('payment');
-        Route::match(['get','post','put'], '/finish-payment', [OrderController::class, 'finishPayment'])->name('finish-payment');
+        Route::match(['get', 'post', 'put'], '/finish-payment', [OrderController::class, 'finishPayment'])->name('finish-payment');
         Route::get('/my-order', [OrderController::class, 'myOrder'])->name('my-order');
         Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
         Route::put('/store-ksm', [RegisteredUserController::class, 'storeKsm'])->name('store-ksm');

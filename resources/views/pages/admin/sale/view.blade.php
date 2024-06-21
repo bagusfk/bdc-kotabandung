@@ -97,10 +97,10 @@
                             {{ $data->qty }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->product->user->ksms->brand_name }}
+                            {{ $data->product->user->ksm->brand_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->product->user->ksms->cluster }}
+                            {{ $data->product->user->ksm->cluster }}
                         </td>
                         <td class="px-6 py-4 flex">
                             <a href="{{ url('/edit-item/' . $data->id) }}"
@@ -124,20 +124,11 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#dataTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [{
-                        extend: 'excel',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                ]
+                layout: {
+                    topStart: {
+                        buttons: ['print']
+                    }
+                }
             });
         });
 

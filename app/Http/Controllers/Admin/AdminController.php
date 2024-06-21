@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+
+use Carbon\Carbon;
 use DataTables;
 use App\Models\Kelola_data_ksm;
+use App\Models\Laporan_kegiatan_event;
 use App\Models\Beli;
 use App\Models\Neraca;
 use App\Models\Laporan_penjualan;
@@ -83,13 +86,13 @@ class AdminController extends Controller
 
     public function manage_items()
     {
-        $data['items'] = Stokbarang::paginate(5);
+        $data['items'] = Stokbarang::all();
         return view('pages.admin.barang.view', $data);
     }
 
     public function add_item()
     {
-        $data['seller'] = User::whereNotNull('ksm_id')->get();
+        $data['ksm'] = Kelola_data_ksm::all();
         $items = Stokbarang::max('id') ?? 0;
         $data['no_item'] = $items + 1;
         $data['category'] = category::all();
@@ -101,7 +104,7 @@ class AdminController extends Controller
         $request->validate([
             'id' => 'required',
             'category_id' => 'required',
-            'seller_id' => 'required',
+            'ksm_id' => 'required',
             'picture_product' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'name' => 'required',
             'stock' => 'required',
@@ -115,7 +118,7 @@ class AdminController extends Controller
         $stokbarang = new Stokbarang();
         $stokbarang->id = $request->id;
         $stokbarang->category_id = $request->category_id;
-        $stokbarang->seller_id = $request->seller_id;
+        $stokbarang->ksm_id = $request->ksm_id;
         $stokbarang->picture_product = 'storage/' . $imagePath;
         $stokbarang->name = $request->name;
         $stokbarang->stock = $request->stock;
@@ -129,15 +132,18 @@ class AdminController extends Controller
     public function edit_item($id)
     {
         $data['item'] = Stokbarang::findOrFail($id);
+        $data['ksm'] = Kelola_data_ksm::all();
         $data['category'] = category::all();
         return view('pages.admin.barang.edit', $data);
     }
 
     public function update_item(Request $request)
     {
+
+        // dd($request->all());
         $item = $request->validate([
             'category_id' => 'required',
-            'seller_id' => 'required',
+            'ksm_id' => 'required',
             'name' => 'required',
             'stock' => 'required',
             'price' => 'required',
@@ -147,6 +153,10 @@ class AdminController extends Controller
         $id = $request->get('id');
         $stokbarang = Stokbarang::find($id);
 
+        dd([
+            'before_update' => $stokbarang,
+            'validated_data' => $item,
+        ]);
         // Update data Stokbarang
         $stokbarang->update($item);
 
@@ -178,8 +188,9 @@ class AdminController extends Controller
 
     public function manage_ksm()
     {
-        $data['ksm1'] = Kelola_data_ksm::paginate(5, ['*'], 'ksm1');
-        $data['ksm2'] = Kelola_data_ksm::paginate(5, ['*'], 'ksm2');
+        $today = Carbon::today();
+        $data['ksm1'] = Kelola_data_ksm::whereDate('created_at', $today)->get();
+        $data['ksm2'] = Kelola_data_ksm::all();
         return view('pages.admin.ksm.view', $data);
     }
 
@@ -273,9 +284,7 @@ class AdminController extends Controller
 
     public function laporan_event()
     {
-        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
-        $data['events'] = Event::paginate(3, ['*'], 'events');
-        $data['ksm'] = Kelola_data_ksm::paginate(3, ['*'], 'ksm');
+        $data['laporan'] = Laporan_kegiatan_event::all();
 
         return view('pages.admin.event.laporan.view', $data);
     }
@@ -289,15 +298,49 @@ class AdminController extends Controller
 
     public function tambah_laporan_event()
     {
-        return view('pages.admin.event.laporan.add');
+        $participants = Register_event::where('report', 'no')->with('ksm:id,owner,brand_name')
+            ->get()
+            ->groupBy('event_id')
+            ->map(function ($group) {
+                return $group->map(function ($participant) {
+                    return [
+                        'id' => $participant->id,
+                        'ksm' => $participant->ksm,
+                    ];
+                });
+            });
+
+        // dd($participants);
+
+        $events = Event::all(); // Assuming you need event data for the select options
+
+        return view('pages.admin.event.laporan.add', [
+            'participantsByEvent' => $participants,
+            'events' => $events
+        ]);
     }
 
-    // public function create_laporan_event(Request $request)
-    // {
-    //     $data = $request->validate([
-    //         ""
-    //     ])
-    //  }
+    public function create_laporan_event(Request $request)
+    {
+
+        $request->validate([
+            "regist_id" => 'required',
+            "sales_result" => 'required',
+        ]);
+
+        $registerEvent = Register_event::findOrFail($request->regist_id);
+        $registerEvent->report = 'yes';
+        $registerEvent->save();
+
+
+        $laporan = new Laporan_kegiatan_event();
+        $laporan->regist_id = $request->regist_id;
+        $laporan->sales_result = $request->sales_result;
+        $laporan->save();
+
+
+        return redirect('/laporan-event');
+    }
 
     public function agree($id)
     {
@@ -546,7 +589,7 @@ class AdminController extends Controller
         foreach ($data['pembeli'] as $pembeli) {
             $productName = $pembeli->product->name;
             $quantity = $pembeli->qty;
-            $ksmName = $pembeli->product->user->ksms->brand_name;
+            $ksmName = $pembeli->product->user->ksm->brand_name;
 
             $labels[] = $productName;
             $qty[] = $quantity;

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\category;
-use App\Models\User;
+use App\Models\Kelola_data_ksm;
 
 class Stokbarang extends Model
 {
@@ -18,9 +18,9 @@ class Stokbarang extends Model
         return $this->belongsTo(category::class, 'category_id');
     }
 
-    public function user()
+    public function ksm()
     {
-        return $this->belongsTo(User::class, 'seller_id');
+        return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id');
     }
 
     public function cart()

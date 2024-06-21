@@ -22,7 +22,7 @@ class Register_event extends Model
 
     public function ksm()
     {
-        return $this->belongsTo(Kelola_data_ksm::class);
+        return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id', 'id');
     }
 
     public function event()

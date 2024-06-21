@@ -16,7 +16,7 @@ class ItemSeeder extends Seeder
 
         Stokbarang::create([
             'category_id' => 1,
-            'seller_id' => 3,
+            'ksm_id' => 3,
             'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
             'name' => 'Snack',
             'stock' => 20,
@@ -26,7 +26,7 @@ class ItemSeeder extends Seeder
 
         Stokbarang::create([
             'category_id' => 1,
-            'seller_id' => 3,
+            'ksm_id' => 3,
             'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
             'name' => 'Chiki',
             'stock' => 20,
@@ -36,7 +36,7 @@ class ItemSeeder extends Seeder
 
         Stokbarang::create([
             'category_id' => 2,
-            'seller_id' => 4,
+            'ksm_id' => 4,
             'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
             'name' => 'Le Minerale',
             'stock' => 100,
@@ -46,7 +46,7 @@ class ItemSeeder extends Seeder
 
         Stokbarang::create([
             'category_id' => 3,
-            'seller_id' => 4,
+            'ksm_id' => 4,
             'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
             'name' => 'Kentang',
             'stock' => 100,
@@ -56,7 +56,7 @@ class ItemSeeder extends Seeder
 
         Stokbarang::create([
             'category_id' => 4,
-            'seller_id' => 4,
+            'ksm_id' => 4,
             'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
             'name' => 'Daging Ayam',
             'stock' => 20,
@@ -66,7 +66,7 @@ class ItemSeeder extends Seeder
 
         Stokbarang::create([
             'category_id' => 5,
-            'seller_id' => 3,
+            'ksm_id' => 3,
             'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
             'name' => 'Tuna',
             'stock' => 20,

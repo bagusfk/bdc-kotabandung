@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('stokbarangs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('ksm_id')->constrained('kelola_data_ksms')->onDelete('cascade');
             $table->string('picture_product', 128)->nullable();
             $table->string('name', 128)->nullable();
             $table->integer('weight')->nullable();

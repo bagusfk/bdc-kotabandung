@@ -1,11 +1,11 @@
 @extends('layouts.appadmin')
 @section('title', 'Kelola Barang')
 @section('content')
-    <style>
+    {{-- <style>
         .dataTables_wrapper .dataTables_length select {
             padding-right: 2rem;
         }
-    </style>
+    </style> --}}
     <div class="flex justify-between">
         <div class="flex items-center">
             <svg class="w-6 h-6 inline-flex" xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@
         </a>
     </div>
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg my-[1rem] h-[20rem]">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg my-[1rem]">
         <table id="dataTable" class="display w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -36,7 +36,10 @@
                         No
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        ID Barang
+                        Nama KSM
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Pemilik
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Nama Barang
@@ -68,7 +71,10 @@
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $data->id }}
+                            {{ $data->ksm->brand_name }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $data->ksm->owner }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->name }}
@@ -104,8 +110,6 @@
         </table>
     </div>
     <script type="text/javascript">
-        $(document).ready(function() {
-            new DataTable('#dataTable');
-        });
+        new DataTable('#dataTable');
     </script>
 @endsection()

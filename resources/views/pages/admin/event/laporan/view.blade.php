@@ -37,22 +37,22 @@
                 @php
                     $no = 1;
                 @endphp
-                @foreach ($events as $data)
+                @foreach ($laporan as $data)
                     <tr>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $data->id }}
+                            {{ $data->register_event->event->event_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->event_name }}
+                            {{ $data->register_event->event->event_organizer }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->event_organizer }}
+                            {{ $data->register_event->ksm->owner }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->description }}
+                            {{ $data->sales_result }}
                         </td>
                     </tr>
                 @endforeach
