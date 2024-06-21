@@ -41,7 +41,6 @@ class UserSeeder extends Seeder
             'city_id' => 22,
             'address' => 'Jl. Setia Budi No. 15C',
             'email' => 'ksm@ksm.com',
-            'ksm_id' => 3,
         ]);
 
         User::create([
@@ -52,7 +51,6 @@ class UserSeeder extends Seeder
             'city_id' => 22,
             'address' => 'Jl. Setia Budi No. 15C',
             'email' => 'ksm2@ksm2.com',
-            'ksm_id' => 4,
         ]);
 
         User::create([

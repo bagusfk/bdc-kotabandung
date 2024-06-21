@@ -13,21 +13,22 @@ return new class extends Migration
     {
         Schema::create('kelola_data_ksms', function (Blueprint $table) {
             $table->id();
-            $table->string('brand_name', 128)->nullable();
+            $table->enum('cluster', ['a', 'b', 'c', 'd']);
+            $table->unsignedBigInteger('category_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('owner', 128);
+            $table->string('owner_picture', 128);
+            $table->string('no_wa', 15);
+            $table->string('brand_name', 128);
             $table->string('logo_image', 128)->nullable();
-            $table->string('owner', 128)->nullable();
-            $table->string('owner_picture', 128)->nullable();
-            $table->string('no_wa', 15)->nullable();
-            $table->string('link_ig', 25)->nullable();
+            $table->string('link_ig')->nullable();
+            $table->string('business_entity');
+            $table->text('business_description');
+            $table->string('product_sales_address', 128);
+            $table->text('address')->nullable();
             $table->string('nib', 50)->nullable();
             $table->string('nib_document', 128)->nullable();
-            $table->string('business_entity', 5)->nullable();
-            $table->string('product_sales_address', 128)->nullable();
             $table->string('permission_letter', 128)->nullable();
-            $table->text('business_description')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->text('address')->nullable();
-            $table->enum('cluster', ['a', 'b', 'c', 'd'])->nullable();
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });

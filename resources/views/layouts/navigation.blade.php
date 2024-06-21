@@ -22,7 +22,7 @@
                     </div>
 
                     @if (Auth::user())
-                        @if (Auth::user()->role == 'pembeli')
+                        @if (Auth::user()->role == 'pembeli' || Auth::user()->role == 'ksm')
                             <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="inline-flex items-center space-x-8 text-sm text-center text-slate-500 sm:-my-px sm:ms-2 lg:ms-6 sm:flex" type="button">
                                 {{ __('E-Catalogs') }}
                                 <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -189,6 +189,12 @@
                             <x-slot name="content">
                             @if (Route::has('login'))
                                 @auth
+                                    @if ( Auth::user()->hasRole('ksm') )
+                                        <x-dropdown-link :href="route('dashboard_ksm')">
+                                            {{ __('Dashboard KSM') }}
+                                        </x-dropdown-link>
+                                    @endif
+
                                     <x-dropdown-link :href="route('profile.edit')">
                                         {{ __('Profile') }}
                                     </x-dropdown-link>

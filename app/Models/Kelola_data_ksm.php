@@ -10,15 +10,28 @@ class Kelola_data_ksm extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'brand_name', 'owner', 'no_wa', 'category_id', 'address'];
+    protected $fillable = [
+        'id','user_id', 'owner', 'brand_name', 'category_id', 'no_wa', 'link_ig', 'nib',
+        'business_entity', 'address', 'product_sales_address', 'business_description',
+        'owner_picture', 'logo_image', 'nib_document', 'permission_letter', 'cluster'
+    ];
 
     public function category()
     {
         return $this->belongsTo(category::class);
     }
 
+    // public function user()
+    // {
+    //     return $this->hasOne(User::class);
+    // }
     public function user()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function item()
+    {
+        return $this->hasMany(Stokbarang::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelola_data_ksm;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KelolaDataKsmController extends Controller
 {
@@ -12,7 +13,12 @@ class KelolaDataKsmController extends Controller
      */
     public function index()
     {
-        //
+        $user_id = Auth::user()->id;
+        // dd($user_id);
+        $users = Kelola_data_ksm::with('item')->where('user_id', $user_id )->get();
+
+        dd($users);
+        return view('pages.ksm.dashboard');
     }
 
     /**
