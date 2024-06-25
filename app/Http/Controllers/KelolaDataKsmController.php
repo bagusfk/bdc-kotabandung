@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\category;
 use App\Models\Kelola_data_ksm;
 use App\Models\Stokbarang;
 use Illuminate\Http\Request;
@@ -18,14 +19,14 @@ class KelolaDataKsmController extends Controller
         // dd($user_id);
         $ksm = Kelola_data_ksm::where('user_id', $user_id )->with('item')->get();
         // $ksm = Transaction::where('buyer_id', $buyer_id)->with('orders')->get();
-
+        $category = category::all();
 
         // dd($ksm);
 
         // $product = Stokbarang::with('ksm')->get();
 
         // dd($product);
-        return view('pages.ksm.dashboard', compact('ksm'));
+        return view('pages.ksm.dashboard', compact('ksm','category'));
     }
 
     /**
@@ -47,9 +48,36 @@ class KelolaDataKsmController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Kelola_data_ksm $kelola_data_ksm)
+    public function show($id)
     {
-        //
+        // dd($id);
+        $data['brand'] = Kelola_data_ksm::findOrFail($id);
+        // dd($data['brand']);
+        $data['products'] = Stokbarang::where('kelola_data_ksm_id', $id)->get();
+        // dd($data['products']);
+        $data['brand_id'] = $id;
+
+        return view('pages.ksm.brand-products', $data);
+    }
+
+    public function viewPdf($path)
+    {
+        $path = decrypt($path);
+        // dd($path);
+        // $filePath = $path;
+
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.basename($path).'"'
+        ]);
+    }
+
+    public function showDetail(Stokbarang $id)
+    {
+        // dd($id);
+        $product = $id;
+        // dd($product);
+        return view('pages.ksm.product-detail', compact('product'));
     }
 
     /**
