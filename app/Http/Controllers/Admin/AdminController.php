@@ -140,7 +140,9 @@ class AdminController extends Controller
     public function update_item(Request $request)
     {
 
-        // dd($request->all());
+        $id = $request->get('id');
+        $stokbarang = Stokbarang::find($id);
+
         $item = $request->validate([
             'category_id' => 'required',
             'ksm_id' => 'required',
@@ -150,13 +152,6 @@ class AdminController extends Controller
             'description' => 'required',
         ]);
 
-        $id = $request->get('id');
-        $stokbarang = Stokbarang::find($id);
-
-        dd([
-            'before_update' => $stokbarang,
-            'validated_data' => $item,
-        ]);
         // Update data Stokbarang
         $stokbarang->update($item);
 
@@ -185,6 +180,43 @@ class AdminController extends Controller
         Stokbarang::findOrFail($id)->delete();
         return redirect()->back();
     }
+
+    public function report_item_json()
+    {
+        $productsByCategory = $this->getLarisProductsByCategory();
+        return response()->json($productsByCategory);
+    }
+
+    public function report_item()
+    {
+        $productsByCategory = $this->getLarisProductsByCategory();
+        return view('pages.admin.barang.laporan.view', compact('productsByCategory'));
+    }
+
+    private function getLarisProductsByCategory()
+    {
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        // Menggabungkan order, transaction, dan stokbarang untuk mendapatkan total penjualan per produk per kategori untuk bulan ini
+        $totalSales = DB::table('orders')
+            ->join('transactions', 'orders.transaction_id', '=', 'transactions.id')
+            ->join('stokbarangs', 'orders.product_id', '=', 'stokbarangs.id')
+            ->whereMonth('transactions.created_at', $currentMonth)
+            ->whereYear('transactions.created_at', $currentYear)
+            ->select(
+                'stokbarangs.category_id',
+                'stokbarangs.name',
+                DB::raw('SUM(transactions.total_qty) as total_sold')
+            )
+            ->groupBy('stokbarangs.category_id', 'stokbarangs.name')
+            ->orderBy('stokbarangs.category_id')
+            ->get();
+
+        return $totalSales;
+    }
+
+
 
     public function manage_ksm()
     {
@@ -572,6 +604,8 @@ class AdminController extends Controller
 
     public function manage_sales()
     {
+
+        $productsByCategory = $this->getLarisProductsByCategory();
         $data['penjualan'] = Laporan_penjualan::all();
         $data['penjual'] = Stokbarang::all();
         $data['pembeli'] = Beli::all();
@@ -617,7 +651,7 @@ class AdminController extends Controller
             'ksmTotalCounts' => array_values($ksmCounts) // Total per KSM
         ];
 
-        return view('pages.admin.sale.view', $data);
+        return view('pages.admin.sale.view', $data, compact('productsByCategory'));
     }
 
     public function manage_finance()

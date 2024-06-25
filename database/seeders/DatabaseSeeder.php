@@ -9,6 +9,8 @@ use App\Models\Stokbarang;
 use App\Models\Kelola_data_ksm;
 use App\Models\Event;
 use App\Models\Beli;
+use App\Models\Order;
+use App\Models\Transaction;
 //cities
 use Database\Seeders\CitySeeder;
 
@@ -60,6 +62,13 @@ class DatabaseSeeder extends Seeder
             $seeder[] = EventSeeder::class;
         }
 
+        if (Transaction::count() == 0) {
+            $seeder[] = TransactionSeeder::class;
+        }
+
+        if (Order::count() == 0) {
+            $seeder[] = OrderSeeder::class;
+        }
         // if (Beli::count() == 0) {
         //     $seeder[] = BeliSeeder::class;
         // }

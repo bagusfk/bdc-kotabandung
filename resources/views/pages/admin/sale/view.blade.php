@@ -179,126 +179,47 @@
         }
     </script>
     <script>
-        var chartBar = null;
-        var chartLine = null;
-        var sortingOrder = null;
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/report-item-json')
+                .then(response => response.json())
+                .then(data => {
+                    const categories = [];
+                    const categoryNames = [];
+                    const totalSold = [];
 
-        document.addEventListener('DOMContentLoaded', function() {
-            renderCharts();
+                    // Memproses data untuk grafik
+                    data.forEach(product => {
+                        if (!categories.includes(product.category_id)) {
+                            categories.push(product.category_id);
+                            categoryNames.push(product.name);
+                        }
+                        totalSold.push(product.total_sold);
+                    });
+
+                    const ctx = document.getElementById('report_item').getContext('2d');
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: categoryNames,
+                            datasets: [{
+                                label: 'Total Sold',
+                                data: totalSold,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
         });
-
-        function sortData(order) {
-            sortingOrder = order;
-            renderCharts();
-        }
-
-        function clearSorting() {
-            sortingOrder = null;
-            renderCharts();
-        }
-
-        function renderCharts() {
-            if (chartBar) {
-                chartBar.destroy();
-            }
-            if (chartLine) {
-                chartLine.destroy();
-            }
-
-            var ctx = document.getElementById('chartBar').getContext('2d');
-            var line = document.getElementById('chartLine').getContext('2d');
-            var labels = {!! json_encode($chartSale['labels']) !!};
-            var labelCount = {!! json_encode($chartSale['labelCount']) !!};
-            var ksmCount = {!! json_encode($chartSale['ksmCount']) !!};
-            var dataCount = {!! json_encode($chartSale['qtyCount']) !!};
-            var data = {!! json_encode($chartSale['qty']) !!};
-            var ksm = {!! json_encode($chartSale['ksm']) !!};
-            var totalTerjual = {!! json_encode($penjual) !!}
-            var ksmTotalCounts = {!! json_encode($chartSale['ksmTotalCounts']) !!};
-
-            var maxsData = Math.max.apply(null, dataCount);
-            var suggestedMaxs = maxsData * 1.2;
-
-            var allData = dataCount.concat(ksmTotalCounts);
-            var maxData = Math.max.apply(null, allData);
-            var suggestedMax = maxData * 1.2;
-
-            var sortedDataCount = [...dataCount];
-            var sortedKsmTotalCounts = [...ksmTotalCounts];
-            var sortedLabels = [...labelCount];
-            var sortedKsmLabels = [...ksmCount];
-
-            // Combine data and labels into arrays of objects
-            var combinedData = dataCount.map((value, index) => {
-                return {
-                    value: value,
-                    label: labelCount[index]
-                };
-            });
-            var combinedKsmData = ksmTotalCounts.map((value, index) => {
-                return {
-                    value: value,
-                    label: ksmCount[index]
-                };
-            });
-
-            // Sort combined arrays based on sortingOrder
-            if (sortingOrder === 'asc') {
-                combinedData.sort((a, b) => a.value - b.value);
-                combinedKsmData.sort((a, b) => a.value - b.value);
-            } else if (sortingOrder === 'desc') {
-                combinedData.sort((a, b) => b.value - a.value);
-                combinedKsmData.sort((a, b) => b.value - a.value);
-            }
-
-            // Separate the sorted arrays back into individual arrays
-            sortedDataCount = combinedData.map(item => item.value);
-            sortedLabels = combinedData.map(item => item.label);
-            sortedKsmTotalCounts = combinedKsmData.map(item => item.value);
-            sortedKsmLabels = combinedKsmData.map(item => item.label);
-
-            chartBar = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: sortedLabels,
-                    datasets: [{
-                        label: 'Produk Terjual',
-                        data: sortedDataCount,
-                        fill: true,
-                        borderColor: 'rgb(75, 0, 192)',
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            suggestedMax: suggestedMaxs
-                        }
-                    }
-                }
-            });
-
-            chartLine = new Chart(line, {
-                type: 'bar',
-                data: {
-                    labels: sortedKsmLabels,
-                    datasets: [{
-                        label: 'Total Barang KSM Yang Terjual',
-                        data: sortedKsmTotalCounts,
-                        fill: false,
-                        backgroundColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            suggestedMax: suggestedMax
-                        }
-                    },
-                }
-            });
-        }
     </script>
 @endsection()

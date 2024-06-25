@@ -14,23 +14,15 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         category::create([
-            'category' => 'Makanan Ringan',
+            'category' => 'Fashion',
         ]);
 
         category::create([
-            'category' => 'Minuman',
+            'category' => 'Kriya',
         ]);
 
         category::create([
-            'category' => 'Sayuran',
-        ]);
-
-        category::create([
-            'category' => 'Daging',
-        ]);
-
-        category::create([
-            'category' => 'Ikan',
+            'category' => 'Kuliner',
         ]);
     }
 }

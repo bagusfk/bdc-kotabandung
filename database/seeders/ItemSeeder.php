@@ -15,17 +15,7 @@ class ItemSeeder extends Seeder
     {
 
         Stokbarang::create([
-            'category_id' => 1,
-            'ksm_id' => 3,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Snack',
-            'stock' => 20,
-            'price' => 10000,
-            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
-        ]);
-
-        Stokbarang::create([
-            'category_id' => 1,
+            'category_id' => 3,
             'ksm_id' => 3,
             'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
             'name' => 'Chiki',
@@ -35,7 +25,7 @@ class ItemSeeder extends Seeder
         ]);
 
         Stokbarang::create([
-            'category_id' => 2,
+            'category_id' => 3,
             'ksm_id' => 4,
             'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
             'name' => 'Le Minerale',
@@ -51,26 +41,6 @@ class ItemSeeder extends Seeder
             'name' => 'Kentang',
             'stock' => 100,
             'price' => 2000,
-            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
-        ]);
-
-        Stokbarang::create([
-            'category_id' => 4,
-            'ksm_id' => 4,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Daging Ayam',
-            'stock' => 20,
-            'price' => 50000,
-            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
-        ]);
-
-        Stokbarang::create([
-            'category_id' => 5,
-            'ksm_id' => 3,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Tuna',
-            'stock' => 20,
-            'price' => 75000,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
         ]);
     }

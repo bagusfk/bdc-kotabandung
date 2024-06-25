@@ -11,7 +11,7 @@ class Kelola_data_ksm extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id','user_id', 'owner', 'brand_name', 'category_id', 'no_wa', 'link_ig', 'nib',
+        'id', 'ksm_id', 'owner', 'brand_name', 'category_id', 'no_wa', 'link_ig', 'nib',
         'business_entity', 'address', 'product_sales_address', 'business_description',
         'owner_picture', 'logo_image', 'nib_document', 'permission_letter', 'cluster'
     ];

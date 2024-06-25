@@ -28,9 +28,6 @@
                                 {{ $ksms->brand_name }} - {{ $ksms->owner }}</option>
                         @endforeach
                     </select>
-                    @error('ksm_id')
-                        <span class="text-red-500 text-sm"><br />{{ $message }}</span>
-                    @enderror
                 </div>
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Barang</label>

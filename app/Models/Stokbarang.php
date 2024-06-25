@@ -11,7 +11,7 @@ class Stokbarang extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'category_id', 'seller_id', 'name', 'stock', 'price', 'description'];
+    protected $fillable = ['id', 'category_id', 'ksm_id', 'name', 'stock', 'price', 'description'];
 
     public function category()
     {
