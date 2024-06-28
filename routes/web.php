@@ -37,7 +37,9 @@ Route::get('/e-catalog/detail/{id}', [StokbarangController::class, 'detail'])->n
 Route::middleware(['auth', 'revalidate'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/address', [ProfileController::class, 'updateCities'])->name('profile.update.address');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/{province}', [ProfileController::class, 'getCities'])->name('getcities');
 
     Route::middleware('role:admin')->group(function () {
         Route::get('/dashboard-admin', [AdminController::class, 'index'])->name('index');

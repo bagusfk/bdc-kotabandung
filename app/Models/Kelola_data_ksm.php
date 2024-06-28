@@ -34,4 +34,9 @@ class Kelola_data_ksm extends Model
     {
         return $this->hasMany(Stokbarang::class);
     }
+
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

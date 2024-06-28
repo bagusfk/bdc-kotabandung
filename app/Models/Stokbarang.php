@@ -20,7 +20,7 @@ class Stokbarang extends Model
 
     public function ksm()
     {
-        return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id');
+        return $this->belongsTo(Kelola_data_ksm::class, 'kelola_data_ksm_id');
     }
 
     public function cart()

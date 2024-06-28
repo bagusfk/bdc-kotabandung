@@ -31,7 +31,7 @@
                         <div class="font-bold text-gray-500 text-md">Alamat Pengiriman</div>
                         <div class="my-2 text-sm font-bold text-gray-700">Penerima : {{ Auth::user()->name }}</div>
                         <p class="mb-4 text-sm text-gray-700">
-                            {{ Auth::user()->address }}
+                            {{ Auth::user()->address }}, {{ Auth::user()->cities->city_name}}, {{ Auth::user()->cities->province}}
                         </p>
                     </div>
                 @foreach ($order as $sellerName => $products)
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                     @endforeach
-                        <div class="py-2 font-medium text-gray-500 border-t text-end">Total Pesanan ({{$totals[$sellerName]['totalQty']}}) <span class="font-semibold text-primary"> Rp{{ $subTotalPrice }}</span></div>
+                        <div class="py-2 font-medium text-gray-500 border-t text-end">Total Pesanan ({{$totals[$sellerName]['totalQty']}}) <span class="font-semibold text-primary"> Rp{{$totalPrices[$sellerName]}}</span></div>
                     </div>
                 @endforeach
                 </div>
@@ -151,6 +151,51 @@
         <hr class="border-black">
         <p class="text-center pb-[1rem]">&copy; 2024 BDC Bandung</p>
     </div>
+
+    <div id="confirmModal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
+        <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="mb-4 text-lg font-semibold">Confirm Navigation</h2>
+            <p class="mb-4">Are you sure you want to leave this page? Your order is not completed yet.</p>
+            <div class="flex justify-end">
+                <button id="stayButton" class="px-4 py-2 mr-2 text-white bg-blue-500 rounded">Stay</button>
+                <button id="leaveButton" class="px-4 py-2 text-white bg-red-500 rounded">Leave</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isModalVisible = false;
+
+        window.addEventListener('beforeunload', function (e) {
+            if (!isModalVisible) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        window.addEventListener('popstate', function (e) {
+            showModal();
+        });
+
+        function showModal() {
+            isModalVisible = true;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        document.getElementById('stayButton').addEventListener('click', function () {
+            isModalVisible = false;
+            history.pushState(null, '', location.href);
+            document.getElementById('confirmModal').classList.add('hidden');
+        });
+
+        document.getElementById('leaveButton').addEventListener('click', function () {
+            isModalVisible = false;
+            window.history.back();
+        });
+
+        // Push state to make sure we can handle back button
+        history.pushState(null, '', location.href);
+    </script>
 
     <script>
         // $(document).ready(function() {});

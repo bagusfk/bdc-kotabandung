@@ -6,6 +6,8 @@ use App\Models\Cart;
 use App\Models\Stokbarang;
 use Illuminate\Http\Request;
 
+use function Symfony\Component\HttpKernel\Profiler\get;
+
 class CartController extends Controller
 {
     /**
@@ -13,18 +15,17 @@ class CartController extends Controller
      */
     public function index()
     {
-        $carts = Cart::with('stokbarang.user')
+        $data = Cart::with('stokbarang','ksm')
         ->where('buyer_id', auth()->user()->id)
         ->get()
-        ->groupBy(function($item) {
-            return $item->stokbarang->user->name;
-        });
+        ->groupBy('ksm.brand_name')
+        ;
 
         // $carts = Cart::all();
 
-        // dd($carts);
+        // dd($data);
 
-        return view('pages.pembeli.cart', compact('carts'));
+        return view('pages.pembeli.cart', compact('data'));
     }
 
     /**
@@ -43,7 +44,7 @@ class CartController extends Controller
 
         $buyer = auth()->user();
         $items = Stokbarang::find($item);
-        // dd($request->qty, $buyer->id, $items);
+        // dd($request->qty, $buyer->id, $items->ksm);
 
         $cart = Cart::where('product_id', $items->id)
         ->where('buyer_id', $buyer->id)
@@ -58,6 +59,7 @@ class CartController extends Controller
         } else {
             // dd($items->id, $buyer->id, $request->qty, $items->price, $items->price * $request->qty);
             Cart::create([
+                'kelola_data_ksm_id' => $items->ksm->id,
                 'product_id' => $items->id,
                 'buyer_id' => $buyer->id,
                 'qty' => $request->qty,
