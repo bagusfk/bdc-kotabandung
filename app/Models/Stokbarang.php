@@ -11,7 +11,7 @@ class Stokbarang extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'category_id', 'ksm_id', 'name', 'stock', 'price', 'description'];
+    protected $fillable = ['id', 'category_id', 'kelola_data_ksm_id', 'name', 'stock', 'price', 'description'];
 
     public function category()
     {
@@ -20,7 +20,7 @@ class Stokbarang extends Model
 
     public function ksm()
     {
-        return $this->belongsTo(Kelola_data_ksm::class, 'ksm_id');
+        return $this->belongsTo(Kelola_data_ksm::class, 'kelola_data_ksm_id');
     }
 
     public function cart()
@@ -30,6 +30,6 @@ class Stokbarang extends Model
 
     public function order()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class, 'product_id');
     }
 }

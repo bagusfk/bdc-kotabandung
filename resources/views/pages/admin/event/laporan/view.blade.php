@@ -63,20 +63,26 @@
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [{
-                        text: 'Add',
-                        action: function() {
-                            window.location.href = '/tambah-laporan';
-                        }
-                    },
-                    {
-                        extend: 'excel'
-                    },
-                    {
-                        extend: 'print'
-                    },
-                ]
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                text: 'Add',
+                                action: function() {
+                                    window.location.href = '/tambah-laporan';
+                                }
+                            },
+                            {
+                                extend: 'excel'
+                            },
+                            {
+                                extend: 'pdf'
+                            },
+                            {
+                                extend: 'print'
+                            }
+                        ]
+                    }
+                }
             });
         });
     </script>

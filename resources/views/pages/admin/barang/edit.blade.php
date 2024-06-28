@@ -21,10 +21,11 @@
 
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand Pemilik</label>
-                    <select id="ksm_id" name="ksm_id"
+                    <select id="ksm_id" name="kelola_data_ksm_id"
                         class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach ($ksm as $ksms)
-                            <option value="{{ $ksms->id }}" {{ $ksms->id == $item->ksm_id ? 'selected' : '' }}>
+                            <option value="{{ $ksms->id }}"
+                                {{ $ksms->id == $item->kelola_data_ksm_id ? 'selected' : '' }}>
                                 {{ $ksms->brand_name }} - {{ $ksms->owner }}</option>
                         @endforeach
                     </select>

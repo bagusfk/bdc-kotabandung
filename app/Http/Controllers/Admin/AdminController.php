@@ -21,6 +21,7 @@ use App\Models\Register_event;
 use App\Models\Stokbarang;
 use App\Models\category;
 use App\Models\User;
+use App\Models\Order;
 
 class AdminController extends Controller
 {
@@ -118,13 +119,34 @@ class AdminController extends Controller
         $stokbarang = new Stokbarang();
         $stokbarang->id = $request->id;
         $stokbarang->category_id = $request->category_id;
-        $stokbarang->ksm_id = $request->ksm_id;
+        $stokbarang->kelola_data_ksm_id = $request->ksm_id;
         $stokbarang->picture_product = 'storage/' . $imagePath;
         $stokbarang->name = $request->name;
         $stokbarang->stock = $request->stock;
         $stokbarang->price = $request->price;
         $stokbarang->description = $request->description;
         $stokbarang->save();
+
+        $ksm = Kelola_data_ksm::findOrFail($request->ksm_id);
+        if ($ksm->business_entity == 'reseller') {
+            $ksm->cluster = 'D';
+        } else {
+            $ksm->cluster = 'C';
+            if ($ksm->logo_image != null && $ksm->nib_document != null && $ksm->address != null && $ksm->nib != null) {
+                $ksm->cluster = 'B';
+                if ($ksm->permission_letter != null) {
+                    $ksm->cluster = 'A';
+                }
+            }
+        }
+        // if ($logoPath && $nibPath && $request->address && $request->nib) {
+        //     $cluster = 'B';
+
+        //     if ($permissionPath) {
+        //         $cluster = 'A';
+        //     }
+        // }
+        $ksm->save();
 
         return redirect('/kelola-barang');
     }
@@ -145,7 +167,7 @@ class AdminController extends Controller
 
         $item = $request->validate([
             'category_id' => 'required',
-            'ksm_id' => 'required',
+            'kelola_data_ksm_id' => 'required',
             'name' => 'required',
             'stock' => 'required',
             'price' => 'required',
@@ -180,6 +202,45 @@ class AdminController extends Controller
         Stokbarang::findOrFail($id)->delete();
         return redirect()->back();
     }
+
+    public function terlaris($id)
+    {
+        $order = Order::select('stokbarangs.name as product_name', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
+            ->join('categories', 'categories.id', '=', 'stokbarangs.category_id')
+            ->where('categories.id', $id)
+            ->whereNotNull('transaction_id')
+            ->groupBy('stokbarangs.name')
+            ->get();
+
+        // Fetch all products
+        $products = Stokbarang::all();
+
+        // Sum the total quantity of orders
+        $countOrder = Order::join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
+            ->join('categories', 'categories.id', '=', 'stokbarangs.category_id')
+            ->where('categories.id', $id)
+            ->whereNotNull('transaction_id')
+            ->sum('orders.qty');
+
+        if ($id == 1) {
+            return view('pages.admin.barang.fashion.view', compact('order', 'countOrder'));
+        } elseif ($id == 2) {
+            return view('pages.admin.barang.kriya.view', compact('order', 'countOrder'));
+        } elseif ($id == 3) {
+            return view('pages.admin.barang.kuliner.view', compact('order', 'countOrder'));
+        }
+    }
+
+    // public function kriya()
+    // {
+    //     return view('pages.admin.barang.kriya.view');
+    // }
+
+    // public function kuliner()
+    // {
+    //     return view('pages.admin.barang.kuliner.view');
+    // }
 
     public function report_item_json()
     {
@@ -248,7 +309,7 @@ class AdminController extends Controller
             'business_description' => 'required',
         ]);
 
-        $id = $request->get('ksm_id');
+        $id = $request->get('kelola_data_ksm_id');
         $ksm = Kelola_data_ksm::findOrFail($id);
 
         DB::transaction(function () use ($ksm, $data, $request) {
@@ -286,7 +347,6 @@ class AdminController extends Controller
     {
         $user = User::find($id);
         $user->role = 'pembeli';
-        $user->ksm_id = null;
 
         // Simpan perubahan
         $user->save();

@@ -12,7 +12,7 @@
     </div>
 
     <div class="relative overflow-x-auto my-[1rem]">
-        <table id="dataTable" class="display w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="dataTable" class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -80,27 +80,40 @@
         $(document).ready(function() {
 
             $('#dataTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [{
-                        text: 'Add',
-                        action: function() {
-                            window.location.href = '/tambah-event';
-                        }
-                    },
-                    {
-                        extend: 'excel',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                ]
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                text: 'Add',
+                                action: function() {
+                                    window.location.href = '/tambah-event';
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'pdf',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'print',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                                // messageBottom: null
+                            }
+                        ]
+                    }
+                }
             });
+
         });
     </script>
 @endsection()
