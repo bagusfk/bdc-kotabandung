@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('laporan_stokbarangs', function (Blueprint $table) {
             $table->id();
-            $table->string('item')->nullable();
-            $table->date('date')->nullable();
+            $table->foreignId('item_id')->constrained('stokbarangs')->onDelete('cascade');
+            $table->date('date_input')->nullable();
             $table->integer('first_stock')->nullable();
             $table->integer('last_stock')->nullable();
             $table->timestamps();

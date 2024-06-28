@@ -16,7 +16,8 @@
     </div>
 
     <div class="relative overflow-x-auto mt-[1rem]">
-        <table id="dataTable" class="display w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="dataTable"
+            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -83,7 +84,8 @@
     </div>
 
     <div class="relative overflow-x-auto mt-[1rem]">
-        <table id="dataTable2" class="display w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="dataTable2"
+            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -171,36 +173,48 @@
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [{
-                        extend: 'excel',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                ]
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excel',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'pdf',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'print',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            }
+                        ]
+                    }
+                }
             });
             $('#dataTable2').DataTable({
-                dom: 'Bfrtip',
-                buttons: [{
-                        extend: 'excel',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                ]
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excel',
+                                messageTop: 'Data Keseluruhan KSM'
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'pdf',
+                                messageTop: 'Data Keseluruhan KSM'
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'print',
+                                messageTop: 'Data Keseluruhan KSM'
+                                // messageBottom: null
+                            }
+                        ]
+                    }
+                }
             });
         });
     </script>

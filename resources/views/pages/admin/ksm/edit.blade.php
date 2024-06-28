@@ -8,7 +8,7 @@
             <form action="{{ route('update-ksm') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <input type="text" class="hidden" name="ksm_id" value="{{ $ksm->id }}">
+                <input type="text" class="hidden" name="kelola_data_ksm_id" value="{{ $ksm->id }}">
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                     <div class="sm:col-span-2">
                         <label for="owner" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama
@@ -74,11 +74,13 @@
                             Usaha</label>
                         <select id="business_entity"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
-                            <option value="{{ $ksm->business_entity }}" selected>
-                                {{ $ksm->business_entity }}
+                            <option value="cv" {{ $ksm->business_entity == 'cv' ? 'selected' : '' }}>CV</option>
+                            <option value="pt" {{ $ksm->business_entity == 'pt' ? 'selected' : '' }}>PT</option>
+                            <option value="perseorangan" {{ $ksm->business_entity == 'perseorangan' ? 'selected' : '' }}>
+                                perseorangan</option>
+                            <option value="reseller" {{ $ksm->business_entity == 'reseller' ? 'selected' : '' }}>
+                                Reseller
                             </option>
-                            <option value="CV" {{ $ksm->business_entity == 'CV' ? 'selected' : '' }}>CV</option>
-                            <option value="PT" {{ $ksm->business_entity == 'PT' ? 'selected' : '' }}>PT</option>
                         </select>
                     </div>
                     <div class="sm:col-span-2">

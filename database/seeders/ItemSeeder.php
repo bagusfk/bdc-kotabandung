@@ -16,9 +16,9 @@ class ItemSeeder extends Seeder
 
         Stokbarang::create([
             'category_id' => 1,
-            'kelola_data_ksm_id' => 1,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Snack',
+            'kelola_data_ksm_id' => 12,
+            'picture_product' => 'https://drive.google.com/open?id=1lf78EKIttUOCcJpgaqoUOOpFTMUDnU72',
+            'name' => 'Hijab 1',
             'stock' => 20,
             'price' => 10000,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
@@ -26,51 +26,21 @@ class ItemSeeder extends Seeder
 
         Stokbarang::create([
             'category_id' => 1,
-            'kelola_data_ksm_id' => 2,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Chiki',
+            'kelola_data_ksm_id' => 12,
+            'picture_product' => 'https://drive.google.com/open?id=10km_ehYGZVM54Uo5_gWZlyeq3G8mTsnS',
+            'name' => 'Hijab 2',
             'stock' => 20,
             'price' => 10000,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
         ]);
 
         Stokbarang::create([
-            'category_id' => 2,
-            'kelola_data_ksm_id' => 1,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Le Minerale',
+            'category_id' => 1,
+            'kelola_data_ksm_id' => 12,
+            'picture_product' => 'https://drive.google.com/open?id=1GRgbbmNJ4rk9d3K9K7OveWT__lF47WmL',
+            'name' => 'Hijab 3',
             'stock' => 100,
             'price' => 5000,
-            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
-        ]);
-
-        Stokbarang::create([
-            'category_id' => 3,
-            'kelola_data_ksm_id' => 2,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Kentang',
-            'stock' => 100,
-            'price' => 2000,
-            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
-        ]);
-
-        Stokbarang::create([
-            'category_id' => 4,
-            'kelola_data_ksm_id' => 1,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Daging Ayam',
-            'stock' => 20,
-            'price' => 50000,
-            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
-        ]);
-
-        Stokbarang::create([
-            'category_id' => 5,
-            'kelola_data_ksm_id' => 2,
-            'picture_product' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
-            'name' => 'Tuna',
-            'stock' => 20,
-            'price' => 75000,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
         ]);
     }

@@ -1,11 +1,6 @@
 @extends('layouts.appadmin')
 @section('title', 'Kelola Barang')
 @section('content')
-    {{-- <style>
-        .dataTables_wrapper .dataTables_length select {
-            padding-right: 2rem;
-        }
-    </style> --}}
     <div class="flex justify-between">
         <div class="flex items-center">
             <svg class="w-6 h-6 inline-flex" xmlns="http://www.w3.org/2000/svg"
@@ -17,19 +12,8 @@
         </div>
     </div>
 
-    <div class="w-full mt-[1rem]">
-        <a href="{{ route('add-item') }}"
-            class="text-sm font-medium text-white p-2.5 bg-primary rounded-lg inline-flex items-center">
-            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path fill="white"
-                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-            </svg>
-            <span class="ms-3">Tambah Barang</span>
-        </a>
-    </div>
-
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg my-[1rem]">
-        <table id="dataTable" class="display w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="dataTable" class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -110,6 +94,39 @@
         </table>
     </div>
     <script type="text/javascript">
-        new DataTable('#dataTable');
+        $('#dataTable').DataTable({
+            layout: {
+                topStart: {
+                    buttons: [{
+                            text: 'Add',
+                            action: function() {
+                                window.location.href = '/tambah-barang';
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            exportOptions: {
+                                columns: ':not(:last-child)'
+                            }
+                            // messageBottom: null
+                        },
+                        {
+                            extend: 'pdf',
+                            exportOptions: {
+                                columns: ':not(:last-child)'
+                            }
+                            // messageBottom: null
+                        },
+                        {
+                            extend: 'print',
+                            exportOptions: {
+                                columns: ':not(:last-child)'
+                            }
+                            // messageBottom: null
+                        }
+                    ]
+                }
+            }
+        });
     </script>
 @endsection()

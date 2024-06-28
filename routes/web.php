@@ -50,6 +50,12 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/edit-item/{id}', [AdminController::class, 'edit_item'])->name('edit-item');
         Route::put('/update-item', [AdminController::class, 'update_item'])->name('update-item');
         Route::delete('/delete-item/{id}', [AdminController::class, 'delete_item'])->name('delete-item');
+        //terlaris
+        Route::get('/terlaris/{id}', [AdminController::class, 'terlaris'])->name('terlaris');
+        // laporan
+        Route::get('/laporan-barang', [AdminController::class, 'report_item'])->name('report_item');
+        Route::get('/report-item-json', [AdminController::class, 'report_item_json'])->name('report_item_json');
+
         // ksm
         Route::get('/kelola-ksm', [AdminController::class, 'manage_ksm'])->name('manage-ksm');
         Route::get('/edit-ksm/{id}', [AdminController::class, 'edit_ksm'])->name('edit-ksm');
