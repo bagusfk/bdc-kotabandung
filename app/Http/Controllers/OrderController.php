@@ -20,8 +20,9 @@ class OrderController extends Controller
      */
     public function checkout(Request $request)
     {
+        // dd($request);
         $req = $request->validate([
-                    'selected_carts.*' => 'required|exists:stokbarangs,id',
+                    'selected_carts.*' => 'required',
                     'qty.*' => 'required|integer|min:1'
                 ]);
 
@@ -249,6 +250,20 @@ class OrderController extends Controller
         ->orderBy('created_at', 'desc')
         ->get();
         // dd($transactions);
+
+        // $transactions = $transactions->map(function ($transaction) {
+        //     $totalItems = $transaction->orders->sum('qty');
+        //     $totalPrice = $transaction->orders->sum('price');
+
+        //     $transaction->totalItems = $totalItems;
+        //     $transaction->totalPrice = $totalPrice;
+
+        //     return $transaction;
+        // });
+        // foreach($transactions as $transaction) {
+        //     dd($transaction->orders->sum('price'));
+        // }
+
         return view('pages.pembeli.my-order', compact('transactions'));
     }
     /**

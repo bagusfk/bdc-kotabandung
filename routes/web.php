@@ -120,7 +120,8 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
         Route::post('/getCourierServices', [OrderController::class, 'getCourierServices'])->name('getCourierServices');
         Route::post('/payment', [OrderController::class, 'payment'])->name('payment');
-        Route::match(['get', 'post', 'put'], '/finish-payment', [OrderController::class, 'finishPayment'])->name('finish-payment');
+        // Route::match(['get', 'post', 'put'], '/finish-payment', [OrderController::class, 'finishPayment'])->name('finish-payment');
+        Route::get('/finish-payment', [OrderController::class, 'finishPayment'])->name('finish-payment');
         Route::get('/my-order', [OrderController::class, 'myOrder'])->name('my-order');
         Route::get('/register-ksm', [RegisteredUserController::class, 'createKsm'])->name('register-ksm');
         Route::put('/create-ksm', [RegisteredUserController::class, 'storeKsm'])->name('store-ksm');

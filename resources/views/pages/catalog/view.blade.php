@@ -84,16 +84,17 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-4 gap-2 py-[1rem] max-sm:px-[1rem] px-[1rem]">
                         @foreach ($items as $item)
                             <div class="w-full bg-white border p-[0.5rem] sm:p-[1rem] border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 max-sm:text-lg dark:text-white">{{ $item->name }}</h5>
                                 <img class="aspect-square" src="{{ asset($item->picture_product) }}" alt="" />
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 h-[4.5rem]" style="-webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden">{{ $item->description }}</p>
+                                <h5 class="text-lg font-bold tracking-tight text-gray-900 max-sm:text-lg dark:text-white">{{ $item->name }}</h5>
+                                <h5 class="text-lg font-bold tracking-tight text-primary max-sm:text-lg dark:text-white">Rp {{ number_format($item->price, 0, ',', '.') }}</h5>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" style="-webkit-line-clamp: 1; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden">{{ $item->description }}</p>
                                 <div class="flex flex-col">
                                     <div class="">
-                                        <a href="{{ url('e-catalog/' . $item->id) }}" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
+                                        <a href="{{ route('detail_catalog', $item->id) }}" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
                                             Details
                                         </a>
                                     </div>
-                                    @if (Route::has('login'))
+                                    @if (Route::has('login') && Auth::user()->id != $item->ksm->user_id)
                                         @auth
                                             <div class="text-center">
                                                 <form action="{{ route('cart.add', $item) }}" method="post">
@@ -106,11 +107,11 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                            <div class="">
+                                            {{-- <div class="">
                                                 <a href="#" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
                                                     Beli Sekarang
                                                 </a>
-                                            </div>
+                                            </div> --}}
                                         @endauth
                                     @endif
                                 </div>
