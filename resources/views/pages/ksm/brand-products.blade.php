@@ -74,29 +74,41 @@
     </div>
     <div class="px-4 py-4 text-lg font-bold leading-none text-gray-800 bg-white rounded-xl">Daftar Produk</div>
     <div class="grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
-        @foreach($products as $product)
-            <a href="{{ route('product_detail_ksm', $product->id) }}" class="flex flex-col w-full p-2 bg-white cursor-pointer rounded-xl active:bg-gray-50 active:scale-[0.99]">
-                <div class="flex flex-wrap gap-2">
-                    <div class="w-16 h-16 bg-red-300 rounded-lg"></div>
-                    <div class="flex flex-1 rounded-xl">
-                        <div class="flex-1 pr-4 text-lg font-semibold leading-none text-wrap">{{ $product->name }}</div>
-                        <div class="flex items-center">
-                            <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="m9 5 7 7-7 7"/>
-                            </svg>
+        @if ($products->count() > 0)
+            @foreach($products as $product)
+                <a href="{{ route('product_detail_ksm', $product->id) }}" class="flex flex-col w-full p-2 bg-white cursor-pointer rounded-xl active:bg-gray-50 active:scale-[0.99]">
+                    <div class="flex flex-wrap gap-2">
+                        <div class="w-16 h-16 bg-red-300 rounded-lg"></div>
+                        <div class="flex flex-1 rounded-xl">
+                            <div class="flex-1 pr-4 text-lg font-semibold leading-none text-wrap">{{ $product->name }}</div>
+                            <div class="flex items-center">
+                                <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="m9 5 7 7-7 7"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
+                    <div class="flex justify-between gap-2 px-4 py-2 text-xs">
+                        <div>Harga: {{ $product->price }}</div>
+                        <div>Weight: {{ $product->weight }}</div>
+                        <div>Stok: {{ $product->stock }}</div>
+                    </div>
+                    <div class="p-2">
+                        <div class="text-xs font-medium">Deskripsi:</div>
+                        <div class="text-xs line-clamp-2">{{ $product->description }}</div>
+                    </div>
+                </a>
+            @endforeach
+        @else
+            <div class="flex flex-col items-center col-span-2 gap-4 py-16 bg-white rounded-xl">
+                <div class="w-56 col-span-2 m-auto text-lg font-bold leading-none text-center">
+                    <img src="{{ asset('assets/default/image/no-product.png') }}" alt="">
+                    <div>Belum ada produk</div>
                 </div>
-                <div class="flex justify-between gap-2 px-4 py-2 text-xs">
-                    <div>Harga: {{ $product->price }}</div>
-                    <div>Weight: {{ $product->weight }}</div>
-                    <div>Stok: {{ $product->stock }}</div>
-                </div>
-                <div class="p-2">
-                    <div class="text-xs font-medium">Deskripsi:</div>
-                    <div class="text-xs line-clamp-2">{{ $product->description }}</div>
-                </div>
-            </a>
-        @endforeach
+                <p>hubungi admin via WhatsApp untuk menambahkan produk di brand yang kamu buat</p>
+                {{-- isi no telp admin --}}
+                <a href="https://wa.me/{no telp admin}?text=Hello%20Admin" target="_blank" class="px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary">Hubungi Admin</a>
+            </div>
+        @endif
     </div>
 </x-ksm.app>

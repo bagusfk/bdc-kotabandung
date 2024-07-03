@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\cities;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +18,42 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $provinces = cities::select('province','province_id')->distinct()->orderBy('province', 'asc')->get();
+        $cities = cities::select('city_name','city_id','province_id','type')->orderBy('city_name', 'asc')->get();
+        // dd($provinces);
+        // dd($cities);
         return view('profile.edit', [
             'user' => $request->user(),
+            'provinces' => $provinces,
+            'cities' => $cities
         ]);
+    }
+
+    public function getCities($province)
+    {
+        // dd($province);
+        $cities = cities::where('province_id', $province)->orderBy('city_name', 'asc')->get();
+        return response()->json($cities);
+    }
+
+    public function updateCities(Request $request): RedirectResponse
+    {
+        // dd($request);
+        $request->validate([
+            'city_id' =>'required',
+            'address' =>'required'
+        ]);
+
+        $user = Auth::user();
+
+        $user->update([
+            'city_id' => $request->city_id,
+            'address' => $request->address
+        ]);
+
+        // $request->user()->save();
+
+        return redirect()->back()->with('status', 'address-updated');
     }
 
     /**

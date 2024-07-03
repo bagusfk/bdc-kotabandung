@@ -16,29 +16,30 @@
                 </div> --}}
 
                 {{-- item --}}
-                @foreach ($carts as $seller => $products)
+                @foreach ($data as $seller => $carts)
                 <div class="p-2 mt-2 bg-white border select_with_store border-slate-300">
                     <div class="flex items-center gap-3 py-2 border-b-2">
                         {{-- <input type="checkbox" name="store_name" class="rounded" data-seller="{{ $seller }}"> --}}
-                        <label for="store_name" class="font-bold">{{ $seller }}</label>
+                        <label for="store_name" class="font-bold">{{ $seller}}</label>
+                        {{-- <label for="store_name" class="font-bold">{{ $cart->stokbarang->name}}</label> --}}
                     </div>
-                    @foreach ($products as $product)
-                        <div class="flex justify-between py-4">
+                    @foreach ($carts as $cart)
+                        <div class="flex justify-between px-4 py-4 my-2 bg-gray-100 rounded-lg">
                             <div class="flex items-start gap-3">
-                                <input type="checkbox" name="selected_products[]" class="rounded" value="{{ $product->stokbarang->id }}" data-price="{{ $product->stokbarang->price * $product->qty }}">
-                                <img src="{{asset($product->stokbarang->picture_product)}}" alt="" class="w-16 h-16">
-                                <label for="item_name" class="">{{ $product->stokbarang->name }}</label>
+                                <input type="checkbox" name="selected_carts[]" class="rounded" value="{{ $cart->id }}" data-price="{{ $cart->total_price }}">
+                                <img src="{{asset($cart->stokbarang->picture_product)}}" alt="" class="w-16 h-16">
+                                <label for="item_name" class="">{{ $cart->stokbarang->name }}</label>
                             </div>
                             <div class="">
-                                <span class="price">Rp{{ $product->stokbarang->price * $product->qty  }}</span>
+                                <span class="price">Rp{{ $cart->stokbarang->price }}</span>
+                                {{-- <span class="price">Rp{{ $cart->stokbarang->price * $cart->qty  }}</span> --}}
                             </div>
                         </div>
                         <div class="flex items-center justify-end gap-8">
                             <a href="#" class="font-medium text-red-500">Hapus</a>
                             <td class="flex items-center quantity">
                                 <div class="font-medium">Jumlah : </div>
-                                {{-- @dd($product->stokbarang->name) --}}
-                                <input type="number" name="qty[{{ $product->stokbarang->id }}]" value="{{$product->qty}}" min="1" max="{{$product->stokbarang->stock}}">
+                                <input type="number" name="qty[{{ $cart->id }}]" value="{{$cart->qty}}" min="1" max="{{$cart->stokbarang->stock}}">
                             </td>
                         </div>
                     @endforeach

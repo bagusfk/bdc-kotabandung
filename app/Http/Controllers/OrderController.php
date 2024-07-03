@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Transaction;
 use App\Models\Stokbarang;
+use App\Models\Cart;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -20,16 +21,16 @@ class OrderController extends Controller
     public function checkout(Request $request)
     {
         $req = $request->validate([
-                    'selected_products.*' => 'required|exists:stokbarangs,id',
+                    'selected_carts.*' => 'required|exists:stokbarangs,id',
                     'qty.*' => 'required|integer|min:1'
                 ]);
 
-        if (!$req) {
-            return redirect()->route('my-order');
+        // dd($req);
+        if ($request->selected_carts === null) {
+            return redirect()->route('cart');
         }
-        // dd($request->all());
 
-        $selectedProducts = $request->input('selected_products', []);
+        $selectedCarts = $request->input('selected_carts', []);
         $quantities = $request->input('qty', []);
 
         $buyer_id = Auth::user()->id;
@@ -42,43 +43,51 @@ class OrderController extends Controller
             'invoice' => $invoice,
         ]);
 
-        // dd($selectedProducts);
+        // dd($selectedCarts);
 
         $subTotalPrice = 0;
         // Simpan data yang diterima dari form
-        foreach ($selectedProducts as $productId) {
-            // dd($productId);
-            $quantity = $quantities[$productId];
-            $items = Stokbarang::find($productId);
+        foreach ($selectedCarts as $cartId) {
+            // dd($cartId);
+            $quantity = $quantities[$cartId];
+            $items = Cart::find($cartId);
 
-            // dd($items);
+            // dd($items->product_id, $quantity, $items->stokbarang->price, $quantity * $items->stokbarang->price);
             // Lakukan sesuatu dengan $productId dan $quantity, seperti menyimpan ke dalam database
             $transaction->orders()->create([
-                'product_id' => $items->id,
+                'product_id' => $items->product_id,
                 'qty' => $quantity,
-                'price' => $items->price,
-                'total_price' => $quantity * $items->price,
+                'price' => $items->stokbarang->price,
+                'total_price' => $quantity * $items->stokbarang->price,
             ]);
 
             // Hitung total harga dengan menambahkan total harga dari setiap produk
-            $subTotalPrice += $quantity * $items->price;
+            $subTotalPrice += $quantity * $items->stokbarang->price;
         }
 
-        // dd($transaction, $totalPrice);
+        // dd($subTotalPrice);
 
         $order = Order::with('item','transaction')
         ->where('transaction_id', $transaction->id)
         ->get()
         ->groupBy(function($item) {
-            return $item->item->user->ksm->business_name;
+            return $item->item->ksm->brand_name;
         });
 
         // Menghitung total harga dari produk di setiap toko
-        // $totalPrices = [];
-        // foreach ($order as $sellerName => $products) {
-        //     $totalPrice = $products->sum('price');
-        //     $totalPrices[$sellerName] = $totalPrice;
-        // }
+        $totalPrices = [];
+        foreach ($order as $sellerName => $products) {
+            // $totalPrice = $products->sum('price') * $products->sum('qty');
+            $totalPrice = $products->sum(function ($products) {
+                return $products->price * $products->qty;
+            });
+            // dd($products);
+            // foreach ($products as $product) {
+            //     $totalPrice = $products[0]->price * $products[0]->qty;
+            // }
+            $totalPrices[$sellerName] = $totalPrice;
+            // dd($totalPrice);
+        }
         // Menghitung total harga dan total qty dari produk di setiap toko
         $totals = [];
         foreach ($order as $sellerName => $orders) {
@@ -87,11 +96,20 @@ class OrderController extends Controller
             });
             $totalQty = $orders->sum('qty');
             $totals[$sellerName] = ['totalPrice' => $totalPrice, 'totalQty' => $totalQty];
+
         }
 
         $transaction_id = $transaction->id;
 
-        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id'));
+        foreach ($selectedCarts as $cartId) {
+            // dd($cartId);
+            $items = Cart::find($cartId);
+            if ($items) {
+                $items->delete();
+            }
+        }
+
+        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices'));
     }
 
     function getCourierServices(Request $request)
@@ -220,8 +238,17 @@ class OrderController extends Controller
     {
         $buyer_id = Auth::user()->id;
 
-        $transactions = Transaction::where('buyer_id', $buyer_id)->with('orders')->get();
-        // dd($transaction);
+        // $order = Order::with('item','transaction')
+        // ->where('transaction.buyer_id', $buyer_id)
+        // ->get();
+
+        // dd($order);
+
+        $transactions = Transaction::where('buyer_id', $buyer_id)
+        ->with('orders')
+        ->orderBy('created_at', 'desc')
+        ->get();
+        // dd($transactions);
         return view('pages.pembeli.my-order', compact('transactions'));
     }
     /**
