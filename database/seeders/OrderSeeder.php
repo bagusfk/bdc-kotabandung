@@ -22,18 +22,19 @@ class OrderSeeder extends Seeder
             'created_at' => now()->toDateString()
         ]);
         Order::create([
-            'product_id' => 1,
+            'product_id' => 2,
             'transaction_id' => 2,
-            'qty' => 1,
+            'qty' => 6,
             'price' => 12000,
-            'total_price' => 12000,
+            'total_price' => 72000,
             'created_at' => now()->toDateString()
         ]);
         Order::create([
-            'product_id' => 1,
-            'qty' => 1,
+            'product_id' => 3,
+            'transaction_id' => 3,
+            'qty' => 5,
             'price' => 12000,
-            'total_price' => 12000,
+            'total_price' => 60000,
             'created_at' => now()->toDateString()
         ]);
     }

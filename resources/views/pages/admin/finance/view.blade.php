@@ -49,22 +49,63 @@
             <p>Omzet</p>
         </label>
     </div>
-
     <div id="neraca_content">
-        @if (session('delete'))
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert">
-                {!! html_entity_decode(session('delete')) !!}
-            </div>
-        @elseif (session('status'))
-            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                role="alert">
-                {!! html_entity_decode(session('status')) !!}
-            </div>
-        @endif
+
+        <div class="mt-[1rem]">
+            @if (session('delete'))
+                <div id="alert-2"
+                    class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                    role="alert">
+                    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div class="ms-3 text-sm font-medium">
+                        {!! html_entity_decode(session('delete')) !!}
+                    </div>
+                    <button type="button"
+                        class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+                        data-dismiss-target="#alert-2" aria-label="Close">
+                        <span class="sr-only">Close</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+            @elseif (session('status'))
+                <div id="alert-1"
+                    class="flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                    role="alert">
+                    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div class="ms-3 text-sm font-medium">
+                        {!! html_entity_decode(session('status')) !!}
+                    </div>
+                    <button type="button"
+                        class="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+                        data-dismiss-target="#alert-1" aria-label="Close">
+                        <span class="sr-only">Close</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+            @endif
+        </div>
         <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
             <label for="" class="font-bold text-lg block text-center">Neraca</label>
-            <table class="display w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 pt-[.5rem]"
+            <table
+                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 pt-[.5rem]"
                 id="dataTable">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -94,28 +135,70 @@
                             <td>
                                 <button class="text-primary border border-primary p-1.5" data-modal-target="editModal"
                                     data-modal-toggle="editModal" onclick="editData({{ $data }})">Edit</button>
-                                <form action="{{ url('neraca_destroy/' . $data->id) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="text-red-600 border border-red-600 p-1.5" type="submit">Hapus</button>
-                                </form>
+
+
+                                <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
+                                    class="text-red-600 border border-red-600 p-1.5" type="button">
+                                    Hapus
+                                </button>
+
+
+
+                                <div id="popup-modal" tabindex="-1"
+                                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    <div class="relative p-4 w-full max-w-md max-h-full">
+                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                            <button type="button"
+                                                class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                data-modal-hide="popup-modal">
+                                                <svg class="w-3 h-3" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                </svg>
+                                                <span class="sr-only">Close modal</span>
+                                            </button>
+                                            <div class="p-4 md:p-5 text-center">
+                                                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 20 20">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+                                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                                    Hapus?</h3>
+                                                <form action="{{ url('neraca_destroy/' . $data->id) }}" method="POST"
+                                                    style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button data-modal-hide="popup-modal" type="submit"
+                                                        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                                <button data-modal-hide="popup-modal" type="button"
+                                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tidak</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="6" style="text-align:right">Total Modal:</th>
-                        <th></th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
 
-        {{-- Create Modal --}}
-        <div id="createModal" tabindex="-1"
-            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <!-- Hidden button to trigger the modal -->
+        <button type="button" class="btn btn-primary" data-modal-toggle="createModal" data-modal-target="createModal"
+            style="display:none;" id="triggerCreateModalButton">Add</button>
+
+        <!-- Modal HTML -->
+        <div id="createModal" tabindex="-1" role="dialog"
+            class="fixed top-0 modal left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative w-full max-w-2xl max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -213,7 +296,7 @@
                         </button>
                     </div>
                     <div class="p-6 space-y-6">
-                        <form id="editForm" action="{{ route('neraca_update', 'id') }}" method="POST">
+                        <form id="editForm" action="" method="POST">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="id" id="edit_id">
@@ -274,25 +357,6 @@
                 </div>
             </div>
         </div>
-        <div class="w-full mt-[1rem] flex justify-end">
-            <button class=" p-2.5 text-primary border-primary border" data-modal-target="createModal"
-                data-modal-toggle="createModal">
-                <svg class="w-4 h-4 inline-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#04a7ff"
-                        d="M64 464l48 0 0 48-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 304l-48 0 0-144-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z" />
-                </svg>
-                Tambah
-            </button>
-            <a href="#"
-                class="w-fit p-2.5 ms-2 text-sm font-medium text-primary border border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800">
-                <svg class="w-4 h-4 inline-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#04a7ff"
-                        d="M64 464l48 0 0 48-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 304l-48 0 0-144-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z" />
-                </svg>
-                Cetak Data Pesanan Masuk
-            </a>
-
-        </div>
     </div>
 
     <div id="labarugi_content">
@@ -305,13 +369,13 @@
                             No.
                         </th>
                         <th scope="col" class="px-6 py-3 text-center">
-                            Keterangan
+                            Nama KSM
                         </th>
                         <th scope="col" class="px-6 py-3 text-center">
-                            laba
+                            Laba
                         </th>
                         <th scope="col" class="px-6 py-3 text-center">
-                            rugi
+                            Rugi
                         </th>
                     </tr>
                 </thead>
@@ -319,97 +383,29 @@
                     @php
                         $no = 1;
                     @endphp
-                    <tr class="bg-red-900">
-                        <th scope="row"
-                            class="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            1
-                        </th>
-                        <td class="px-6 py-4 text-center">
-                            Pendapatan Usaha
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            Rp. 10.000.000
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            Rp. 0
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"
-                            class="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            2
-                        </th>
-                        <td class="px-6 py-4 text-center">
-                            Beban Pokok Pendapatan
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            Rp. 10.000.000
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            Rp. 0
-                        </td>
-                    </tr>
-                    {{-- @foreach ($events as $data)
-                        <tr>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $no++ }}
-                            </th>
-                            <td class="px-6 py-4">
-                                {{ $data->id }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $data->event_name }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $data->event_organizer }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $data->description }}
-                            </td>
-                            <td class="px-6 py-4 flex">
-                                <a href="{{ url('/edit-item/' . $data->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
-                                <form method="POST" action="{{ url('/delete-item/'.$data->id) }}"
-                                    enctype="multipart/form-data">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit"
-                                        class="font-medium text-red-700 dark:text-blue-500 hover:underline" onclick="return confirm('Are you sure you want to search Google?')">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach --}}
+                    @if ($order->isEmpty())
+                        <!-- Anda dapat menambahkan pesan atau tindakan lain jika tidak ada data -->
+                    @else
+                        @foreach ($order as $item)
+                            <tr>
+                                <th scope="row"
+                                    class="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $no++ }}
+                                </th>
+                                <td class="px-6 py-4 text-center">
+                                    {{ $item->ksm_owner }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {{ $item->total_paid - $item->omzet > 0 ? $item->total_paid - $item->omzet : '0' }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {{ $item->total_paid - $item->omzet < 0 ? $item->total_paid - $item->omzet : '0' }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
-        </div>
-        <div class="w-full mt-[1rem] flex justify-end">
-
-            <a href="#"
-                class="w-fit p-2.5 ms-2 text-sm font-medium text-primary border border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800">
-                <svg class="w-4 h-4 inline-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#04a7ff"
-                        d="M64 464l48 0 0 48-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 304l-48 0 0-144-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z" />
-                </svg>
-                Tambah
-            </a>
-            <a href="#"
-                class="w-fit p-2.5 ms-2 text-sm font-medium text-primary border border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800">
-                <svg class="w-4 h-4 inline-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#04a7ff"
-                        d="M64 464l48 0 0 48-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 304l-48 0 0-144-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z" />
-                </svg>
-                Edit
-            </a>
-            <a href="#"
-                class="w-fit p-2.5 ms-2 text-sm font-medium text-primary border border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800">
-                <svg class="w-4 h-4 inline-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#04a7ff"
-                        d="M64 464l48 0 0 48-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 304l-48 0 0-144-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z" />
-                </svg>
-                Cetak Data Pesanan Masuk
-            </a>
-
         </div>
     </div>
 
@@ -419,132 +415,11 @@
         <div class="w-full rounded-lg dark:bg-gray-800 p-4 md:p-6">
             <canvas id="chartLine"></canvas>
         </div>
-
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg my-[1rem] min-h-[20rem]">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            No.
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Tanggal
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Nama KSM
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Produk
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Bayar
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            QTY
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Harga
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Jumlah
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    @php
-                        $no = 1;
-                    @endphp
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        1
-                    </th>
-                    <td class="px-6 py-4">
-                        22/04/2024
-                    </td>
-                    <td class="px-6 py-4">
-                        Soebagja
-                    </td>
-                    <td class="px-6 py-4">
-                        Makanan Ringan
-                    </td>
-                    <td class="px-6 py-4">
-                        Tunai
-                    </td>
-                    <td class="px-6 py-4">
-                        120
-                    </td>
-                    <td class="px-6 py-4">
-                        100.000
-                    </td>
-                    <td class="px-6 py-4">
-                        12.000.000
-                    </td>
-                    {{-- @foreach ($events as $data)
-                        <tr>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $no++ }}
-                            </th>
-                            <td class="px-6 py-4">
-                                {{ $data->id }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $data->event_name }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $data->event_organizer }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $data->description }}
-                            </td>
-                            <td class="px-6 py-4 flex">
-                                <a href="{{ url('/edit-item/' . $data->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
-                                <form method="POST" action="{{ url('/delete-item/'.$data->id) }}"
-                                    enctype="multipart/form-data">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit"
-                                        class="font-medium text-red-700 dark:text-blue-500 hover:underline" onclick="return confirm('Are you sure you want to search Google?')">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach --}}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="w-full mt-[1rem] flex justify-end">
-
-            <a href="#"
-                class="w-fit p-2.5 ms-2 text-sm font-medium text-primary border border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800">
-                <svg class="w-4 h-4 inline-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#04a7ff"
-                        d="M64 464l48 0 0 48-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 304l-48 0 0-144-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z" />
-                </svg>
-                Tambah
-            </a>
-            <a href="#"
-                class="w-fit p-2.5 ms-2 text-sm font-medium text-primary border border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800">
-                <svg class="w-4 h-4 inline-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#04a7ff"
-                        d="M64 464l48 0 0 48-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 304l-48 0 0-144-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z" />
-                </svg>
-                Edit
-            </a>
-            <a href="#"
-                class="w-fit p-2.5 ms-2 text-sm font-medium text-primary border border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800">
-                <svg class="w-4 h-4 inline-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#04a7ff"
-                        d="M64 464l48 0 0 48-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 304l-48 0 0-144-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z" />
-                </svg>
-                Cetak Data Pesanan Masuk
-            </a>
-
-        </div>
     </div>
-
     <script>
         function editData(data) {
+            var formAction = '{{ url('neraca_update') }}/' + data.id;
+            document.getElementById('editForm').action = formAction;
             document.getElementById('edit_id').value = data.id;
             document.getElementById('edit_input_date').value = data.input_date;
             document.getElementById('edit_cash').value = data.cash;
@@ -556,55 +431,53 @@
             document.getElementById('edit_information').value = data.information;
         }
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            moment.locale('id');
-
-            // Initialize the DataTable
-            $('#dataTable').DataTable({
-                order: [],
-                footerCallback: function(row, data, start, end, display) {
-                    let api = this.api();
-
-                    // Remove the formatting to get integer data for summation
-                    let intVal = function(i) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\Rp,.]/g, '') * 1 :
-                            typeof i === 'number' ?
-                            i :
-                            0;
-                    };
-
-                    let columns = [5, 6]; // Index of the "Modal" column
-                    let total = {};
-                    let pageTotal = {};
-
-                    columns.forEach(colIndex => {
-                        total[colIndex] = api
-                            .column(colIndex)
-                            .data()
-                            .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-                        pageTotal[colIndex] = api
-                            .column(colIndex, {
-                                page: 'current'
-                            })
-                            .data()
-                            .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-                        // Update footer
-                        let footerCell = api.column(colIndex).footer();
-                        footerCell.innerHTML = 'Rp. ' + pageTotal[colIndex].toLocaleString(
-                            'id-ID');
-                        // footerCell.innerHTML = 'Rp. ' + pageTotal[colIndex].toLocaleString('id-ID') + ' ( Rp. ' + total[colIndex].toLocaleString('id-ID') + ' total)';
-                    });
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                text: 'Add',
+                                action: function() {
+                                    // Trigger the hidden button with data-target for create
+                                    $('#triggerCreateModalButton').click();
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            }
+                        ]
+                    }
                 }
             });
 
-            // Initialize the DateTime plugin after DataTable initialization
-            $.fn.dataTable.DateTime.defaults.format = 'D MMM YYYY';
+            // Ensure a row is selected for edit action
+            $('#dataTable tbody').on('click', 'tr', function() {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                } else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
         });
     </script>
+
     <script>
         const neracaRadio = document.getElementById('neraca_radio');
         const neracaContent = document.getElementById('neraca_content');
@@ -635,22 +508,34 @@
             });
         });
 
-        const line = document.getElementById('chartLine');
+        var ksmOwners = @json($ksmOwners);
+        var remainingBalances = @json($remainingBalances);
+        var omzets = @json($omzets);
 
-        new Chart(line, {
+        const ctx = document.getElementById('chartLine');
+        new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ksmOwners,
                 datasets: [{
-                    label: 'My First Dataset',
-                    data: [65, 59, 80, 81, 56, 55],
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
+                    label: 'Pendapatan',
+                    data: remainingBalances,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Omzet',
+                    data: omzets,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 scales: {
+                    x: {
+                        beginAtZero: true
+                    },
                     y: {
                         beginAtZero: true
                     }

@@ -15,14 +15,17 @@ class CategorySeeder extends Seeder
     {
         category::create([
             'category' => 'Fashion',
+            'url' => 'terlaris/1'
         ]);
 
         category::create([
             'category' => 'Kriya',
+            'url' => 'terlaris/2'
         ]);
 
         category::create([
             'category' => 'Kuliner',
+            'url' => 'terlaris/3'
         ]);
     }
 }

@@ -20,8 +20,10 @@ use App\Models\Picture_event;
 use App\Models\Register_event;
 use App\Models\Stokbarang;
 use App\Models\category;
+use App\Models\Kelola_data_keuangan;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Transaction;
 
 class AdminController extends Controller
 {
@@ -203,8 +205,29 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    public function terlaris($id)
+    public function terlaris()
     {
+        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
+            ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
+            ->whereNotNull('transaction_id')
+            ->groupBy('category_name', 'category_url')
+            ->orderBy('total_qty', 'desc')
+            ->get();
+        return view('pages.admin.barang.fashion.view', compact('category'));
+    }
+
+    public function terlaris_id($id)
+    {
+
+        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
+            ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
+            ->whereNotNull('transaction_id')
+            ->groupBy('category_name', 'category_url')
+            ->orderBy('total_qty', 'desc')
+            ->get();
+
         $order = Order::select('stokbarangs.name as product_name', DB::raw('SUM(orders.qty) as total_qty'))
             ->join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
             ->join('categories', 'categories.id', '=', 'stokbarangs.category_id')
@@ -213,23 +236,15 @@ class AdminController extends Controller
             ->groupBy('stokbarangs.name')
             ->get();
 
-        // Fetch all products
-        $products = Stokbarang::all();
+        return view('pages.admin.barang.fashion.view', compact('order', 'category'));
 
-        // Sum the total quantity of orders
-        $countOrder = Order::join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
-            ->join('categories', 'categories.id', '=', 'stokbarangs.category_id')
-            ->where('categories.id', $id)
-            ->whereNotNull('transaction_id')
-            ->sum('orders.qty');
-
-        if ($id == 1) {
-            return view('pages.admin.barang.fashion.view', compact('order', 'countOrder'));
-        } elseif ($id == 2) {
-            return view('pages.admin.barang.kriya.view', compact('order', 'countOrder'));
-        } elseif ($id == 3) {
-            return view('pages.admin.barang.kuliner.view', compact('order', 'countOrder'));
-        }
+        // if ($id == 1) {
+        //     return view('pages.admin.barang.fashion.view', compact('order', 'countOrder'));
+        // } elseif ($id == 2) {
+        //     return view('pages.admin.barang.kriya.view', compact('order', 'countOrder'));
+        // } elseif ($id == 3) {
+        //     return view('pages.admin.barang.kuliner.view', compact('order', 'countOrder'));
+        // }
     }
 
     // public function kriya()
@@ -716,8 +731,32 @@ class AdminController extends Controller
 
     public function manage_finance()
     {
-        $data['neraca'] = Neraca::all();
-        return view('pages.admin.finance.view', $data);
+        $currentMonth = Carbon::now()->month;
+        $order = Order::select(
+            'kelola_data_ksms.owner as ksm_owner',
+            DB::raw('SUM(transactions.total_price) as total_paid'),
+            'kelola_data_keuangans.omzet as omzet'
+        )
+            ->join('transactions', 'transactions.id', '=', 'orders.transaction_id')
+            ->join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
+            ->join('kelola_data_ksms', 'kelola_data_ksms.id', '=', 'stokbarangs.kelola_data_ksm_id')
+            ->join('kelola_data_keuangans', 'kelola_data_keuangans.kelola_data_ksm_id', '=', 'kelola_data_ksms.id')
+            ->where('transactions.payment_status', 'paid')
+            ->whereMonth('transactions.created_at', $currentMonth)
+            ->whereMonth('kelola_data_keuangans.date', $currentMonth)
+            ->whereNotNull('orders.transaction_id')
+            ->groupBy('ksm_owner', 'kelola_data_keuangans.omzet')
+            ->get();
+
+
+        $ksmOwners = $order->pluck('ksm_owner')->toArray();
+        $remainingBalances = $order->map(function ($orders) {
+            return $orders->total_paid - $orders->omzet;
+        })->toArray();
+        $omzets = $order->pluck('omzet')->toArray();
+
+        $neraca = Neraca::all();
+        return view('pages.admin.finance.view', compact('neraca', 'order', 'omzets', 'ksmOwners', 'remainingBalances'));
     }
 
     public function neraca()
