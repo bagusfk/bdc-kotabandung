@@ -49,7 +49,8 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::put('/update-item', [AdminController::class, 'update_item'])->name('update-item');
         Route::delete('/delete-item/{id}', [AdminController::class, 'delete_item'])->name('delete-item');
         //terlaris
-        Route::get('/terlaris/{id}', [AdminController::class, 'terlaris'])->name('terlaris');
+        Route::get('/terlaris', [AdminController::class, 'terlaris'])->name('terlaris');
+        Route::get('/terlaris/{id}', [AdminController::class, 'terlaris_id'])->name('terlaris_id');
         // laporan
         Route::get('/laporan-barang', [AdminController::class, 'report_item'])->name('report_item');
         Route::get('/report-item-json', [AdminController::class, 'report_item_json'])->name('report_item_json');

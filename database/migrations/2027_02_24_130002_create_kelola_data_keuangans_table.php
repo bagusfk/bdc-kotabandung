@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('kelola_data_keuangans', function (Blueprint $table) {
             $table->id();
             $table->date('date')->nullable();
-            $table->string('product')->nullable();
-            $table->integer('total_product')->nullable();
-            $table->double('total_price')->nullable();
+            $table->foreignId('kelola_data_ksm_id')->constrained('kelola_data_ksms')->onDelete('cascade');
+            $table->double('omzet');
             $table->timestamps();
         });
     }
