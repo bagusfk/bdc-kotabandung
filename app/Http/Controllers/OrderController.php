@@ -113,6 +113,48 @@ class OrderController extends Controller
         return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices'));
     }
 
+    public function continueCheckout($id)
+    {
+        $transaction = Transaction::find($id);
+
+        $subTotalPrice = $transaction->total_price;
+
+        $transaction_id = $transaction->id;
+
+        $order = Order::with('item','transaction')
+        ->where('transaction_id', $transaction->id)
+        ->get()
+        ->groupBy(function($item) {
+            return $item->item->ksm->brand_name;
+        });
+
+        $totalPrices = [];
+        foreach ($order as $sellerName => $products) {
+            // $totalPrice = $products->sum('price') * $products->sum('qty');
+            $totalPrice = $products->sum(function ($products) {
+                return $products->price * $products->qty;
+            });
+            // dd($products);
+            // foreach ($products as $product) {
+            //     $totalPrice = $products[0]->price * $products[0]->qty;
+            // }
+            $totalPrices[$sellerName] = $totalPrice;
+            // dd($totalPrice);
+        }
+        // Menghitung total harga dan total qty dari produk di setiap toko
+        $totals = [];
+        foreach ($order as $sellerName => $orders) {
+            $totalPrice = $orders->sum(function ($order) {
+                return $order->item->price;
+            });
+            $totalQty = $orders->sum('qty');
+            $totals[$sellerName] = ['totalPrice' => $totalPrice, 'totalQty' => $totalQty];
+
+        }
+
+        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices'));
+    }
+
     function getCourierServices(Request $request)
     {
         $origin = 22;

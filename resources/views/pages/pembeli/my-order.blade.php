@@ -62,7 +62,7 @@
                             </div>
                             <!-- Modal toggle -->
                             @if ($transaction->payment_status == 'unpaid')
-                                <a href="#" class="block text-white bg-lime-500 hover:bg-lime-600 focus:ring-4 focus:outline-none focus:ring-lime-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Lanjut Pembayaran</a>
+                                <a href="{{ route('continueCheckout', $transaction->id ) }}" class="block text-white bg-lime-500 hover:bg-lime-600 focus:ring-4 focus:outline-none focus:ring-lime-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Lanjut Pembayaran</a>
                             @else
                                 <button @click=" detail = '{{ $transaction->id }}' " class="block text-white bg-primary hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800" type="button">
                                     Lihat Detail Transaksi
@@ -161,7 +161,7 @@
                                             <div class="font-bold">No Resi</div>
                                         </div>
                                         <div class="">
-                                            <span class="price">JNT098709809</span>
+                                            <span class="resi">{!! $transaction->no_resi ?? '<span class="text-sm text-gray-500">Tunggu konfirmasi admin</span>' !!}</span>
                                         </div>
                                     </div>
                                     <div class="flex justify-between mb-2">

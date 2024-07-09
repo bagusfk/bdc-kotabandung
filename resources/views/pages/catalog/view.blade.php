@@ -69,14 +69,14 @@
         </div>
         <div class="col-span-3">
             {{-- get Category --}}
-            @php
+            {{-- @php
                 $snacks = $categories->where('category', 'Makanan Ringan')->first()->items;
                 $drinks = $categories->where('category', 'Minuman')->first()->items;
                 $vegetables = $categories->where('category', 'Sayuran')->first()->items;
                 $meats = $categories->where('category', 'Daging')->first()->items;
                 $fish = $categories->where('category', 'Ikan')->first()->items;
 
-            @endphp
+            @endphp --}}
 
             <section class="">
                 @if ( $items->isNotEmpty() )

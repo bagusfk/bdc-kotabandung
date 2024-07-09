@@ -119,6 +119,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::post('/cart/add/{item}', [CartController::class, 'addTocart'])->name('cart.add');
         Route::get('/cart', [CartController::class, 'index'])->name('cart');
         Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+        Route::get('/checkout/{id}', [OrderController::class, 'continueCheckout'])->name('continueCheckout');
         Route::post('/getCourierServices', [OrderController::class, 'getCourierServices'])->name('getCourierServices');
         Route::post('/payment', [OrderController::class, 'payment'])->name('payment');
         // Route::match(['get', 'post', 'put'], '/finish-payment', [OrderController::class, 'finishPayment'])->name('finish-payment');

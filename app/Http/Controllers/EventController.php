@@ -41,7 +41,7 @@ class EventController extends Controller
         $event->event_id = $id;
         $event->save();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Berhasil mendaftar event! Silahkan tunggu konfirmasi');
     }
 
     /**
