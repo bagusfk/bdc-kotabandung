@@ -140,18 +140,19 @@
                             @php
                                 $user = Auth::user()
                             @endphp
+                            @auth
                             {{-- @foreach ($users as $user) --}}
                                 @if (!$alreadyRegistered && $user->ksm && $user->id == $auth)
                                     <div class="my-8">
                                         <a href="{{ url('register-event/' . $data->id) }}" class="flex justify-center w-full px-3 py-2 text-white register-btn bg-primary rounded-xl">Daftar</a>
                                     </div>
-                                @elseif(!$user->ksm)
+                            @endauth
+                                @else
                                     <div class="my-8">
                                         <a href="{{ route('register-ksm') }}" class="flex justify-center w-full px-3 py-2 text-white register-btn bg-primary rounded-xl">Daftar</a>
                                     </div>
                                 @endif
                             {{-- @endforeach --}}
-
                         </div>
                     </div>
                 </div>
