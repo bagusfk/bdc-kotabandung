@@ -746,17 +746,29 @@ class AdminController extends Controller
             ->whereMonth('kelola_data_keuangans.date', $currentMonth)
             ->whereNotNull('orders.transaction_id')
             ->groupBy('ksm_owner', 'kelola_data_keuangans.omzet')
+            ->orderBy('total_paid', 'desc')
             ->get();
 
 
-        $ksmOwners = $order->pluck('ksm_owner')->toArray();
-        $remainingBalances = $order->map(function ($orders) {
-            return $orders->total_paid - $orders->omzet;
-        })->toArray();
-        $omzets = $order->pluck('omzet')->toArray();
+        // $ksmOwners = $order->pluck('ksm_owner')->toArray();
+        // $remainingBalances = $order->map(function ($orders) {
+        //     return $orders->total_paid - $orders->omzet;
+        // })->toArray();
+        // $omzets = $order->pluck('omzet')->toArray();
 
         $neraca = Neraca::all();
-        return view('pages.admin.finance.view', compact('neraca', 'order', 'omzets', 'ksmOwners', 'remainingBalances'));
+        $debtData = Neraca::select(
+            DB::raw('SUM(debt) as total_debt'),
+            DB::raw('DATE_FORMAT(created_at, "%m") as month')
+        )
+            ->groupBy('month')
+            ->get();
+
+        $debt = $debtData->pluck('total_debt')->toArray();
+        $labels = $debtData->map(function ($item) {
+            return Carbon::createFromFormat('m', $item->month)->translatedFormat('F');
+        })->toArray();
+        return view('pages.admin.finance.view', compact('neraca', 'order', 'debt', 'labels'));
     }
 
     public function neraca()

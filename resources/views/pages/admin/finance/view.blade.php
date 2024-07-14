@@ -372,6 +372,9 @@
                             Nama KSM
                         </th>
                         <th scope="col" class="px-6 py-3 text-center">
+                            Penjualan
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
                             Laba
                         </th>
                         <th scope="col" class="px-6 py-3 text-center">
@@ -382,6 +385,7 @@
                 <tbody>
                     @php
                         $no = 1;
+                        $fee = 0;
                     @endphp
                     @if ($order->isEmpty())
                         <!-- Anda dapat menambahkan pesan atau tindakan lain jika tidak ada data -->
@@ -396,10 +400,13 @@
                                     {{ $item->ksm_owner }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    {{ $item->total_paid - $item->omzet > 0 ? $item->total_paid - $item->omzet : '0' }}
+                                    {{ $item->total_paid }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    {{ $item->total_paid - $item->omzet < 0 ? $item->total_paid - $item->omzet : '0' }}
+                                    {{ $item->total_paid * $fee > 0 ? $item->total_paid * $fee : '0' }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {{ $item->total_paid * $fee < 0 ? $item->total_paid * $fee : '0' }}
                                 </td>
                             </tr>
                         @endforeach
@@ -507,25 +514,17 @@
                 }
             });
         });
-
-        var ksmOwners = @json($ksmOwners);
-        var remainingBalances = @json($remainingBalances);
-        var omzets = @json($omzets);
+        var debt = @json($debt);
+        var labels = @json($labels);
 
         const ctx = document.getElementById('chartLine');
         new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: ksmOwners,
+                labels: labels,
                 datasets: [{
-                    label: 'Pendapatan',
-                    data: remainingBalances,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }, {
                     label: 'Omzet',
-                    data: omzets,
+                    data: debt,
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1

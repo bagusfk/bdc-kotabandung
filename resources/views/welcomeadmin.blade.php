@@ -1,6 +1,6 @@
 @extends('layouts.appadmin')
 @section('content')
-    <div class="grid grid-cols-4 gap-4 mb-4">
+    <div class="grid-cols-4 gap-4 mb-4 hidden">
         <div class="grid grid-cols-2 gap-4 bg-green-700 items-center rounded dark:bg-gray-800 p-[1rem]">
             <div class="">
                 <label class="flex" for="">Traffic</label>
@@ -107,7 +107,7 @@
             </div>
             <canvas id="line_items"></canvas>
         </div>
-        <div class="items-center justify-center rounded bg-gray-50 h-fit dark:bg-gray-800">
+        <div class="hidden items-center justify-center rounded bg-gray-50 h-fit dark:bg-gray-800">
             <div class="flex items-center justify-between">
                 <label for="">Data Event</label>
                 <select id="monthFilterEvents">
@@ -151,27 +151,29 @@
             </div>
             <canvas id="line_user_ksm"></canvas>
         </div>
+        <div class="items-center justify-center rounded bg-gray-50 h-fit dark:bg-gray-800">
+            <div class="flex items-center justify-between">
+                <label for="">Data Pendaftar Event</label>
+                <select id="monthFilterRegisterEvents">
+                    <option value="">All Months</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <canvas id="line_register_events"></canvas>
+        </div>
     </div>
     <div class="items-center justify-center h-fit mb-4 rounded bg-gray-50 dark:bg-gray-800">
-        <div class="flex items-center justify-between">
-            <label for="">Data Pendaftar Event</label>
-            <select id="monthFilterRegisterEvents">
-                <option value="">All Months</option>
-                <option value="01">January</option>
-                <option value="02">February</option>
-                <option value="03">March</option>
-                <option value="04">April</option>
-                <option value="05">May</option>
-                <option value="06">June</option>
-                <option value="07">July</option>
-                <option value="08">August</option>
-                <option value="09">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-        </div>
-        <canvas id="line_register_events"></canvas>
     </div>
 
     <script>
@@ -216,7 +218,7 @@
 
         // Creating the charts
         const lineChartUserPembeli = new Chart(document.getElementById('line_user_pembeli'), {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: [],
                 datasets: [{
