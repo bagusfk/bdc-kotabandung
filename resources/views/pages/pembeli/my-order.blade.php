@@ -16,17 +16,21 @@
                     <div class="px-3 py-2 mt-2 bg-white border rounded-lg select_with_store border-slate-300">
                         <div class="flex items-center justify-between gap-3 py-2 border-b-2">
                             <div class="flex flex-wrap items-center gap-3">
-                                <div class="font-bold">{{$transaction->orders->first()}}</div>
+                                <div class="font-bold">
+                                    @foreach ($transaction->orders as $item)
+                                        {{ $item->item->ksm->brand_name }},
+                                    @endforeach
+                                </div>
                                 <div class="text-sm">{{ $transaction->invoice }}</div>
                                 @if ($transaction->payment_status == 'unpaid')
                                     <div class="px-2 py-1 text-sm text-red-500 border border-red-500 rounded-md">Belum dibayar</div>
-                                @elseif ($transaction->payment_status == 'paid' && $transaction->status == 'dikemas')
+                                @elseif ($transaction->payment_status == 'paid' && $transaction->order_status == 'dikemas')
                                     <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Dikemas</div>
-                                @elseif ($transaction->payment_status == 'paid' && $transaction->status =='dikirim')
+                                @elseif ($transaction->payment_status == 'paid' && $transaction->order_status =='dikirim')
                                     <div class="px-2 py-1 text-sm text-white bg-yellow-300 rounded-md">Shipping</div>
-                                @elseif ($transaction->payment_status == 'paid' && $transaction->status =='selesai')
+                                @elseif ($transaction->payment_status == 'paid' && $transaction->order_status =='selesai')
                                     <div class="px-2 py-1 text-sm text-white bg-green-500 rounded-md">Selesai</div>
-                                @elseif ($transaction->status == 'cancel')
+                                @elseif ($transaction->order_status == 'cancel')
                                     <div class="px-2 py-1 text-sm text-white bg-red-500 rounded-md">Cancle</div>
                                 @endif
                             </div>
@@ -43,7 +47,7 @@
                         </div>
 
                         @if($transaction->orders->count() > 1)
-                            <button @click=" detail = true " class="flex items-center justify-center w-full gap-3 py-2 border-t-2 border-b-2 hover:bg-slate-50" type="button">
+                            <button @click=" detail = '{{ $transaction->id }}' " class="flex items-center justify-center w-full gap-3 py-2 border-t-2 border-b-2 hover:bg-slate-50" type="button">
                                 Tampilkan barang lainnya
                             </button>
                         @endif
@@ -53,16 +57,14 @@
                                 @if ($transaction->total_price)
                                     <span class="price">Rp{{ $transaction->total_price }}</span>
                                 @else
-                                    @foreach ($transaction->orders as $item)
-                                        <span class="price">Rp{{ $item->qty * $item->item->price  }}</span>
-                                    @endforeach
+                                    <span class="price">Rp{{ $transaction->orders->sum('price') }}</span>
                                 @endif
                             </div>
                             <!-- Modal toggle -->
                             @if ($transaction->payment_status == 'unpaid')
-                                <a href="#" class="block text-white bg-lime-500 hover:bg-lime-600 focus:ring-4 focus:outline-none focus:ring-lime-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Lanjut Pembayaran</a>
+                                <a href="{{ route('continueCheckout', $transaction->id ) }}" class="block text-white bg-lime-500 hover:bg-lime-600 focus:ring-4 focus:outline-none focus:ring-lime-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Lanjut Pembayaran</a>
                             @else
-                                <button @click=" detail = true " class="block text-white bg-primary hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800" type="button">
+                                <button @click=" detail = '{{ $transaction->id }}' " class="block text-white bg-primary hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-primary dark:focus:ring-blue-800" type="button">
                                     Lihat Detail Transaksi
                                 </button>
                             @endif
@@ -70,7 +72,7 @@
                     </div>
                 </div>
                 <!-- Main modal -->
-                <div x-show="detail" x-cloak style="display: none !important;" class="fixed top-0 left-0 right-0 z-50 items-center justify-center w-full max-h-full overflow-x-hidden overflow-y-auto bg-black bg-opacity-25 md:inset-0">
+                <div x-show="detail === '{{ $transaction->id }}'" x-cloak style="display: none !important;" class="fixed top-0 left-0 right-0 z-50 items-center justify-center w-full max-h-full overflow-x-hidden overflow-y-auto bg-black bg-opacity-25 md:inset-0">
                     <div class="w-full max-w-2xl max-h-full p-4 mx-auto" @click.outside=" detail = false">
                         <!-- Modal content -->
                         <div class="mx-auto bg-white rounded-lg shadow dark:bg-gray-700">
@@ -90,58 +92,53 @@
                             <div class="p-4 md:p-5">
                                 <div class="py-2 border-b">
                                     <div class="flex items-center gap-2">
-                                        <div class="px-2 py-1 text-sm text-blue-500 border border-blue-500 rounded-md">Belum dibayar</div>
-                                        <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Dikemas</div>
-                                        <div class="px-2 py-1 text-sm text-white bg-yellow-300 rounded-md">Shipping</div>
-                                        <div class="px-2 py-1 text-sm text-white bg-green-500 rounded-md">Selesai</div>
-                                        <div class="px-2 py-1 text-sm text-white bg-red-500 rounded-md">Cancle</div>
+                                        @if ($transaction->payment_status == 'unpaid')
+                                            <div class="px-2 py-1 text-sm text-red-500 border border-red-500 rounded-md">Belum dibayar</div>
+                                        @elseif ($transaction->payment_status == 'paid' && $transaction->order_status == 'dikemas')
+                                            <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Dikemas</div>
+                                        @elseif ($transaction->payment_status == 'paid' && $transaction->order_status =='dikirim')
+                                            <div class="px-2 py-1 text-sm text-white bg-yellow-300 rounded-md">Shipping</div>
+                                        @elseif ($transaction->payment_status == 'paid' && $transaction->order_status =='selesai')
+                                            <div class="px-2 py-1 text-sm text-white bg-green-500 rounded-md">Selesai</div>
+                                        @elseif ($transaction->order_status == 'cancel')
+                                            <div class="px-2 py-1 text-sm text-white bg-red-500 rounded-md">Cancle</div>
+                                        @endif
                                     </div>
                                     <div class="flex items-center justify-between mt-4">
                                         <div class="font-bold">No Invoice</div>
-                                        <a href="#" class="text-sm text-primary">INV0180912983172041924</a>
+                                        <a href="#" class="text-sm text-primary">{{ $transaction->invoice }}</a>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <div class="font-bold">Tanggal Pembelian</div>
-                                        <div class="text-sm">12-12-2024</div>
+                                        <div class="text-sm">{{ $transaction->created_at }}</div>
                                     </div>
                                 </div>
                                 <div class="py-2 border-b">
                                     <div class="flex items-center justify-between py-2">
                                         <div class="font-bold">Detail Produk</div>
-                                        <div class="text-sm">(Nama Toko)</div>
                                     </div>
                                     {{-- list barang yang dibeli --}}
-                                    <div class="flex justify-between px-2 py-2 mb-2 border rounded-lg border-slate-300">
-                                        <div class="flex items-start gap-3">
-                                            <img src="{{asset('storage/img/kursi.png')}}" alt="" class="w-16 h-16">
-                                            <div>
-                                                <div class="font-bold">Nama Barang</div>
-                                                <div class="">1x Barang Rp15.000</div>
+                                    @foreach ($transaction->orders as $item)
+                                        <div class="flex justify-between px-2 py-2 mb-2 border rounded-lg border-slate-300">
+                                            <div class="flex items-start gap-3">
+                                                <img src="{{asset( $item->item->picture_product )}}" alt="" class="w-16 h-16">
+                                                <div>
+                                                    <div class="font-bold">{{ $item->item->name }}<span class="text-sm font-normal"> - ({{ $item->item->ksm->brand_name }})</span></div>
+                                                    <div class="">{{ $item->qty }}x Barang Rp{{ $item->item->price }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <span class="price"><span class="price">Rp{{ $item->qty * $item->item->price  }}</span></span>
                                             </div>
                                         </div>
-                                        <div class="">
-                                            <span class="price">Rp.500.000</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-between px-2 py-2 mb-2 border rounded-lg border-slate-300">
-                                        <div class="flex items-start gap-3">
-                                            <img src="{{asset('storage/img/kursi.png')}}" alt="" class="w-16 h-16">
-                                            <div>
-                                                <div class="font-bold">Nama Barang</div>
-                                                <div class="">1x Barang Rp15.000</div>
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <span class="price">Rp.500.000</span>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                     {{-- End list barang yang dibeli --}}
                                     <div class="flex justify-between px-2 py-2 mb-2 border rounded-lg border-slate-300">
                                         <div class="flex items-start gap-3">
                                             <div class="font-bold">Total Harga</div>
                                         </div>
                                         <div class="">
-                                            <span class="font-bold price text-primary">Rp.1000.000</span>
+                                            <span class="font-bold price text-primary">Rp{{ $transaction->orders->sum('price') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +153,7 @@
                                             <div class="font-bold">Kurir</div>
                                         </div>
                                         <div class="">
-                                            <span class="price">JNT</span>
+                                            <span class="price">{{ $transaction->expedition }} - {{ $transaction->expedition_type }} - Rp{{ $transaction->shipping_cost }}</span>
                                         </div>
                                     </div>
                                     <div class="flex justify-between mb-2">
@@ -164,7 +161,7 @@
                                             <div class="font-bold">No Resi</div>
                                         </div>
                                         <div class="">
-                                            <span class="price">JNT098709809</span>
+                                            <span class="resi">{!! $transaction->no_resi ?? '<span class="text-sm text-gray-500">Tunggu konfirmasi admin</span>' !!}</span>
                                         </div>
                                     </div>
                                     <div class="flex justify-between mb-2">
@@ -172,9 +169,9 @@
                                             <div class="font-bold">Aamat</div>
                                         </div>
                                         <div class="flex flex-col items-end">
-                                            <div class="font-bold price">Bagus Farhan Kirana</div>
-                                            <div class="font-semibold price">08123456789</div>
-                                            <div class="price">Jl. Juriman blok adawd ahdsoai oahoid aowdhoid adoh</div>
+                                            <div class="font-bold price">{{ Auth::user()->name }}</div>
+                                            <div class="font-semibold price">{{ Auth::user()->no_wa }}</div>
+                                            <div class="price">{{ Auth::user()->address}}, {{ Auth::user()->cities->city_name }}, {{Auth::user()->cities->province }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -190,15 +187,15 @@
                                             <div class="font-bold">Metode Pembayaran</div>
                                         </div>
                                         <div class="">
-                                            <span class="price">Bank Transfer - BNI</span>
+                                            <span class="price">{{ $transaction->payment_method }}</span>
                                         </div>
                                     </div>
                                     <div class="flex justify-between mb-2">
                                         <div class="flex items-start gap-3">
-                                            <div class="font-bold">Total Harga (1 Barang)</div>
+                                            <div class="font-bold">Total Harga ({{ $transaction->orders->sum('qty') }} Barang)</div>
                                         </div>
                                         <div class="">
-                                            <span class="price">Rp500.000</span>
+                                            <span class="price">Rp{{ $transaction->orders->sum('price') }}</span>
                                         </div>
                                     </div>
                                     <div class="flex justify-between mb-2">
@@ -206,7 +203,7 @@
                                             <div class="font-bold">Total Ongkos</div>
                                         </div>
                                         <div class="">
-                                            <span class="price">Rp9.000</span>
+                                            <span class="price">Rp{{ $transaction->shipping_cost }}</span>
                                         </div>
                                     </div>
                                     <div class="flex justify-between mt-2 mb-2 border-t">
@@ -214,7 +211,7 @@
                                             <div class="text-xl font-bold">Total Belanja</div>
                                         </div>
                                         <div class="">
-                                            <div class="text-xl font-bold price text-primary">Rp509.000</div>
+                                            <div class="text-xl font-bold price text-primary">Rp{{ $transaction->total_price }}</div>
                                         </div>
                                     </div>
                                 </div>

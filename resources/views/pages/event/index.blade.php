@@ -137,24 +137,57 @@
                                 @endif
                             @endforeach
 
-                            @foreach ($users as $user)
-                                @if (!$alreadyRegistered && $user->ksm_id != null && $user->id == $auth)
+                            @php
+                                $user = Auth::user()
+                            @endphp
+                            @auth
+                            {{-- @foreach ($users as $user) --}}
+                                @if (!$alreadyRegistered && $user->ksm && $user->id == $auth)
                                     <div class="my-8">
-                                        <a href="{{ url('register-event/' . $data->id) }}" class="register-btn flex justify-center w-full px-3 py-2 text-white bg-primary rounded-xl">Daftar</a>
+                                        <a href="{{ url('register-event/' . $data->id) }}" class="flex justify-center w-full px-3 py-2 text-white register-btn bg-primary rounded-xl">Daftar</a>
                                     </div>
-                                    @break
-                                    @elseif(!$alreadyRegistered && $user->ksm_id == null && $user->id == $auth)
+                            @endauth
+                                @else
                                     <div class="my-8">
-                                        <a href="{{ route('register-ksm') }}" class="register-btn flex justify-center w-full px-3 py-2 text-white bg-primary rounded-xl">Daftar</a>
+                                        <a href="{{ route('register-ksm') }}" class="flex justify-center w-full px-3 py-2 text-white register-btn bg-primary rounded-xl">Daftar</a>
                                     </div>
-                                    @break
                                 @endif
-                            @endforeach
-
+                            {{-- @endforeach --}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
+
+    @if (session('success'))
+    <div x-data="{ isOpen: true }" x-show="isOpen" x-cloak
+        x-init="$watch('isOpen', value => {
+            if (value) {
+                document.body.classList.add('overflow-hidden');
+            } else {
+                document.body.classList.remove('overflow-hidden');
+            }
+        })" style="display: none">
+        <div class="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div class="p-2 bg-white rounded-xl w-[550px] flex flex-col gap-8">
+                <div class="flex items-center justify-end w-full modal-header">
+                    {{-- <h5 class="text-lg font-bold">asdasd</h5> --}}
+                    <button @click="isOpen = false" class="px-2 text-3xl text-gray-500 hover:text-gray-700">&times;</button>
+                </div>
+                <div class="flex flex-col gap-2 px-8 font-sans text-center modal-body">
+                    <div class="flex items-center justify-center h-44">
+                        <img src="{{ asset('assets\landing\illustrations\success.svg') }}" alt="" class="h-72">
+                    </div>
+                    <div class="text-3xl font-bold">Selamat!!</div>
+                    <div class="text-xl">Kamu berhasil mengajukan pendaftaran event, ayo tingkatkan lagi kualitas Produk dan Brand kamu</div>
+                </div>
+                <div class="flex justify-center pt-2 pb-4 modal-footer">
+                    <button @click="isOpen = false" class="px-8 py-2 text-white bg-blue-500 rounded-xl">Oke</button>
+                </div>
+            </div>
+        </div>
+        <div class="fixed inset-0 z-40 bg-black opacity-50" @click="isOpen = false"></div>
+    </div>
+    @endif
 </x-app-layout>

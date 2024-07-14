@@ -69,14 +69,14 @@
         </div>
         <div class="col-span-3">
             {{-- get Category --}}
-            @php
+            {{-- @php
                 $snacks = $categories->where('category', 'Makanan Ringan')->first()->items;
                 $drinks = $categories->where('category', 'Minuman')->first()->items;
                 $vegetables = $categories->where('category', 'Sayuran')->first()->items;
                 $meats = $categories->where('category', 'Daging')->first()->items;
                 $fish = $categories->where('category', 'Ikan')->first()->items;
 
-            @endphp
+            @endphp --}}
 
             <section class="">
                 @if ( $items->isNotEmpty() )
@@ -84,35 +84,36 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-4 gap-2 py-[1rem] max-sm:px-[1rem] px-[1rem]">
                         @foreach ($items as $item)
                             <div class="w-full bg-white border p-[0.5rem] sm:p-[1rem] border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 max-sm:text-lg dark:text-white">{{ $item->name }}</h5>
                                 <img class="aspect-square" src="{{ asset($item->picture_product) }}" alt="" />
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 h-[4.5rem]" style="-webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden">{{ $item->description }}</p>
+                                <h5 class="text-lg font-bold tracking-tight text-gray-900 max-sm:text-lg dark:text-white">{{ $item->name }}</h5>
+                                <h5 class="text-lg font-bold tracking-tight text-primary max-sm:text-lg dark:text-white">Rp {{ number_format($item->price, 0, ',', '.') }}</h5>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" style="-webkit-line-clamp: 1; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden">{{ $item->description }}</p>
                                 <div class="flex flex-col">
                                     <div class="">
-                                        <a href="{{ url('e-catalog/' . $item->id) }}" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
+                                        <a href="{{ route('detail_catalog', $item->id) }}" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
                                             Details
                                         </a>
                                     </div>
-                                    @if (Route::has('login'))
-                                        @auth
-                                            <div class="text-center">
-                                                <form action="{{ route('cart.add', $item) }}" method="post">
-                                                    @csrf
-                                                    <input type="number" value="1" name="qty" hidden>
-                                                    <button type="submit" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
-                                                        <svg class="w-6 h-6 dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7h-1M8 7h-.688M13 5v4m-2-2h4"/>
-                                                        </svg>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                            <div class="">
-                                                <a href="#" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
-                                                    Beli Sekarang
-                                                </a>
-                                            </div>
-                                        @endauth
-                                    @endif
+                                    @auth
+                                        @if (Route::has('login') && Auth::user()->id != $item->ksm->user_id)
+                                                <div class="text-center">
+                                                    <form action="{{ route('cart.add', $item) }}" method="post">
+                                                        @csrf
+                                                        <input type="number" value="1" name="qty" hidden>
+                                                        <button type="submit" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
+                                                            <svg class="w-6 h-6 dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7h-1M8 7h-.688M13 5v4m-2-2h4"/>
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                {{-- <div class="">
+                                                    <a href="#" class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white border rounded-lg dark:text-gray-400 dark:hover:text-white bg-primary hover:bg-transparent hover:border-primary hover:text-primary hover:border">
+                                                        Beli Sekarang
+                                                    </a>
+                                                </div> --}}
+                                        @endif
+                                    @endauth
                                 </div>
                             </div>
                         @endforeach

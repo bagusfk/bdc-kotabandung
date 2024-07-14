@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('total_qty', 125)->nullable();
             $table->string('expedition', 125)->nullable();
             $table->string('expedition_type', 125)->nullable();
+            $table->string('no_resi', 125)->nullable();
             $table->string('total_price', 125)->nullable();
             $table->string('shipping_cost', 125)->nullable();
             $table->string('payment_method', 125)->nullable();

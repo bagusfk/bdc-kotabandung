@@ -20,8 +20,9 @@ class OrderController extends Controller
      */
     public function checkout(Request $request)
     {
+        // dd($request);
         $req = $request->validate([
-                    'selected_carts.*' => 'required|exists:stokbarangs,id',
+                    'selected_carts.*' => 'required',
                     'qty.*' => 'required|integer|min:1'
                 ]);
 
@@ -107,6 +108,48 @@ class OrderController extends Controller
             if ($items) {
                 $items->delete();
             }
+        }
+
+        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices'));
+    }
+
+    public function continueCheckout($id)
+    {
+        $transaction = Transaction::find($id);
+
+        $subTotalPrice = $transaction->total_price;
+
+        $transaction_id = $transaction->id;
+
+        $order = Order::with('item','transaction')
+        ->where('transaction_id', $transaction->id)
+        ->get()
+        ->groupBy(function($item) {
+            return $item->item->ksm->brand_name;
+        });
+
+        $totalPrices = [];
+        foreach ($order as $sellerName => $products) {
+            // $totalPrice = $products->sum('price') * $products->sum('qty');
+            $totalPrice = $products->sum(function ($products) {
+                return $products->price * $products->qty;
+            });
+            // dd($products);
+            // foreach ($products as $product) {
+            //     $totalPrice = $products[0]->price * $products[0]->qty;
+            // }
+            $totalPrices[$sellerName] = $totalPrice;
+            // dd($totalPrice);
+        }
+        // Menghitung total harga dan total qty dari produk di setiap toko
+        $totals = [];
+        foreach ($order as $sellerName => $orders) {
+            $totalPrice = $orders->sum(function ($order) {
+                return $order->item->price;
+            });
+            $totalQty = $orders->sum('qty');
+            $totals[$sellerName] = ['totalPrice' => $totalPrice, 'totalQty' => $totalQty];
+
         }
 
         return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices'));
@@ -249,6 +292,20 @@ class OrderController extends Controller
         ->orderBy('created_at', 'desc')
         ->get();
         // dd($transactions);
+
+        // $transactions = $transactions->map(function ($transaction) {
+        //     $totalItems = $transaction->orders->sum('qty');
+        //     $totalPrice = $transaction->orders->sum('price');
+
+        //     $transaction->totalItems = $totalItems;
+        //     $transaction->totalPrice = $totalPrice;
+
+        //     return $transaction;
+        // });
+        // foreach($transactions as $transaction) {
+        //     dd($transaction->orders->sum('price'));
+        // }
+
         return view('pages.pembeli.my-order', compact('transactions'));
     }
     /**

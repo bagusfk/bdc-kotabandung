@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\category;
+use App\Models\Kelola_data_ksm;
 use App\Models\Stokbarang;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,9 +24,9 @@ class StokbarangController extends Controller
     public function detail($id)
     {
         $data['item'] = Stokbarang::find($id);
-        $data['seller'] = User::where('id', $data['item']->seller_id)->first();
-        $data['items'] = Stokbarang::where('seller_id', $data['seller']->id)->get();
-
+        $data['seller'] = Kelola_data_ksm::with('item')->where('id', $data['item']->kelola_data_ksm_id)->first();
+        // $data['items'] = Stokbarang::where('seller_id', $data['seller']->id)->get();
+        // dd($data['seller']);
         return view('pages.catalog.detailproduct', $data);
     }
 
