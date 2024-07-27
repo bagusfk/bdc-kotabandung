@@ -14,6 +14,16 @@
         table.dataTable th.dt-type-numeric {
             text-align: left;
         }
+
+        .border-bottom {
+            border: none;
+            border-bottom: 1px solid #000000;
+            background: none;
+        }
+
+        .border-bottom:focus {
+            border: none;
+        }
     </style>
 
     <div class="flex justify-between mb-[2rem]">
@@ -27,17 +37,14 @@
         </div>
     </div>
     <div class="w-full flex justify-end">
-        <button class="bg-primary text-white p-[.5rem] mr-2" onclick="sortData('asc')">Sort Ascending</button>
+        {{-- <button class="bg-primary text-white p-[.5rem] mr-2" onclick="sortData('asc')">Sort Ascending</button>
         <button class="bg-primary text-white p-[.5rem] mr-2" onclick="sortData('desc')">Sort Descending</button>
-        <button class="bg-primary text-white p-[.5rem]" onclick="clearSorting()">Clear Sorting</button>
+        <button class="bg-primary text-white p-[.5rem]" onclick="clearSorting()">Clear Sorting</button> --}}
     </div>
 
-    <div class="grid grid-cols-2 gap-4 dark:bg-gray-800 md:p-6">
+    <div class=" dark:bg-gray-800 md:p-6">
         <div class="">
-            <canvas id="chartBar"></canvas>
-        </div>
-        <div class="">
-            <canvas id="chartLine"></canvas>
+            <canvas id="report_item"></canvas>
         </div>
     </div>
 
@@ -46,32 +53,41 @@
     </div>
 
     <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
-        <table id="dataTable" class="display w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="dataTable" class="display nowrap text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
                         No
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Pembeli
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Email
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Pesanan
+                        Produk
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Qty
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        KSM
+                        Harga/satuan
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Cluster KSM
+                        Nama Toko
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Konfirmasi Pesanan
+                        Pembeli
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Alamat Pembeli
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Ekspedisi
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        No. Resi
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Total Harga
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Status
                     </th>
                 </tr>
             </thead>
@@ -79,39 +95,80 @@
                 @php
                     $no = 1;
                 @endphp
-                @foreach ($pembeli as $data)
+                @foreach ($order as $orders)
                     <tr>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $data->users->name }}
+                            {{ $orders->item->name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->users->email }}
+                            {{ $orders->qty }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->product->name }}
+                            {{ $orders->price }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->qty }}
+                            {{ $orders->item->ksm->brand_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->product->user->ksm->brand_name }}
+                            {{ $orders->transaction->user->name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->product->user->ksm->cluster }}
+                            {{ $orders->transaction->user->address }}
                         </td>
-                        <td class="px-6 py-4 flex">
-                            <a href="{{ url('/edit-item/' . $data->id) }}"
-                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
-                            <form method="POST" action="{{ url('/delete-item/' . $data->id) }}"
-                                enctype="multipart/form-data">
+                        <td class="px-6 py-4">
+                            @if ($orders->transaction->expedition && $orders->transaction->expedition_type != null)
+                                {{ $orders->transaction->expedition }},
+                                {{ $orders->transaction->expedition_type }}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td class="px-6 py-4">
+                            <form action="{{ route('no_resi', $orders->transaction_id) }}" method="POST">
                                 @csrf
-                                @method('delete')
-                                <button type="submit" class="font-medium text-red-700 dark:text-blue-500 hover:underline"
-                                    onclick="return confirm('Are you sure you want to search Google?')">
-                                    Delete
+                                <input type="text" class="border-bottom" name="no_resi"
+                                    value="{{ $orders->transaction->no_resi }}">
+                                <button type="submit" class="p-[0.5rem] bg-green-500 rounded-lg hover:bg-green-600">
+                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"
+                                        viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                        <path
+                                            d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $orders->total_price }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <form action="{{ url('order_status/' . $orders->transaction_id) }}" method="POST">
+                                @csrf
+                                <select name="status" id="status">
+                                    <option value="process"
+                                        {{ $orders->transaction->order_status == 'process' ? 'selected' : '' }}>Proses
+                                    </option>
+                                    <option value="dikemas"
+                                        {{ $orders->transaction->order_status == 'dikemas' ? 'selected' : '' }}>Dikemas
+                                    </option>
+                                    <option value="dikirim"
+                                        {{ $orders->transaction->order_status == 'dikirim' ? 'selected' : '' }}>Dikirim
+                                    </option>
+                                    <option value="selesai"
+                                        {{ $orders->transaction->order_status == 'selesai' ? 'selected' : '' }}>Selesai
+                                    </option>
+                                    <option value="cancel"
+                                        {{ $orders->transaction->order_status == 'cancel' ? 'selected' : '' }}>Batal
+                                    </option>
+                                </select>
+                                <button type="submit" class="p-[0.5rem] bg-green-500 rounded-lg hover:bg-green-600">
+                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"
+                                        viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                        <path
+                                            d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
+                                    </svg>
                                 </button>
                             </form>
                         </td>
@@ -126,57 +183,26 @@
             $('#dataTable').DataTable({
                 layout: {
                     topStart: {
-                        buttons: ['print']
+                        buttons: [{
+                                extend: 'excel',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'pdf',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'print',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            }
+                        ]
                     }
                 }
             });
         });
-
-        function tableToCSV() {
-            var csv = [];
-            var rows = document.querySelectorAll("table tr");
-
-            for (var i = 0; i < rows.length; i++) {
-                var row = [],
-                    cols = rows[i].querySelectorAll("td, th");
-
-                for (var j = 0; j < cols.length; j++)
-                    row.push(cols[j].innerText);
-
-                csv.push(row.join(","));
-            }
-
-            // Download CSV
-            downloadCSV(csv.join("\n"));
-        }
-
-        function downloadCSV(csv) {
-            var csvFile;
-            var downloadLink;
-
-            // CSV file
-            csvFile = new Blob([csv], {
-                type: "text/csv"
-            });
-
-            // Download link
-            downloadLink = document.createElement("a");
-
-            // File name
-            downloadLink.download = "table_data.csv";
-
-            // Create a link to the file
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-
-            // Hide download link
-            downloadLink.style.display = "none";
-
-            // Add the link to DOM
-            document.body.appendChild(downloadLink);
-
-            // Click download link
-            downloadLink.click();
-        }
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -184,16 +210,18 @@
                 .then(response => response.json())
                 .then(data => {
                     const categories = [];
-                    const categoryNames = [];
                     const totalSold = [];
 
-                    // Memproses data untuk grafik
-                    data.forEach(product => {
-                        if (!categories.includes(product.category_id)) {
-                            categories.push(product.category_id);
-                            categoryNames.push(product.name);
+                    // Mengelompokkan data berdasarkan kategori
+                    data.forEach(item => {
+                        if (!categories.includes(item.category_name)) {
+                            categories.push(item.category_name);
+                            totalSold.push(item.total_sold);
+                        } else {
+                            // Jika kategori sudah ada, update total penjualan
+                            const index = categories.indexOf(item.category_name);
+                            totalSold[index] += item.total_sold;
                         }
-                        totalSold.push(product.total_sold);
                     });
 
                     const ctx = document.getElementById('report_item').getContext('2d');
@@ -201,7 +229,7 @@
                     new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: categoryNames,
+                            labels: categories,
                             datasets: [{
                                 label: 'Total Sold',
                                 data: totalSold,

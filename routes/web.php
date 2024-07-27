@@ -85,6 +85,8 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
 
         // penjualan
         Route::get('/kelola-penjualan', [AdminController::class, 'manage_sales'])->name('manage-sales');
+        Route::post('/order_status/{id}', [AdminController::class, 'order_status'])->name('order_status');
+        Route::post('/input_resi/{id}', [AdminController::class, 'input_resi'])->name('no_resi');
         // keuangan
         Route::get('/kelola-keuangan', [AdminController::class, 'manage_finance'])->name('manage-finance');
         Route::get('/tambah-kolom', [AdminController::class, 'neraca'])->name('neraca');

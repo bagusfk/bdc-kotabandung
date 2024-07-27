@@ -274,7 +274,7 @@ class AdminController extends Controller
         $currentMonth = now()->month;
         $currentYear = now()->year;
 
-        // Menggabungkan order, transaction, dan stokbarang untuk mendapatkan total penjualan per produk per kategori untuk bulan ini
+        // Menggabungkan order, transaction, dan stokbarang untuk mendapatkan total penjualan per kategori untuk bulan ini
         $totalSales = DB::table('orders')
             ->join('transactions', 'orders.transaction_id', '=', 'transactions.id')
             ->join('stokbarangs', 'orders.product_id', '=', 'stokbarangs.id')
@@ -282,14 +282,24 @@ class AdminController extends Controller
             ->whereYear('transactions.created_at', $currentYear)
             ->select(
                 'stokbarangs.category_id',
-                'stokbarangs.name',
                 DB::raw('SUM(transactions.total_qty) as total_sold')
             )
-            ->groupBy('stokbarangs.category_id', 'stokbarangs.name')
+            ->groupBy('stokbarangs.category_id')
             ->orderBy('stokbarangs.category_id')
             ->get();
 
-        return $totalSales;
+        // Mendapatkan nama kategori
+        $categories = DB::table('categories')->pluck('category', 'id')->toArray();
+
+        $result = $totalSales->map(function ($item) use ($categories) {
+            return [
+                'category_id' => $item->category_id,
+                'category_name' => $categories[$item->category_id] ?? 'Unknown',
+                'total_sold' => $item->total_sold,
+            ];
+        });
+
+        return $result;
     }
 
 
@@ -679,6 +689,7 @@ class AdminController extends Controller
 
     public function manage_sales()
     {
+        $data['order'] = Order::all();
 
         $productsByCategory = $this->getLarisProductsByCategory();
         $data['penjualan'] = Laporan_penjualan::all();
@@ -892,4 +903,18 @@ class AdminController extends Controller
     // {
     //     //
     // }
+
+    public function order_status(Request $request, $id)
+    {
+        Transaction::find($id)->update(['order_status' => $request->input('status')]);
+
+        return redirect()->back()->with('status', 'Status Order Berhasil Diubah');
+    }
+
+    public function input_resi(Request $request, $id)
+    {
+        Transaction::find($id)->update(['no_resi' => $request->input('no_resi')]);
+
+        return redirect()->back()->with('status', 'Status Order Berhasil Diubah');
+    }
 }
