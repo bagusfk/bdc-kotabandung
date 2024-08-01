@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Kepalabagian\KepalabagianController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CompanyController;
@@ -62,6 +63,9 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/edit-ksm/{id}', [AdminController::class, 'edit_ksm'])->name('edit-ksm');
         Route::put('/update-ksm', [AdminController::class, 'update_ksm'])->name('update-ksm');
         Route::delete('/delete-ksm/{id}', [AdminController::class, 'delete_ksm'])->name('delete-ksm');
+        Route::get('/edit-pembeli/{id}', [AdminController::class, 'edit_pembeli'])->name('edit-pembeli');
+        Route::put('/update-pembeli', [AdminController::class, 'update_pembeli'])->name('update-pembeli');
+        Route::delete('/delete-pembeli/{id}', [AdminController::class, 'delete_pembeli'])->name('delete-pembeli');
         // event
         //list
         Route::get('/table_list', [AdminController::class, 'table_list'])->name('table_list');
@@ -98,9 +102,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
     });
 
     Route::middleware('role:kepalabagian')->group(function () {
-        Route::get('/kepalabagian', function () {
-            return 'Kepala Bagian Page';
-        });
+        Route::get('/dashboard/kepalabagian', [KepalabagianController::class, 'index'])->name('kepalabagiandashboard');
     });
 
     Route::middleware('role:ksm')->group(function () {

@@ -110,6 +110,7 @@ class AdminController extends Controller
             'ksm_id' => 'required',
             'picture_product' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'name' => 'required',
+            'weight' => 'required',
             'stock' => 'required',
             'price' => 'required',
             'description' => 'required',
@@ -124,6 +125,7 @@ class AdminController extends Controller
         $stokbarang->kelola_data_ksm_id = $request->ksm_id;
         $stokbarang->picture_product = 'storage/' . $imagePath;
         $stokbarang->name = $request->name;
+        $stokbarang->weight = $request->weight;
         $stokbarang->stock = $request->stock;
         $stokbarang->price = $request->price;
         $stokbarang->description = $request->description;
@@ -309,6 +311,8 @@ class AdminController extends Controller
         $today = Carbon::today();
         $data['ksm1'] = Kelola_data_ksm::whereDate('created_at', $today)->get();
         $data['ksm2'] = Kelola_data_ksm::all();
+        $data['pembeli'] = User::whereDate('created_at', $today)->get();
+        $data['pembeli2'] = User::all();
         return view('pages.admin.ksm.view', $data);
     }
 
@@ -317,6 +321,12 @@ class AdminController extends Controller
         $data['ksm'] = Kelola_data_ksm::findOrFail($id);
         $data['category'] = category::all();
         return view('pages.admin.ksm.edit', $data);
+    }
+
+    public function edit_pembeli($id)
+    {
+        $data['pembeli'] = User::findOrFail($id);
+        return view('pages.admin.pembeli.edit', $data);
     }
 
     public function update_ksm(Request $request)
@@ -350,6 +360,36 @@ class AdminController extends Controller
         return redirect('/kelola-ksm');
     }
 
+    public function update_pembeli(Request $request)
+    {
+        // Validate the request
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|string|min:8|confirmed',
+            'email' => 'required|email|max:255',
+            'no_wa' => 'required|string|max:15',
+            'address' => 'required|string|max:255'
+        ]);
+
+        // Find the user by ID
+        $id = $request->get('pembeli_id');
+        $user = User::findOrFail($id);
+
+        // If password is provided, hash it and add it to the validated data
+        if ($request->filled('password')) {
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        } else {
+            // Otherwise, remove password from the validated data
+            unset($validatedData['password']);
+        }
+
+        // Update the user with the validated data
+        $user->update($validatedData);
+
+        // Redirect back with success message
+        return redirect('/kelola-ksm')->with('success', 'User updated successfully');
+    }
+
     private function handleFileUpload(Request $request, $fileInputName, $ksm, $dbColumnName)
     {
         if ($request->hasFile($fileInputName)) {
@@ -381,6 +421,11 @@ class AdminController extends Controller
             $kelolaDataKsm->delete();
         }
 
+        return redirect()->back();
+    }
+    public function delete_pembeli($id)
+    {
+        User::find($id)->delete();
         return redirect()->back();
     }
 

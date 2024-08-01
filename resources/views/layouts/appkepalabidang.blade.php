@@ -66,18 +66,9 @@
         </div>
         <div
             class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:focus:ring-gray-600">
-            {{-- <a href="#"
-                class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-                <img class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    src="{{ asset('assets/bell-regular.svg') }}" alt="">
-                <span class="ms-3">Notifikasi</span>
-            </a> --}}
-            {{-- <a href="#"
-                class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"> --}}
             <img class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                 src="{{ asset('assets/user-solid.svg') }}" alt="">
             <span class="ms-3">{{ auth()->user()->name }}</span>
-            {{-- </a> --}}
         </div>
     </div>
 
@@ -95,17 +86,10 @@
                         class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('dashboard') ? 'border-b-2 border-white' : '' }} group">
                         <img class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             src="{{ asset('assets/database-solid.svg') }}" alt="">
-                        <span class="ms-3 text-slate-50">Dashboard Admin</span>
+                        <span class="ms-3 text-slate-50">Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    {{-- <a href="{{ route('manage-items') }}"
-                        class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-barang') ? 'border-b-2 border-white' : '' }} group">
-                        <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                            src="{{ asset('assets/briefcase-solid.svg') }}" alt="">
-                        <span class="flex-1 ms-3 text-white whitespace-nowrap">Kelola Barang</span>
-                    </a> --}}
-
                     <button type="button"
                         class="flex text-left items-center w-full p-2 text-gray-900 transition duration-75 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 group"
                         aria-controls="dropdown-item" data-collapse-toggle="dropdown-item">

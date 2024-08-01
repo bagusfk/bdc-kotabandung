@@ -360,9 +360,11 @@
     </div>
 
     <div id="labarugi_content">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg my-[1rem] min-h-[20rem]">
+        <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
             <label for="" class="font-bold text-lg block text-center">Laba / Rugi</label>
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table
+                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 pt-[.5rem]"
+                id="dataTable2">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center w-10">
@@ -382,7 +384,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="dataList">
                     @php
                         $no = 1;
                         $fee = 0;
@@ -392,10 +394,10 @@
                     @else
                         @foreach ($order as $item)
                             <tr>
-                                <th scope="row"
+                                <td scope="row"
                                     class="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $no++ }}
-                                </th>
+                                </td>
                                 <td class="px-6 py-4 text-center">
                                     {{ $item->ksm_owner }}
                                 </td>
@@ -440,7 +442,7 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-            var table = $('#dataTable').DataTable({
+            $('#dataTable').DataTable({
                 layout: {
                     topStart: {
                         buttons: [{
@@ -472,14 +474,20 @@
                     }
                 }
             });
-
-            // Ensure a row is selected for edit action
-            $('#dataTable tbody').on('click', 'tr', function() {
-                if ($(this).hasClass('selected')) {
-                    $(this).removeClass('selected');
-                } else {
-                    table.$('tr.selected').removeClass('selected');
-                    $(this).addClass('selected');
+            $('#dataTable2').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excel'
+                            },
+                            {
+                                extend: 'pdf'
+                            },
+                            {
+                                extend: 'print'
+                            }
+                        ]
+                    }
                 }
             });
         });
