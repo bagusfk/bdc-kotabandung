@@ -18,13 +18,13 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $provinces = cities::select('province','province_id')->distinct()->orderBy('province', 'asc')->get();
+        $province = cities::select('province','province_id')->distinct()->orderBy('province', 'asc')->get();
         $cities = cities::select('city_name','city_id','province_id','type')->orderBy('city_name', 'asc')->get();
-        // dd($provinces);
+        // dd($province);
         // dd($cities);
         return view('profile.edit', [
             'user' => $request->user(),
-            'provinces' => $provinces,
+            'provinces' => $province,
             'cities' => $cities
         ]);
     }

@@ -25,8 +25,8 @@
                         <div class="max-sm:text-right w-fit">
                             <span class="text-2xl font-semibold text-primary">{{'Rp ' . number_format($item->price,'0',',','.')}}</span>
                         </div>
-                        @if (Route::has('login') && Auth::user()->id != $item->ksm->user_id)
-                            @auth
+                        @auth
+                            @if (Route::has('login') && Auth::user()->id != $item->ksm->user_id)
                                 <div class="text-center w-fit">
                                     <form action="{{ route('cart.add', $item) }}" method="post">
                                         @csrf
@@ -39,8 +39,8 @@
                                         </button>
                                     </form>
                                 </div>
-                            @endauth
-                        @endif
+                            @endif
+                        @endauth
                         <div class="flex px-4 py-2 border-2 w-fit rounded-xl">
                             <img class="w-[4rem] h-[4rem] rounded-full border-2 bg-gray-200" src="{{ asset( $item->ksm->logo_image ?? 'assets/default/image/default-picture.jpg' ) }}" alt="">
                             <div class="flex flex-col ml-4">
@@ -76,8 +76,8 @@
                                                 Details
                                             </a>
                                         </div>
-                                        @if (Route::has('login') && Auth::user()->id != $data->ksm->user_id)
-                                            @auth
+                                        @auth
+                                            @if (Route::has('login') && Auth::user()->id != $data->ksm->user_id)
                                                 <div class="text-center">
                                                     <form action="{{ route('cart.add', $data) }}" method="post">
                                                         @csrf
@@ -94,8 +94,8 @@
                                                         Beli Sekarang
                                                     </a>
                                                 </div> --}}
-                                            @endauth
-                                        @endif
+                                            @endif
+                                        @endauth
                                     </div>
                                 </div>
                             </div>
