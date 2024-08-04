@@ -101,7 +101,7 @@
                                         <!-- Email Address -->
                                         <div>
                                             {{-- <x-input-label for="email" :value="__('Email')" /> --}}
-                                            <x-input-user id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')" required autofocus autocomplete="email" placeholder="Masukan email" icon="{{ asset('assets/user-solid.svg') }}" />
+                                            <x-input-user id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')" required autofocus autocomplete="email" placeholder="Masukan email" icon="{{ asset('assets/user-solid.svg') }}"/>
 
                                             {{-- <x-text-input id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Username" icon="{{ asset('assets/user-solid.svg') }}" /> --}}
                                             {{-- <img src="{{ asset('assets/user-solid.svg')}}"> --}}
@@ -192,7 +192,7 @@
                                         <x-dropdown-link :href="route('dashboard_ksm')">
                                             {{ __('Dashboard KSM') }}
                                         </x-dropdown-link>
-                                    @else
+                                    @elseif ( Auth::user()->role == 'pembeli' )
                                         <x-dropdown-link :href="route('register-ksm')" class="underline decoration-2">
                                             {{ __('Daftar Sebagai KSM') }}
                                         </x-dropdown-link>
