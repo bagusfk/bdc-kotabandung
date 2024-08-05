@@ -31,6 +31,10 @@ class OrderController extends Controller
             return redirect()->route('cart');
         }
 
+        // if (Auth::user()->city_id == null) {
+        //     return redirect()->route('profile.edit');
+        // }
+
         $selectedCarts = $request->input('selected_carts', []);
         $quantities = $request->input('qty', []);
 
@@ -67,6 +71,9 @@ class OrderController extends Controller
         }
 
         // dd($subTotalPrice);
+        $transaction->update([
+            'sub_total_price' => $subTotalPrice,
+        ]);
 
         $order = Order::with('item','transaction')
         ->where('transaction_id', $transaction->id)
@@ -116,8 +123,8 @@ class OrderController extends Controller
     public function continueCheckout($id)
     {
         $transaction = Transaction::find($id);
-
-        $subTotalPrice = $transaction->total_price;
+        // dd($transaction);
+        $subTotalPrice = $transaction->sub_total_price;
 
         $transaction_id = $transaction->id;
 

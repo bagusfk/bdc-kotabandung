@@ -19,7 +19,9 @@
             <select id="province" class="block w-full mt-1 border border-gray-300 rounded-lg form-select">
                 <option value="">Select Province</option>
                 @foreach($provinces as $province)
-                    <option value="{{ $province->province_id }}" {{ $province->province_id == $user->cities->province_id ? 'selected' : ''}} >{{ $province->province }}</option>
+                    <option value="{{ $province->province_id }}" {{ $province->province_id == ($user->cities->province_id ?? '') ? 'selected' : '' }}>
+                        {{ $province->province }}
+                    </option>
                 @endforeach
             </select>
         </div>

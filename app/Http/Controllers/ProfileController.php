@@ -20,8 +20,11 @@ class ProfileController extends Controller
     {
         $provinces = cities::select('province','province_id')->distinct()->orderBy('province', 'asc')->get();
         $cities = cities::select('city_name','city_id','province_id','type')->orderBy('city_name', 'asc')->get();
-        // dd($provinces);
-        // dd($cities);
+        // foreach ($provinces as $province) {
+        //     dd($province->province_id); // Mengakses property `province_id` dari setiap item dalam koleksi
+        // }
+        // dd($provinces->province_id);
+        // dd($cities->province_id);
         return view('profile.edit', [
             'user' => $request->user(),
             'provinces' => $provinces,

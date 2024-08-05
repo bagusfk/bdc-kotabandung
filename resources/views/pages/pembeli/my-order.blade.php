@@ -171,7 +171,11 @@
                                         <div class="flex flex-col items-end">
                                             <div class="font-bold price">{{ Auth::user()->name }}</div>
                                             <div class="font-semibold price">{{ Auth::user()->no_wa }}</div>
-                                            <div class="price">{{ Auth::user()->address}}, {{ Auth::user()->cities->city_name }}, {{Auth::user()->cities->province }}</div>
+                                            @if (Auth::user()->city_id)
+                                                <div class="price">{{ Auth::user()->address}}, {{ Auth::user()->cities->city_name }}, {{Auth::user()->cities->province }}</div>
+                                            @else
+                                                <div>belum ada alamat</div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

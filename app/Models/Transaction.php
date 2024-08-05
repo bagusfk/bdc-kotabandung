@@ -17,6 +17,7 @@ class Transaction extends Model
         'total_qty',
         'expedition',
         'expedition_type',
+        'sub_total_price',
         'total_price',
         'no_resi',
         'shipping_cost',

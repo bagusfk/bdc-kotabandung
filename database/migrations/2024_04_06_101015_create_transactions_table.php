@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('expedition', 125)->nullable();
             $table->string('expedition_type', 125)->nullable();
             $table->string('no_resi', 125)->nullable();
-            $table->string('total_price', 125)->nullable();
             $table->string('shipping_cost', 125)->nullable();
+            $table->string('sub_total_price', 125)->nullable();
+            $table->string('total_price', 125)->nullable();
             $table->string('payment_method', 125)->nullable();
             $table->enum('payment_status', ['unpaid', 'paid'])->default('unpaid');
             $table->enum('order_status', ['process','dikemas', 'dikirim','selesai', 'cancel'])->default('process');
