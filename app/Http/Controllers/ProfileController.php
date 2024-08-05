@@ -18,16 +18,13 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $provinces = cities::select('province','province_id')->distinct()->orderBy('province', 'asc')->get();
+        $province = cities::select('province','province_id')->distinct()->orderBy('province', 'asc')->get();
         $cities = cities::select('city_name','city_id','province_id','type')->orderBy('city_name', 'asc')->get();
-        // foreach ($provinces as $province) {
-        //     dd($province->province_id); // Mengakses property `province_id` dari setiap item dalam koleksi
-        // }
-        // dd($provinces->province_id);
-        // dd($cities->province_id);
+        // dd($province);
+        // dd($cities);
         return view('profile.edit', [
             'user' => $request->user(),
-            'provinces' => $provinces,
+            'provinces' => $province,
             'cities' => $cities
         ]);
     }
