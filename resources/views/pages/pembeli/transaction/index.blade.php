@@ -28,11 +28,18 @@
             <div class="grid grid-cols-1 md:gap-4 md:grid-cols-3">
                 <div class="flex flex-col col-span-2 gap-4 mb-4">
                     <div class="px-4 py-3 bg-white border-2 border-gray-100 rounded-lg">
-                        <div class="font-bold text-gray-500 text-md">Alamat Pengiriman</div>
-                        <div class="my-2 text-sm font-bold text-gray-700">Penerima : {{ Auth::user()->name }}</div>
-                        <p class="mb-4 text-sm text-gray-700">
-                            {{ Auth::user()->address }}, {{ Auth::user()->cities->city_name}}, {{ Auth::user()->cities->province}}
-                        </p>
+                        <div class="mb-2 font-bold text-gray-500 text-md">Alamat Pengiriman</div>
+                        @if (Auth::user()->city_id == null)
+                            <div class="flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-2xl">
+                                <div class="flex-1">Mohon isi alamat terlebih dahulu di menu profile sebelum melakukan transaksi, Terimakasih!</div>
+                                <a href="{{ route('profile.edit') }}" class="px-2 py-1 text-sm text-white bg-blue-500 rounded-lg h-fit">Lenkapi Alamat</a>
+                            </div>
+                        @else
+                            <div class="my-2 text-sm font-bold text-gray-700">Penerima : {{ Auth::user()->name }}</div>
+                            <p class="mb-4 text-sm text-gray-700">
+                                {{ Auth::user()->address }}, {{ Auth::user()->cities->city_name}}, {{ Auth::user()->cities->province}}
+                            </p>
+                        @endif
                     </div>
                 @foreach ($order as $sellerName => $products)
                     <div class="px-3 py-2 bg-white border-2 border-gray-100 rounded-lg">
@@ -65,8 +72,8 @@
                 <div class="w-full">
                     <div class="flex flex-col w-full px-4 py-3 mb-4 bg-white border-2 border-gray-200 rounded-xl">
                         <form class="max-w-sm">
-                            <label for="courier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi</label>
-                            <select id="courier" name="courier" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <label for="courier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi {!! Auth::user()->city_id == null ? '<span class="px-2 py-1 text-xs text-gray-500 bg-gray-300 rounded-full">isi alamat terlebih dahulu</span>' : '' !!}</label>
+                            <select id="courier" name="courier" {{ Auth::user()->city_id == null ? 'disabled' : '' }} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="">-- Pilih Ekspedisi --</option>
                                 <option value="jne">JNE</option>
                                 <option value="pos">POS</option>
@@ -75,7 +82,7 @@
                         </form>
                         <form class="max-w-sm mt-2">
                             <label for="service" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Pengiriman</label>
-                            <select id="service" name="service" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="service" name="service" {{ Auth::user()->city_id == null ? 'disabled' : '' }} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </select>
                         </form>
                         <div class="flex items-center justify-between px-2 pt-3">
@@ -105,6 +112,7 @@
                         <input type="hidden" value="{{ Auth::user()->address }}" name="address" id="address">
                         <input type="hidden" value="{{ Auth::user()->no_wa }}" name="phone" id="phone">
                         <input type="hidden" value="{{ $totals[$sellerName]['totalQty'] }}" name="total_qty" id="total_qty">
+                        <input type="hidden" id="total_price" value="" name="total_price">
                         {{-- total price + ongkir --}}
                         {{-- <input type="hidden" id="totalPrice" value="{{ $subTotalPrice }}" name="total_price"> --}}
                         {{-- Belum ada data kurir --}}
@@ -114,7 +122,7 @@
                         {{-- <input type="hidden" value="bank" name="payment_method"> --}}
                         {{-- <input type="hidden" value="pending" name="payment_status"> --}}
                         {{-- <input type="hidden" value="payment" name="order_status"> --}}
-                        <button type="submit" id="pay-button" class="w-full p-2 px-5 mt-2 text-white rounded bg-primary">
+                        <button type="submit" id="pay-button" class="w-full p-2 px-5 mt-2 text-white rounded {{ Auth::user()->city_id == null ? 'bg-gray-500' : 'bg-primary' }}" {{ Auth::user()->city_id == null ? 'disabled' : '' }}>
                             Pilih Pembayaran
                         </button>
                     </form>
@@ -207,7 +215,7 @@
 
             /////////////////////////////////////////////////////
             //belum ada di database
-            var weight = 700; // replace with actual weight in grams
+            var weight = {{ $totalWeight }}; // replace with actual weight in grams
             //////////////////////////////////////////////////////
 
             if (!courier) {
@@ -265,7 +273,8 @@
             console.log(cost);
             $('#form-payment').append(`<input type="hidden" value="${cost}" name="shipping_cost" id="shipping_cost">`);
             console.log(parseInt(cost) + parseInt({{ $subTotalPrice }}));
-            $('#form-payment').append(`<input type="hidden" id="total_price" value="${parseInt(cost) + parseInt({{ $subTotalPrice }})}" name="total_price">`);
+            // $('#form-payment').append(`<input type="hidden" id="total_price" value="${parseInt(cost) + parseInt({{ $subTotalPrice }})}" name="total_price">`);
+            $('#total_price').val(parseInt(cost) + parseInt({{ $subTotalPrice }}));
         }
 
         $('#courier').on('change', function() {
@@ -306,6 +315,7 @@
                     total_qty :$('#total_qty').val(),
                     expedition: $('#expedition').val(),
                     expedition_type: $('#expedition_type').val(),
+                    // total_price: $('#totalPrice').html(),
                     total_price: $('#total_price').val(),
                     shipping_cost: $('#shipping_cost').val()
                 };

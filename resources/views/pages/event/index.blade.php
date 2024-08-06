@@ -9,7 +9,36 @@
             <div class="grid grid-cols-1 gap-4 pb-12 md:grid-cols-1 lg:grid-cols-2">
                 <div class="flex flex-col w-full gap-4 px-8 py-12 bg-white border-2 border-slate-200 rounded-b-xl">
                     <h1 class="text-2xl font-[1000] tracking-tight text-gray-900 dark:text-white">Galery Event</h1>
-                    <div class="flex items-center justify-center bg-blue-300 h-96"> untuk slide galery</div>
+                    <div class="-z-0 flex items-center justify-center h-96">
+                        <div id="custom-controls-gallery" class="relative w-full" data-carousel="slide">
+                            <!-- Carousel wrapper -->
+                            <div class="relative h-96 overflow-hidden rounded-lg md:h-96">
+                                @for ($i = 1; $i <= 7; $i++)
+                                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                                        <img src="{{ asset('/assets/galery_event/galery'.$i.'.jpg') }}" class="absolute block max-w-full h-auto -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="">
+                                    </div>
+                                @endfor
+                            </div>
+                            <div class="flex justify-center items-center pt-4">
+                                <button type="button" class="flex justify-center items-center me-4 h-full cursor-pointer group focus:outline-none" data-carousel-prev>
+                                    <span class="text-gray-400 hover:text-gray-900 dark:hover:text-white group-focus:text-gray-900 dark:group-focus:text-white">
+                                        <svg class="rtl:rotate-180 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                                        </svg>
+                                        <span class="sr-only">Previous</span>
+                                    </span>
+                                </button>
+                                <button type="button" class="flex justify-center items-center h-full cursor-pointer group focus:outline-none" data-carousel-next>
+                                    <span class="text-gray-400 hover:text-gray-900 dark:hover:text-white group-focus:text-gray-900 dark:group-focus:text-white">
+                                        <svg class="rtl:rotate-180 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                                        </svg>
+                                        <span class="sr-only">Next</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="flex flex-col justify-center w-full">
                     <h1 class="text-[40px] leading-10 font-[1000] text-primary dark:text-white">
@@ -146,12 +175,12 @@
                                     <div class="my-8">
                                         <a href="{{ url('register-event/' . $data->id) }}" class="flex justify-center w-full px-3 py-2 text-white register-btn bg-primary rounded-xl">Daftar</a>
                                     </div>
-                            @endauth
                                 @else
                                     <div class="my-8">
                                         <a href="{{ route('register-ksm') }}" class="flex justify-center w-full px-3 py-2 text-white register-btn bg-primary rounded-xl">Daftar</a>
                                     </div>
                                 @endif
+                            @endauth
                             {{-- @endforeach --}}
                         </div>
                     </div>

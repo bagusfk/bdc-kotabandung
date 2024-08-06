@@ -11,12 +11,15 @@ class Transaction extends Model
 
     protected $fillable = [
         'buyer_id',
+        'order_id',
         'invoice',
         'address',
         'phone',
         'total_qty',
+        'total_weight',
         'expedition',
         'expedition_type',
+        'sub_total_price',
         'total_price',
         'no_resi',
         'shipping_cost',

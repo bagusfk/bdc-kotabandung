@@ -4,31 +4,44 @@
         <div class="flex justify-between w-full">
             <!-- Logo -->
             <div class="flex w-full space-x-3 rtl:space-x-reverse">
-                <a href="{{ route('dashboard') }}" class="flex items-center">
-                    <x-application-logo class="block w-auto text-gray-800 fill-current h-9 dark:text-gray-200" />
+                <a href="{{ route('dashboard') }}" class="flex items-center w-12 h-full my-auto">
+                    {{-- <x-application-logo class="block w-auto text-gray-800 fill-current h-9 dark:text-gray-200" /> --}}
+                    <img src="{{ asset('/assets/logo-bdc.png') }}" alt="" class="bg-cover">
                 </a>
                 <div class="sm:flex sm:relative max-lg:absolute max-lg:-left-[12px] sm:top-0 top-16 hidden w-full" id="navbar-sticky">
                     <div class="space-x-8 duration-200 max-sm:border-b max-sm:bg-white border-slate-500 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110">
-                        <x-nav-link :href="route('dashboard')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]" :active="request()->routeIs('dashboard')">
-                            <img class="w-4 mr-2 " src="{{ asset('assets/house-solid.svg') }}">
+                        <x-nav-link :href="route('dashboard')" class="items-center flex max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]" :active="request()->routeIs('dashboard')">
+                            {{-- <img class="w-4 mr-2 " src="{{ asset('assets/house-solid.svg') }}"> --}}
+                            <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
+                            </svg>
                             {{ __('Home') }}
                         </x-nav-link>
                     </div>
                     <div class="space-x-8 duration-200 max-sm:border-b max-sm:bg-white border-slate-500 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110">
                         <x-nav-link :href="route('company_profile')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]" :active="request()->routeIs('company_profile')">
                             {{-- <img class="w-3 mr-2 " src="{{ asset('assets/building-solid.svg') }}"> --}}
+                            <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9V7Zm5 0h1v1h-1V7Zm-5 4h1v1H9v-1Zm5 0h1v1h-1v-1Zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1Z"/>
+                            </svg>
                             {{ __('Company') }}
                         </x-nav-link>
                     </div>
                     <div class="space-x-8 duration-200 max-sm:border-b max-sm:bg-white border-slate-500 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110">
                         <x-nav-link :href="route('catalog')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]" :active="request()->routeIs('catalog')">
                             {{-- <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}"> --}}
+                            <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4"/>
+                            </svg>
                             {{ __('E-Catalog') }}
                         </x-nav-link>
                     </div>
                     <div class="space-x-8 duration-200 max-sm:border-b max-sm:bg-white border-slate-500 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110">
                         <x-nav-link :href="route('event')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]" :active="request()->routeIs('event')">
-                            <svg class="w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>
+                            {{-- <svg class="w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg> --}}
+                            <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 10h16M8 14h8m-4-7V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+                            </svg>
                             {{ __('Event') }}
                         </x-nav-link>
                     </div>
@@ -40,7 +53,7 @@
                 <div class="space-x-8 duration-200 max-sm:border-b max-sm:bg-white border-slate-500 sm:-my-px sm:ms-2 lg:ms-6 sm:flex sm:transition sm:ease-in-out sm:delay-100 sm:hover:-translate-y-1 sm:hover:scale-110">
                     <x-nav-link :href="route('cart')" class="block max-sm:w-full max-sm:px-6 max-sm:py-3 max-sm:hover:bg-[#04a7ff]" :active="request()->routeIs('cart')">
                         {{-- <img class="w-4 mr-2 " src="{{ asset('assets/newspaper-solid.svg') }}"> --}}
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
                         </svg>
                     </x-nav-link>
@@ -77,7 +90,8 @@
                                     <!-- Session Status -->
                                     <x-auth-session-status class="mb-4" :status="session('status')" />
                                     <div class="flex justify-center">
-                                        <img class="w-20" src="{{ asset('assets/xmark-solid.svg') }}" alt="">
+                                        {{-- <img class="w-20" src="{{ asset('assets/xmark-solid.svg') }}" alt=""> --}}
+                                        <img src="{{ asset('/assets/logo-bdc.png') }}" alt="" class="w-20">
                                     </div>
                                     <h2 class="text-[1rem] text-center my-5">Silahkan Masuk</h2>
 
@@ -87,7 +101,7 @@
                                         <!-- Email Address -->
                                         <div>
                                             {{-- <x-input-label for="email" :value="__('Email')" /> --}}
-                                            <x-input-user id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Username" icon="{{ asset('assets/user-solid.svg') }}" />
+                                            <x-input-user id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')" required autofocus autocomplete="email" placeholder="Masukan email" icon="{{ asset('assets/user-solid.svg') }}"/>
 
                                             {{-- <x-text-input id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Username" icon="{{ asset('assets/user-solid.svg') }}" /> --}}
                                             {{-- <img src="{{ asset('assets/user-solid.svg')}}"> --}}
@@ -95,16 +109,32 @@
                                         </div>
 
                                         <!-- Password -->
-                                        <div class="mt-4">
+                                        <div x-data="{ show: false }" class="mt-4">
                                             {{-- <x-input-label for="password" :value="__('Password')" /> --}}
 
-                                            <x-input-user id="password" class="block w-full mt-1"
-                                                            type="password"
-                                                            name="password"
-                                                            required autocomplete="current-password"
-                                                            placeholder="Password" icon="{{ asset('assets/key-solid.svg') }}" />
+                                            {{-- <x-input-user id="password" class="block w-full mt-1"
+                                                            type="show ? 'text' : 'password'"
+                                                             icon="" /> --}}
+                                            <div class="relative">
+                                                <input id="password"
+                                                :type="show ? 'text' : 'password'"
+                                                name="password"
+                                                required autocomplete="current-password"
+                                                placeholder="Masukan password"
+                                                class="block mt-1 w-full pr-4 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                                <img class="w-5 absolute inset-y-0 right-0 pr-2 top-1/2 transform -translate-y-1/2" src="{{ asset('assets/key-solid.svg') }}">
+                                            </div>
 
                                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                                            <div class="flex items-center mt-2">
+                                                <input
+                                                    type="checkbox"
+                                                    id="show-password"
+                                                    x-model="show"
+                                                    class="mr-2 leading-tight"
+                                                >
+                                                <label for="show-password" class="text-sm text-gray-700">Lihat password</label>
+                                            </div>
                                         </div>
 
                                         <!-- Remember Me -->
@@ -162,7 +192,7 @@
                                         <x-dropdown-link :href="route('dashboard_ksm')">
                                             {{ __('Dashboard KSM') }}
                                         </x-dropdown-link>
-                                    @else
+                                    @elseif ( Auth::user()->role == 'pembeli' )
                                         <x-dropdown-link :href="route('register-ksm')" class="underline decoration-2">
                                             {{ __('Daftar Sebagai KSM') }}
                                         </x-dropdown-link>

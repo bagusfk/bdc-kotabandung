@@ -21,7 +21,8 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-slate-100 dark:bg-gray-900">
             <div>
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    {{-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> --}}
+                    <img src="{{ asset('/assets/logo-bdc.png') }}" alt="" class="w-20">
                 </a>
             </div>
 

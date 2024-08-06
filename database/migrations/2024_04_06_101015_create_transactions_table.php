@@ -14,15 +14,18 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
+            $table->string('order_id', 125)->nullable();
             $table->char('invoice', 125)->unique();
             $table->string('address', 255)->nullable();
             $table->string('phone', 15)->nullable();
             $table->string('total_qty', 125)->nullable();
+            $table->string('total_weight', 125)->nullable();
             $table->string('expedition', 125)->nullable();
             $table->string('expedition_type', 125)->nullable();
             $table->string('no_resi', 125)->nullable();
-            $table->string('total_price', 125)->nullable();
             $table->string('shipping_cost', 125)->nullable();
+            $table->string('sub_total_price', 125)->nullable();
+            $table->string('total_price', 125)->nullable();
             $table->string('payment_method', 125)->nullable();
             $table->enum('payment_status', ['unpaid', 'paid'])->default('unpaid');
             $table->enum('order_status', ['process','dikemas', 'dikirim','selesai', 'cancel'])->default('process');

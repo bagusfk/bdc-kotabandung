@@ -19,16 +19,32 @@
             </div>
 
             <!-- Password -->
-            <div class="mt-4">
+            <div x-data="{ show: false }" class="mt-4">
                 {{-- <x-input-label for="password" :value="__('Password')" /> --}}
 
-                <x-input-user id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password"
-                                placeholder="Password" icon="{{ asset('assets/key-solid.svg') }}" />
+                {{-- <x-input-user id="password" class="block w-full mt-1"
+                                type="show ? 'text' : 'password'"
+                                 icon="" /> --}}
+                <div class="relative">
+                    <input id="password"
+                    :type="show ? 'text' : 'password'"
+                    name="password"
+                    required autocomplete="current-password"
+                    placeholder="Masukan Password"
+                    class="block mt-1 w-full pr-4 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <img class="w-5 absolute inset-y-0 right-0 pr-2 top-1/2 transform -translate-y-1/2" src="{{ asset('assets/key-solid.svg') }}">
+                </div>
 
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                <div class="flex items-center mt-2">
+                    <input
+                        type="checkbox"
+                        id="show-password"
+                        x-model="show"
+                        class="mr-2 leading-tight"
+                    >
+                    <label for="show-password" class="text-sm text-gray-700">Lihat password</label>
+                </div>
             </div>
 
             <!-- Remember Me -->

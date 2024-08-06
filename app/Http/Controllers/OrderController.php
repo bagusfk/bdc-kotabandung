@@ -31,6 +31,10 @@ class OrderController extends Controller
             return redirect()->route('cart');
         }
 
+        // if (Auth::user()->city_id == null) {
+        //     return redirect()->route('profile.edit');
+        // }
+
         $selectedCarts = $request->input('selected_carts', []);
         $quantities = $request->input('qty', []);
 
@@ -47,6 +51,7 @@ class OrderController extends Controller
         // dd($selectedCarts);
 
         $subTotalPrice = 0;
+        $totalWeight = 0;
         // Simpan data yang diterima dari form
         foreach ($selectedCarts as $cartId) {
             // dd($cartId);
@@ -64,9 +69,18 @@ class OrderController extends Controller
 
             // Hitung total harga dengan menambahkan total harga dari setiap produk
             $subTotalPrice += $quantity * $items->stokbarang->price;
+            // Hitung total berat dengan menambahkan total berat dari setiap produk
+            $totalWeight += $items->stokbarang->weight * $quantity;
+
+            // Menghapus item cart yang sudah dibeli
+            // Cart::destroy($cartId);
         }
 
         // dd($subTotalPrice);
+        $transaction->update([
+            'sub_total_price' => $subTotalPrice,
+            'total_weight' => $totalWeight,
+        ]);
 
         $order = Order::with('item','transaction')
         ->where('transaction_id', $transaction->id)
@@ -102,6 +116,7 @@ class OrderController extends Controller
 
         $transaction_id = $transaction->id;
 
+        // Menghapus item cart yang sudah dibeli
         foreach ($selectedCarts as $cartId) {
             // dd($cartId);
             $items = Cart::find($cartId);
@@ -110,14 +125,16 @@ class OrderController extends Controller
             }
         }
 
-        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices'));
+        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices', 'totalWeight'));
     }
 
     public function continueCheckout($id)
     {
         $transaction = Transaction::find($id);
+        // dd($transaction);
+        $subTotalPrice = $transaction->sub_total_price;
 
-        $subTotalPrice = $transaction->total_price;
+        $totalWeight = $transaction->total_weight;
 
         $transaction_id = $transaction->id;
 
@@ -152,7 +169,7 @@ class OrderController extends Controller
 
         }
 
-        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices'));
+        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices', 'totalWeight'));
     }
 
     function getCourierServices(Request $request)
@@ -227,6 +244,8 @@ class OrderController extends Controller
             'shipping_cost' =>'required'
         ]);
 
+        // dd($request->total_price);
+
         $user = Auth::user();
 
         //data yang belum ada di database
@@ -274,6 +293,7 @@ class OrderController extends Controller
 
     public function finishPayment()
     {
+
         return view('pages.pembeli.transaction.finish-payment');
     }
 

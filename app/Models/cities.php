@@ -9,10 +9,10 @@ class cities extends Model
 {
     use HasFactory;
 
-    public function provinces()
-    {
-        return $this->belongsTo(Province::class, 'province_id');
-    }
+    // public function provinces()
+    // {
+    //     return $this->belongsTo(Province::class, 'province_id');
+    // }
     public function user()
     {
         return $this->hasOne(User::class);
