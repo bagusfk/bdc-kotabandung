@@ -283,7 +283,13 @@ class OrderController extends Controller
             ]
         ];
 
+        // dd($params['transaction_details']['order_id']);
+        $transaction->update([
+            'order_id' => $params['transaction_details']['order_id'],
+        ]);
+
         $snapToken = \Midtrans\Snap::getSnapToken($params);
+
 
         $response = response()->json([ 'status' => 'success', 'snapToken' => $snapToken ]);
 
@@ -291,8 +297,18 @@ class OrderController extends Controller
         return $response;
     }
 
-    public function finishPayment()
+    public function finishPayment(Request $request)
     {
+        // dd($request);
+        // dd($request->query('order_id'));
+        $order_id = $request->query('order_id');
+
+        $transaction = Transaction::where('order_id', $order_id);
+
+        $transaction->update([
+            'payment_method' => 'bca va',
+            'payment_status' => 'paid',
+        ]);
 
         return view('pages.pembeli.transaction.finish-payment');
     }
