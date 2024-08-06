@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelola_data_penjualans', function (Blueprint $table) {
+        Schema::create('omzets', function (Blueprint $table) {
             $table->id();
-            $table->date('date_sale')->nullable();
             $table->foreignId('kelola_data_ksm_id')->constrained('kelola_data_ksms')->onDelete('cascade');
-            $table->double('sale')->nullable();
-            $table->double('profit')->nullable();
-            $table->double('loss')->nullable();
+            $table->double('omzet')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelola_data_penjualans');
+        Schema::dropIfExists('omzets');
     }
 };

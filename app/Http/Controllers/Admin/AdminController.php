@@ -17,10 +17,12 @@ use App\Models\Neraca;
 use App\Models\Laporan_penjualan;
 use App\Models\Event;
 use App\Models\Picture_event;
+use App\Models\Omzet;
 use App\Models\Register_event;
 use App\Models\Stokbarang;
 use App\Models\category;
 use App\Models\Kelola_data_keuangan;
+use App\Models\Kelola_data_penjualan;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Transaction;
@@ -303,8 +305,6 @@ class AdminController extends Controller
 
         return $result;
     }
-
-
 
     public function manage_ksm()
     {
@@ -787,44 +787,100 @@ class AdminController extends Controller
 
     public function manage_finance()
     {
-        $currentMonth = Carbon::now()->month;
-        $order = Order::select(
-            'kelola_data_ksms.owner as ksm_owner',
-            DB::raw('SUM(transactions.total_price) as total_paid'),
-            'kelola_data_keuangans.omzet as omzet'
-        )
-            ->join('transactions', 'transactions.id', '=', 'orders.transaction_id')
-            ->join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
-            ->join('kelola_data_ksms', 'kelola_data_ksms.id', '=', 'stokbarangs.kelola_data_ksm_id')
-            ->join('kelola_data_keuangans', 'kelola_data_keuangans.kelola_data_ksm_id', '=', 'kelola_data_ksms.id')
-            ->where('transactions.payment_status', 'paid')
-            ->whereMonth('transactions.created_at', $currentMonth)
-            ->whereMonth('kelola_data_keuangans.date', $currentMonth)
-            ->whereNotNull('orders.transaction_id')
-            ->groupBy('ksm_owner', 'kelola_data_keuangans.omzet')
-            ->orderBy('total_paid', 'desc')
-            ->get();
 
 
-        // $ksmOwners = $order->pluck('ksm_owner')->toArray();
-        // $remainingBalances = $order->map(function ($orders) {
-        //     return $orders->total_paid - $orders->omzet;
-        // })->toArray();
-        // $omzets = $order->pluck('omzet')->toArray();
-
+        $ksm = Kelola_data_ksm::all();
+        $omzet = Omzet::all();
+        $finance = Kelola_data_penjualan::all();
         $neraca = Neraca::all();
-        $debtData = Neraca::select(
-            DB::raw('SUM(debt) as total_debt'),
-            DB::raw('DATE_FORMAT(created_at, "%m") as month')
+
+        // $bulanIndonesia = [
+        //     '01' => 'Januari',
+        //     '02' => 'Februari',
+        //     '03' => 'Maret',
+        //     '04' => 'April',
+        //     '05' => 'Mei',
+        //     '06' => 'Juni',
+        //     '07' => 'Juli',
+        //     '08' => 'Agustus',
+        //     '09' => 'September',
+        //     '10' => 'Oktober',
+        //     '11' => 'November',
+        //     '12' => 'Desember',
+        // ];
+
+        // $currentMonth = Carbon::now()->format('m'); // For numeric representation
+
+
+        $currentMonth = Carbon::now()->format('m'); // For numeric representation
+        // or
+        $currentMonthName = Carbon::now()->translatedFormat('F'); // For full month name
+        $debtData = Omzet::select(
+            'kelola_data_ksm_id',
+            'kelola_data_ksms.owner as ksm_owner', // Add the column from kelola_data_ksm table
+            DB::raw('SUM(omzet) as total_omzet'),
+            DB::raw('DATE_FORMAT(omzets.created_at, "%m") as month')
         )
-            ->groupBy('month')
+            ->join('kelola_data_ksms', 'kelola_data_ksms.id', '=', 'omzets.kelola_data_ksm_id') // Adjust if needed
+            ->whereMonth('omzets.created_at', $currentMonth)
+            ->groupBy('month', 'kelola_data_ksm_id', 'ksm_owner')
             ->get();
 
-        $debt = $debtData->pluck('total_debt')->toArray();
+        // Extract total_omzet values
+        $debt = $debtData->pluck('total_omzet')->toArray();
+        // Extract month labels and KSM names
         $labels = $debtData->map(function ($item) {
-            return Carbon::createFromFormat('m', $item->month)->translatedFormat('F');
+            return $item->ksm_owner; // Combine KSM name and month
         })->toArray();
-        return view('pages.admin.finance.view', compact('neraca', 'order', 'debt', 'labels'));
+        return view('pages.admin.finance.view', compact('neraca', 'finance', 'labels', 'debt', 'currentMonthName', 'ksm', 'omzet'));
+    }
+
+    public function omzet_store(Request $request)
+    {
+        $request->validate([
+            'kelola_data_ksm_id' => 'required',
+            'omzet' => 'required',
+        ]);
+
+        Omzet::create([
+            'kelola_data_ksm_id' => $request->input('kelola_data_ksm_id'),
+            'omzet' => $request->input('omzet'),
+        ]);
+        // dd($request);
+        return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
+    }
+
+    public function omzet_destroy($id)
+    {
+        Omzet::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
+    }
+
+    public function labarugi_store(Request $request)
+    {
+        $request->validate([
+            'date_sale' => 'required',
+            'kelola_data_ksm_id' => 'required',
+            'sale' => 'required',
+            'profit' => 'required',
+            'loss' => 'required',
+        ]);
+        Kelola_data_penjualan::create([
+            'date_sale' => $request->input('date_sale'),
+            'kelola_data_ksm_id' => $request->input('kelola_data_ksm_id'),
+            'sale' => $request->input('sale'),
+            'profit' => $request->input('profit'),
+            'loss' => $request->input('loss')
+        ]);
+        return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
+    }
+
+    public function labarugi_destroy($id)
+    {
+        $transaction = Kelola_data_penjualan::findOrFail($id);
+        $transaction->delete();
+
+        return redirect()->route('manage-finance')->with('delete', 'Data Berhasil Dihapus');
     }
 
     public function neraca()

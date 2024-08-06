@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Kelola_data_penjualan extends Model
+class Omzet extends Model
 {
     use HasFactory;
 
-    protected $table = 'kelola_data_penjualans';
+    protected $table = 'omzets';
     protected $fillable = [
-        'date_sale',
         'kelola_data_ksm_id',
-        'sale',
-        'profit',
-        'loss',
+        'omzet'
     ];
 
     public function ksm()
