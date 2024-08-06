@@ -19,6 +19,7 @@ class ItemSeeder extends Seeder
             'kelola_data_ksm_id' => 12,
             'picture_product' => 'https://drive.google.com/open?id=1lf78EKIttUOCcJpgaqoUOOpFTMUDnU72',
             'name' => 'Hijab 1',
+            'weight' => 500,
             'stock' => 20,
             'price' => 12000,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
@@ -29,6 +30,7 @@ class ItemSeeder extends Seeder
             'kelola_data_ksm_id' => 13,
             'picture_product' => 'https://drive.google.com/open?id=10km_ehYGZVM54Uo5_gWZlyeq3G8mTsnS',
             'name' => 'Hijab 2',
+            'weight' => 500,
             'stock' => 20,
             'price' => 12000,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
@@ -39,6 +41,7 @@ class ItemSeeder extends Seeder
             'kelola_data_ksm_id' => 14,
             'picture_product' => 'https://drive.google.com/open?id=1GRgbbmNJ4rk9d3K9K7OveWT__lF47WmL',
             'name' => 'Hijab 3',
+            'weight' => 500,
             'stock' => 100,
             'price' => 12000,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'

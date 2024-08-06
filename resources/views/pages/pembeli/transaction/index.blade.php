@@ -72,7 +72,7 @@
                 <div class="w-full">
                     <div class="flex flex-col w-full px-4 py-3 mb-4 bg-white border-2 border-gray-200 rounded-xl">
                         <form class="max-w-sm">
-                            <label for="courier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi <span class="text-xs text-gray-500 bg-gray-300 rounded-full px-2 py-1">{{ Auth::user()->city_id == null ? 'isi alamat terlebih dahulu' : '' }}</span></label>
+                            <label for="courier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi {!! Auth::user()->city_id == null ? '<span class="px-2 py-1 text-xs text-gray-500 bg-gray-300 rounded-full">isi alamat terlebih dahulu</span>' : '' !!}</label>
                             <select id="courier" name="courier" {{ Auth::user()->city_id == null ? 'disabled' : '' }} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="">-- Pilih Ekspedisi --</option>
                                 <option value="jne">JNE</option>
@@ -112,6 +112,7 @@
                         <input type="hidden" value="{{ Auth::user()->address }}" name="address" id="address">
                         <input type="hidden" value="{{ Auth::user()->no_wa }}" name="phone" id="phone">
                         <input type="hidden" value="{{ $totals[$sellerName]['totalQty'] }}" name="total_qty" id="total_qty">
+                        <input type="hidden" id="total_price" value="" name="total_price">
                         {{-- total price + ongkir --}}
                         {{-- <input type="hidden" id="totalPrice" value="{{ $subTotalPrice }}" name="total_price"> --}}
                         {{-- Belum ada data kurir --}}
@@ -214,7 +215,7 @@
 
             /////////////////////////////////////////////////////
             //belum ada di database
-            var weight = 700; // replace with actual weight in grams
+            var weight = {{ $totalWeight }}; // replace with actual weight in grams
             //////////////////////////////////////////////////////
 
             if (!courier) {
@@ -272,7 +273,8 @@
             console.log(cost);
             $('#form-payment').append(`<input type="hidden" value="${cost}" name="shipping_cost" id="shipping_cost">`);
             console.log(parseInt(cost) + parseInt({{ $subTotalPrice }}));
-            $('#form-payment').append(`<input type="hidden" id="total_price" value="${parseInt(cost) + parseInt({{ $subTotalPrice }})}" name="total_price">`);
+            // $('#form-payment').append(`<input type="hidden" id="total_price" value="${parseInt(cost) + parseInt({{ $subTotalPrice }})}" name="total_price">`);
+            $('#total_price').val(parseInt(cost) + parseInt({{ $subTotalPrice }}));
         }
 
         $('#courier').on('change', function() {
@@ -313,6 +315,7 @@
                     total_qty :$('#total_qty').val(),
                     expedition: $('#expedition').val(),
                     expedition_type: $('#expedition_type').val(),
+                    // total_price: $('#totalPrice').html(),
                     total_price: $('#total_price').val(),
                     shipping_cost: $('#shipping_cost').val()
                 };
