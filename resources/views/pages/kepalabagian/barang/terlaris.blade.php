@@ -1,4 +1,4 @@
-@extends('layouts.appadmin')
+@extends('layouts.appkepalabidang')
 @section('title', 'Fashion')
 @section('content')
     <style>

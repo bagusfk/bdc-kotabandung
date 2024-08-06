@@ -41,6 +41,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -82,7 +83,7 @@
             </a>
             <ul class="space-y-2 font-medium">
                 <li>
-                    <a href="{{ route('index') }}"
+                    <a href="{{ route('kepalabagiandashboard') }}"
                         class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('dashboard') ? 'border-b-2 border-white' : '' }} group">
                         <img class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             src="{{ asset('assets/database-solid.svg') }}" alt="">
@@ -105,7 +106,7 @@
 
                     <ul id="dropdown-item" class="hidden bg-white">
                         <li>
-                            <a href="{{ route('manage-items') }}"
+                            <a href="{{ route('manage_items_kg') }}"
                                 class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
                                 <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -116,7 +117,7 @@
                         </li>
                         <li>
 
-                            <a href="{{ url('terlaris') }}"
+                            <a href="{{ route('terlaris_kg', 1) }}"
                                 class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
                                 <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -124,44 +125,11 @@
                                         d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z" />
                                 </svg>
                                 <span class="flex-1 ms-3 whitespace-nowrap">Terlaris</span></a>
-
-                            {{-- <ul id="dropdown-item-2" class="hidden bg-slate-200">
-                                <li>
-                                    <a href="{{ url('terlaris/1') }}"
-                                        class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
-                                        <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                            <path
-                                                d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z" />
-                                        </svg>
-                                        <span class="flex-1 ms-3 whitespace-nowrap">Fashion</span></a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('terlaris/2') }}"
-                                        class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
-                                        <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                            <path
-                                                d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z" />
-                                        </svg>
-                                        <span class="flex-1 ms-3 whitespace-nowrap">Kriya</span></a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('terlaris/3') }}"
-                                        class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
-                                        <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                            <path
-                                                d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z" />
-                                        </svg>
-                                        <span class="flex-1 ms-3 whitespace-nowrap">Kuliner</span></a>
-                                </li>
-                            </ul> --}}
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ route('manage-ksm') }}"
+                    <a href="{{ route('manage_ksm_kg') }}"
                         class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-ksm') ? 'border-b-2 border-white' : '' }} group">
                         <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             src="{{ asset('assets/joomla.svg') }}" alt="">
@@ -185,7 +153,7 @@
                     </button>
                     <ul id="dropdown-example" class="hidden bg-white">
                         <li>
-                            <a href="{{ route('list-event') }}"
+                            <a href="{{ route('list_event_kg') }}"
                                 class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
                                 <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -195,17 +163,7 @@
                                 <span class="flex-1 ms-3 whitespace-nowrap">List</span></a>
                         </li>
                         <li>
-                            <a href="{{ route('dokumentasi-event') }}"
-                                class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
-                                <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                    <path
-                                        d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z" />
-                                </svg>
-                                <span class="flex-1 ms-3 whitespace-nowrap">Dokumentasi</span></a>
-                        </li>
-                        <li>
-                            <a href="{{ route('daftar-event') }}"
+                            <a href="{{ route('daftar_event_kg') }}"
                                 class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
                                 <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -215,7 +173,7 @@
                                 <span class="flex-1 ms-3 whitespace-nowrap">Daftar</span></a>
                         </li>
                         <li>
-                            <a href="{{ route('laporan-event') }}"
+                            <a href="{{ route('laporan_event_kg') }}"
                                 class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
                                 <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -227,7 +185,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ route('manage-sales') }}"
+                    <a href="{{ route('manage_sales_kg') }}"
                         class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-penjualan') ? 'border-b-2 border-white' : '' }} group">
                         <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             src="{{ asset('assets/paypal.svg') }}" alt="">
@@ -235,7 +193,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('manage-finance') }}"
+                    <a href="{{ route('manage_finance_kg') }}"
                         class="flex items-center p-2 text-gray-900 dark:text-white hover:border-b-2 hover:rounded-none hover:border-white dark:hover:bg-gray-700 {{ request()->is('kelola-keuangan') ? 'border-b-2 border-white' : '' }} group">
                         <img class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             src="{{ asset('assets/money-bill-1-regular.svg') }}" alt="">

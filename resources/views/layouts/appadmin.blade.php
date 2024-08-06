@@ -41,6 +41,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -132,7 +133,7 @@
                         </li>
                         <li>
 
-                            <a href="{{ url('terlaris') }}"
+                            <a href="{{ route('terlaris_id', 1) }}"
                                 class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
                                 <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->

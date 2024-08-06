@@ -94,6 +94,10 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         // keuangan
         Route::get('/kelola-keuangan', [AdminController::class, 'manage_finance'])->name('manage-finance');
         Route::get('/tambah-kolom', [AdminController::class, 'neraca'])->name('neraca');
+        Route::put('/omzet_store', [AdminController::class, 'omzet_store'])->name('omzet_store');
+        Route::put('/labarugi_store', [AdminController::class, 'labarugi_store'])->name('labarugi_store');
+        Route::delete('/omzet_destroy/{id}', [AdminController::class, 'omzet_destroy'])->name('omzet_destroy');
+        Route::delete('/labarugi_destroy/{id}', [AdminController::class, 'labarugi_destroy'])->name('labarugi_destroy');
         // Route::match(['get', 'post'], '/neraca-store', [AdminController::class, 'neraca_store'])->name('neraca_store');
         Route::put('/neraca-store', [AdminController::class, 'neraca_store'])->name('neraca_store');
         Route::get('/tambah', [AdminController::class, 'add_neraca'])->name('add_neraca');
@@ -103,6 +107,16 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
 
     Route::middleware('role:kepalabagian')->group(function () {
         Route::get('/dashboard/kepalabagian', [KepalabagianController::class, 'index'])->name('kepalabagiandashboard');
+        Route::get('/kelola_barang', [KepalabagianController::class, 'manage_items_kg'])->name('manage_items_kg');
+        // Route::get('/terlaris_', [KepalabagianController::class, 'terlaris_kg'])->name('terlaris_kg');
+        Route::get('/terlaris_/{id}', [KepalabagianController::class, 'terlaris_kg'])->name('terlaris_kg');
+        Route::get('/manage_ksm_kg', [KepalabagianController::class, 'manage_ksm'])->name('manage_ksm_kg');
+        Route::get('/list_event_kg', [KepalabagianController::class, 'list_event_kg'])->name('list_event_kg');
+        Route::get('/daftar_event_kg', [KepalabagianController::class, 'daftar_event_kg'])->name('daftar_event_kg');
+        Route::get('/laporan_event_kg', [KepalabagianController::class, 'laporan_event_kg'])->name('laporan_event_kg');
+        Route::get('/manage_sales_kg', [KepalabagianController::class, 'manage_sales_kg'])->name('manage_sales_kg');
+        Route::get('/manage_finance_kg', [KepalabagianController::class, 'manage_finance_kg'])->name('manage_finance_kg');
+        Route::get('/report_item_json2', [KepalabagianController::class, 'report_item_json2'])->name('report_item_json2');
     });
 
     Route::middleware('role:ksm')->group(function () {
