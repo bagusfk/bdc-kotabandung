@@ -39,7 +39,7 @@
                             <a href="#" class="font-medium text-red-500">Hapus</a>
                             <td class="flex items-center quantity">
                                 <div class="font-medium">Jumlah : </div>
-                                <input type="number" name="qty[{{ $cart->id }}]" value="{{$cart->qty}}" min="1" max="{{$cart->stokbarang->stock}}">
+                                <input id="qty" type="number" name="qty[{{ $cart->id }}]" value="{{$cart->qty}}" min="1" max="{{$cart->stokbarang->stock}}">
                             </td>
                         </div>
                     @endforeach
@@ -64,6 +64,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             const totalPrice = document.getElementById('totalPrice');
+            const qty = document.querySelectorAll('input[name="qty[]"]');
             let total = 0;
 
             function calculateTotalPrice() {

@@ -24,6 +24,8 @@
                                 <div class="text-sm">{{ $transaction->invoice }}</div>
                                 @if ($transaction->payment_status == 'unpaid')
                                     <div class="px-2 py-1 text-sm text-red-500 border border-red-500 rounded-md">Belum dibayar</div>
+                                @elseif ($transaction->payment_status == 'paid' && $transaction->order_status == 'proses')
+                                    <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Menunggu Konfirmasi</div>
                                 @elseif ($transaction->payment_status == 'paid' && $transaction->order_status == 'dikemas')
                                     <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Dikemas</div>
                                 @elseif ($transaction->payment_status == 'paid' && $transaction->order_status =='dikirim')
@@ -94,6 +96,8 @@
                                     <div class="flex items-center gap-2">
                                         @if ($transaction->payment_status == 'unpaid')
                                             <div class="px-2 py-1 text-sm text-red-500 border border-red-500 rounded-md">Belum dibayar</div>
+                                        @elseif ($transaction->payment_status == 'paid' && $transaction->order_status == 'proses')
+                                            <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Menunggu Konfirmasi</div>
                                         @elseif ($transaction->payment_status == 'paid' && $transaction->order_status == 'dikemas')
                                             <div class="px-2 py-1 text-sm text-white bg-blue-500 rounded-md">Dikemas</div>
                                         @elseif ($transaction->payment_status == 'paid' && $transaction->order_status =='dikirim')
@@ -223,7 +227,7 @@
                             </div>
                             <!-- Modal footer -->
                             <div class="flex items-center p-4 border-t border-gray-200 rounded-b md:p-5 dark:border-gray-600">
-                                <button data-modal-hide="default-modal" type="button" class="text-white bg-primary hover:bg-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 w-full text-center">Tanya Admin</button>
+                                <a href="https://wa.me/{no telp admin}?text=Hello%20Admin" target="_blank" data-modal-hide="default-modal" type="button" class="text-white bg-primary hover:bg-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 w-full text-center">Tanya Admin</a>
                             </div>
                         </div>
                     </div>
