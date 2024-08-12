@@ -78,6 +78,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         //daftar
         Route::get('/daftar-event', [AdminController::class, 'daftar_event'])->name('daftar-event');
         Route::put('/agree/{id}', [AdminController::class, 'agree']);
+        Route::put('/reject/{id}', [AdminController::class, 'reject']);
         //laporan
         Route::get('/laporan-event', [AdminController::class, 'laporan_event'])->name('laporan-event');
         Route::get('/tambah-laporan', [AdminController::class, 'tambah_laporan_event'])->name('tambah-laporan-event');
@@ -108,7 +109,6 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
     Route::middleware('role:kepalabagian')->group(function () {
         Route::get('/dashboard/kepalabagian', [KepalabagianController::class, 'index'])->name('kepalabagiandashboard');
         Route::get('/kelola_barang', [KepalabagianController::class, 'manage_items_kg'])->name('manage_items_kg');
-        // Route::get('/terlaris_', [KepalabagianController::class, 'terlaris_kg'])->name('terlaris_kg');
         Route::get('/terlaris_/{id}', [KepalabagianController::class, 'terlaris_kg'])->name('terlaris_kg');
         Route::get('/manage_ksm_kg', [KepalabagianController::class, 'manage_ksm'])->name('manage_ksm_kg');
         Route::get('/list_event_kg', [KepalabagianController::class, 'list_event_kg'])->name('list_event_kg');
@@ -147,7 +147,6 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::put('/create-ksm', [RegisteredUserController::class, 'storeKsm'])->name('store-ksm');
     });
 });
-
 Route::get('/e-catalog/search', [StokbarangController::class, 'searchBarang'])->name('search.barang');
 Route::get('/e-catalog/search-category', [StokbarangController::class, 'searchCategory'])->name('search.category');
 Route::get('/company-profile', [CompanyController::class, 'index'])->name('company_profile');

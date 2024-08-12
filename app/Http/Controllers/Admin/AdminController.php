@@ -517,6 +517,19 @@ class AdminController extends Controller
         return response()->json(['message' => 'Status updated successfully'], 200);
     }
 
+    public function reject($id)
+    {
+        $data = Register_event::find($id);
+        if (!$data) {
+            return response()->json(['error' => 'Data not found'], 404);
+        }
+
+        $data->status_validation = 'disagree';
+        $data->save();
+
+        return response()->json(['message' => 'Status updated successfully'], 200);
+    }
+
     public function add_event()
     {
         return view('pages.admin.event.addevent');
@@ -734,7 +747,13 @@ class AdminController extends Controller
 
     public function manage_sales()
     {
-        $data['order'] = Order::all();
+        $data['order'] = Order::select('orders.transaction_id as transaction', 'stokbarangs.name as product_name', 'transactions.total_qty as total_qty', 'orders.price as price', 'kelola_data_ksms.brand_name as brand_name', 'users.name as user_name', 'users.address as user_address', 'transactions.expedition as expedition', 'transactions.expedition_type as expedition_type', 'transactions.no_resi as no_resi', 'transactions.total_price as total_price', 'transactions.order_status as order_status')
+            ->join('stokbarangs', 'orders.product_id', '=', 'stokbarangs.id')
+            ->join('kelola_data_ksms', 'kelola_data_ksms.id', '=', 'stokbarangs.kelola_data_ksm_id')
+            ->join('transactions', 'orders.transaction_id', '=', 'transactions.id')
+            ->join('users', 'transactions.buyer_id', '=', 'users.id')
+            ->groupBy('transaction', 'product_name', 'price', 'brand_name')
+            ->get();
 
         $productsByCategory = $this->getLarisProductsByCategory();
         $data['penjualan'] = Laporan_penjualan::all();

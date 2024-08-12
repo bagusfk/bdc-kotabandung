@@ -11,8 +11,7 @@
     </div>
 
     <div class="relative overflow-x-auto my-[1rem]">
-        <table id="dataTable"
-            class="display nowrap min-h-[20rem] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="dataTable" class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -35,6 +34,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Alamat KSM
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Cluster
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Validasi
@@ -81,18 +83,24 @@
                             </td>
                         @endif
                         <td class="px-6 py-4">
-                            @if ($data->status_validation == 'prosess')
-                                <button type="button"
-                                    class="agree-button text-white bg-primary hover:bg-primary focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-primary dark:hover:bg-primary focus:outline-none dark:focus:ring-blue-800"
-                                    data-id="{{ $data->id }}">Izinkan</button>
-                                <button type="button"
-                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Tolak</button>
-                            @elseif ($data->status_validation == 'agree')
+                            {{ $data->ksm->cluster }}
+                        </td>
+                        <td class="px-6 py-4">
+                            @if ($data->status_validation == 'agree')
                                 Izinkan
-                            @else
+                            @elseif ($data->status_validation == 'disagree')
                                 Tolak
                             @endif
                         </td>
+                        @if ($data->ksm->status_validation == null)
+                            <td class="px-6 py-4">
+                                -
+                            </td>
+                        @else
+                            <td class="px-6 py-4">
+                                {{ $data->ksm->status_validation }}
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
@@ -115,26 +123,6 @@
                         ]
                     }
                 }
-            });
-
-            $('.agree-button').click(function() {
-                var id = $(this).data('id');
-                var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                $.ajax({
-                    url: '/agree/' + id,
-                    type: 'PUT',
-                    data: {
-                        _token: csrfToken // Sertakan token CSRF di dalam data permintaan
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
             });
         });
     </script>

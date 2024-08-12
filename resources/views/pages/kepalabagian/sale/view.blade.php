@@ -101,39 +101,39 @@
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $orders->item->name }}
+                            {{ $orders->product_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->qty }}
+                            {{ $orders->total_qty }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $orders->price }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->item->ksm->brand_name }}
+                            {{ $orders->brand_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->transaction->user->name }}
+                            {{ $orders->user_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->transaction->user->address }}
+                            {{ $orders->user_address }}
                         </td>
                         <td class="px-6 py-4">
-                            @if ($orders->transaction->expedition && $orders->transaction->expedition_type != null)
-                                {{ $orders->transaction->expedition }},
-                                {{ $orders->transaction->expedition_type }}
+                            @if ($orders->expedition && $orders->expedition_type != null)
+                                {{ $orders->expedition }},
+                                {{ $orders->expedition_type }}
                             @else
                                 -
                             @endif
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->transaction->no_resi }}
+                            {{ $orders->no_resi }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $orders->total_price }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->transaction->order_status }}
+                            {{ $orders->order_status }}
                         </td>
                     </tr>
                 @endforeach

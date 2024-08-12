@@ -101,36 +101,35 @@
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $orders->item->name }}
+                            {{ $orders->product_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->qty }}
+                            {{ $orders->total_qty }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $orders->price }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->item->ksm->brand_name }}
+                            {{ $orders->brand_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->transaction->user->name }}
+                            {{ $orders->user_name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $orders->transaction->user->address }}
+                            {{ $orders->user_address }}
                         </td>
                         <td class="px-6 py-4">
-                            @if ($orders->transaction->expedition && $orders->transaction->expedition_type != null)
-                                {{ $orders->transaction->expedition }},
-                                {{ $orders->transaction->expedition_type }}
+                            @if ($orders->expedition && $orders->expedition_type != null)
+                                {{ $orders->expedition }},
+                                {{ $orders->expedition_type }}
                             @else
                                 -
                             @endif
                         </td>
                         <td class="px-6 py-4">
-                            <form action="{{ route('no_resi', $orders->transaction_id) }}" method="POST">
+                            <form action="{{ route('no_resi', $orders->transaction) }}" method="POST">
                                 @csrf
-                                <input type="text" class="border-bottom" name="no_resi"
-                                    value="{{ $orders->transaction->no_resi }}">
+                                <input type="text" class="border-bottom" name="no_resi" value="{{ $orders->no_resi }}">
                                 <button type="submit" class="p-[0.5rem] bg-green-500 rounded-lg hover:bg-green-600">
                                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"
                                         viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -144,23 +143,22 @@
                             {{ $orders->total_price }}
                         </td>
                         <td class="px-6 py-4">
-                            <form action="{{ url('order_status/' . $orders->transaction_id) }}" method="POST">
+                            <form action="{{ url('order_status/' . $orders->transaction) }}" method="POST">
                                 @csrf
                                 <select name="status" id="status">
-                                    <option value="process"
-                                        {{ $orders->transaction->order_status == 'process' ? 'selected' : '' }}>Proses
+                                    <option value="process" {{ $orders->order_status == 'process' ? 'selected' : '' }}>
+                                        Proses
                                     </option>
-                                    <option value="dikemas"
-                                        {{ $orders->transaction->order_status == 'dikemas' ? 'selected' : '' }}>Dikemas
+                                    <option value="dikemas" {{ $orders->order_status == 'dikemas' ? 'selected' : '' }}>
+                                        Dikemas
                                     </option>
-                                    <option value="dikirim"
-                                        {{ $orders->transaction->order_status == 'dikirim' ? 'selected' : '' }}>Dikirim
+                                    <option value="dikirim" {{ $orders->order_status == 'dikirim' ? 'selected' : '' }}>
+                                        Dikirim
                                     </option>
-                                    <option value="selesai"
-                                        {{ $orders->transaction->order_status == 'selesai' ? 'selected' : '' }}>Selesai
+                                    <option value="selesai" {{ $orders->order_status == 'selesai' ? 'selected' : '' }}>
+                                        Selesai
                                     </option>
-                                    <option value="cancel"
-                                        {{ $orders->transaction->order_status == 'cancel' ? 'selected' : '' }}>Batal
+                                    <option value="cancel" {{ $orders->order_status == 'cancel' ? 'selected' : '' }}>Batal
                                     </option>
                                 </select>
                                 <button type="submit" class="p-[0.5rem] bg-green-500 rounded-lg hover:bg-green-600">
