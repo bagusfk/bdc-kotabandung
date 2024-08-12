@@ -113,6 +113,9 @@
                         <input type="hidden" value="{{ Auth::user()->no_wa }}" name="phone" id="phone">
                         <input type="hidden" value="{{ $totals[$sellerName]['totalQty'] }}" name="total_qty" id="total_qty">
                         <input type="hidden" id="total_price" value="" name="total_price">
+                        <input type="hidden" id="expedition" value="" name="expedition">
+                        <input type="hidden" id="expedition_type" value="" name="expedition_type">
+                        <input type="hidden" id="shipping_cost" value="" name="shipping_cost">
                         {{-- total price + ongkir --}}
                         {{-- <input type="hidden" id="totalPrice" value="{{ $subTotalPrice }}" name="total_price"> --}}
                         {{-- Belum ada data kurir --}}
@@ -212,11 +215,7 @@
             var courier = $('#courier').val();
             var origin = 22;
             var destination = {{ Auth::user()->city_id }};
-
-            /////////////////////////////////////////////////////
-            //belum ada di database
-            var weight = {{ $totalWeight }}; // replace with actual weight in grams
-            //////////////////////////////////////////////////////
+            var weight = {{ $totalWeight }};
 
             if (!courier) {
                 return;
@@ -242,7 +241,8 @@
                     $.each(response, function(index, courier) {
 
                         console.log(courier.code);
-                        $('#form-payment').append(`<input type="hidden" value="${courier.code}" name="expedition" id="expedition">`)
+                        // $('#form-payment').append(`<input type="hidden" value="${courier.code}" name="expedition" id="expedition">`)
+                        $('#expedition').val(courier.code);
 
                         $.each(courier.costs, function(index, cost) {
                             $('#service').append(`<option value="${cost.service}" data-cost="${cost.cost[0].value}" data-etd="${cost.cost[0].etd}">${cost.service} - ${cost.cost[0].value} IDR ( ${cost.cost[0].etd} hari)</option>`);
@@ -269,9 +269,11 @@
             $('#totalPrice').html(parseInt(cost) + parseInt({{ $subTotalPrice }}));
 
             console.log(service);
-            $('#form-payment').append(`<input type="hidden" value="${service}" name="expedition_type" id="expedition_type">`);
+            // $('#form-payment').append(`<input type="hidden" value="${service}" name="expedition_type" id="expedition_type">`);
+            $('#expedition_type').val(service);
             console.log(cost);
-            $('#form-payment').append(`<input type="hidden" value="${cost}" name="shipping_cost" id="shipping_cost">`);
+            // $('#form-payment').append(`<input type="hidden" value="${cost}" name="shipping_cost" id="shipping_cost">`);
+            $('#shipping_cost').val(cost);
             console.log(parseInt(cost) + parseInt({{ $subTotalPrice }}));
             // $('#form-payment').append(`<input type="hidden" id="total_price" value="${parseInt(cost) + parseInt({{ $subTotalPrice }})}" name="total_price">`);
             $('#total_price').val(parseInt(cost) + parseInt({{ $subTotalPrice }}));

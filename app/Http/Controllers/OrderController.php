@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Midtrans\Config;
+use GuzzleHttp\Client;
 
 
 class OrderController extends Controller
@@ -283,7 +284,13 @@ class OrderController extends Controller
             ]
         ];
 
+        // dd($params['transaction_details']['order_id']);
+        $transaction->update([
+            'order_id' => $params['transaction_details']['order_id'],
+        ]);
+
         $snapToken = \Midtrans\Snap::getSnapToken($params);
+
 
         $response = response()->json([ 'status' => 'success', 'snapToken' => $snapToken ]);
 
@@ -291,10 +298,41 @@ class OrderController extends Controller
         return $response;
     }
 
-    public function finishPayment()
+    public function finishPayment(Request $request)
     {
+        // dd($request);
+        // dd($request->query('order_id'));
+        $order_id = $request->query('order_id');
+        // return response($order_id);
+        $transaction = Transaction::where('order_id', $order_id);
 
+        // $client = new Client();
+
+        // $response = $client->request('GET', "https://api.sandbox.midtrans.com/v2/{$order_id}/status", [
+        //     'headers' => [
+        //         'Authorization' => 'Basic '. base64_encode(config('services.midtrans.server_key').':'),
+        //         'accept' => 'application/json',
+        //     ],
+        //   ]);
+          $response = Http::withHeaders([
+            'Authorization' => 'Basic '. base64_encode(config('services.midtrans.server_key') . ':'),
+            'accept' => 'application/json',
+            'content-type' => 'application/json',
+          ])->get("https://api.sandbox.midtrans.com/v2/{$order_id}/status");
+
+        $payment_type = $response->json();
+        $va = is_array($payment_type['va_numbers'] ?? null)? $payment_type['va_numbers'] : [];
+        //   dd($payment_methode);
+        $transaction->update([
+            'payment_type' => $payment_type['payment_type'],
+            'payment_status' => 'paid',
+        ]);
         return view('pages.pembeli.transaction.finish-payment');
+
+        // return response()->json([
+        //             'payment_method' => $payment_methode['payment_type'],
+        //             'va' => $va[0]['va_number'] ?? null,
+        //         ]);
     }
 
     public function myOrder()
