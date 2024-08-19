@@ -167,16 +167,15 @@
             });
         });
     </script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('/report_item_json2')
-                .then(response => response.json())
-                .then(data => {
+        document.addEventListener('DOMContentLoaded', () => {
+            axios.get('/report_item_json2')
+                .then(function(response) {
                     const categories = [];
                     const totalSold = [];
-
                     // Mengelompokkan data berdasarkan kategori
-                    data.forEach(item => {
+                    response.data.forEach(item => {
                         if (!categories.includes(item.category_name)) {
                             categories.push(item.category_name);
                             totalSold.push(item.total_sold);
@@ -210,7 +209,6 @@
                         }
                     });
                 })
-                .catch(error => console.error('Error fetching data:', error));
-        });
+        })
     </script>
 @endsection()
