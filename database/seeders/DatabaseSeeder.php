@@ -67,9 +67,9 @@ class DatabaseSeeder extends Seeder
             $seeder[] = TransactionSeeder::class;
         }
 
-        if (Order::count() == 0) {
-            $seeder[] = OrderSeeder::class;
-        }
+        // if (Order::count() == 0) {
+        //     $seeder[] = OrderSeeder::class;
+        // }
 
         if (Kelola_data_keuangan::count() == 0) {
             $seeder[] = BalanceSeeder::class;
