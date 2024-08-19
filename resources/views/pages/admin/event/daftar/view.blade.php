@@ -11,7 +11,7 @@
     </div>
 
     <div class="relative overflow-x-auto my-[1rem]">
-        <table id="dataTable" class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="dataTable" class="w-full text-sm text-left text-gray-500 display nowrap rtl:text-right dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -83,7 +83,11 @@
                             </td>
                         @endif
                         <td class="px-6 py-4">
-                            {{ $data->ksm->cluster }}
+                            {{ $data->ksm->cluster == 'd' ? 'D (Reseller)'
+                                : ($data->ksm->cluster == 'c' ? 'C (Dokumen tidak lengkap)'
+                                : ($data->ksm->cluster == 'b' ? 'B (Tidak ada NIB)'
+                                : ($data->ksm->cluster == 'a' ? 'A (Dokumen lengkap)'
+                                : 'Tidak ada cluster'))) }}
                         </td>
                         <td class="px-6 py-4">
                             @if ($data->status_validation == 'prosess')

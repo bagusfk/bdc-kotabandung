@@ -34,7 +34,7 @@
                 </div>
                 <div class="relative overflow-x-auto mt-[1rem]">
                     <table id="dataTable"
-                        class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        class="w-full text-sm text-left text-gray-500 display nowrap rtl:text-right dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">No</th>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="relative overflow-x-auto mt-[1rem]">
                     <table id="dataTable2"
-                        class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        class="w-full text-sm text-left text-gray-500 display nowrap rtl:text-right dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">No</th>
@@ -102,10 +102,16 @@
                                         <td class="px-6 py-4">{{ $data->category->category }}</td>
                                         <td class="px-6 py-4">{{ $data->address }}</td>
                                     @endif
-                                    <td class="px-6 py-4">{{ $data->cluster }}</td>
-                                    <td class="px-6 py-4 flex">
+                                    <td class="px-6 py-4">
+                                        {{ $data->cluster == 'd' ? 'D (Reseller)'
+                                            : ($data->cluster == 'c' ? 'C (Dokumen tidak lengkap)'
+                                            : ($data->cluster == 'b' ? 'B (Tidak ada NIB)'
+                                            : ($data->cluster == 'a' ? 'A (Dokumen lengkap)'
+                                            : 'Tidak ada cluster'))) }}
+                                    </td>
+                                    <td class="flex px-6 py-4">
                                         <a href="{{ url('/edit-ksm/' . $data->id) }}"
-                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
+                                            class="mr-2 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                         <form method="POST" action="{{ url('/delete-ksm/' . $data->id) }}"
                                             enctype="multipart/form-data">
                                             @csrf
@@ -129,7 +135,7 @@
                 </div>
                 <div class="relative overflow-x-auto mt-[1rem]">
                     <table id="dataTable3"
-                        class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        class="w-full text-sm text-left text-gray-500 display nowrap rtl:text-right dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">No</th>
@@ -164,7 +170,7 @@
                 </div>
                 <div class="relative overflow-x-auto mt-[1rem]">
                     <table id="dataTable4"
-                        class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        class="w-full text-sm text-left text-gray-500 display nowrap rtl:text-right dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">No</th>
@@ -190,9 +196,9 @@
                                     @else
                                         <td class="px-6 py-4">{{ $data->address }}</td>
                                     @endif
-                                    <td class="px-6 py-4 flex">
+                                    <td class="flex px-6 py-4">
                                         <a href="{{ url('/edit-pembeli/' . $data->id) }}"
-                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
+                                            class="mr-2 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                         <form method="POST" action="{{ url('/delete-pembeli/' . $data->id) }}"
                                             enctype="multipart/form-data">
                                             @csrf
