@@ -84,7 +84,9 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-4 gap-2 py-[1rem] max-sm:px-[1rem] px-[1rem]">
                         @foreach ($items as $item)
                             <div class="w-full bg-white border p-[0.5rem] sm:p-[1rem] border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700">
-                                <img class="aspect-square" src="{{ asset($item->picture_product) }}" alt="" />
+                                <div class="w-40 h-40 overflow-clip">
+                                    <img class="object-cover w-full h-full" src="{{ asset($item->picture_product) }}" alt="" />
+                                </div>
                                 <h5 class="text-lg font-bold tracking-tight text-gray-900 max-sm:text-lg dark:text-white">{{ $item->name }}</h5>
                                 <h5 class="text-lg font-bold tracking-tight text-primary max-sm:text-lg dark:text-white">Rp {{ number_format($item->price, 0, ',', '.') }}</h5>
                                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" style="-webkit-line-clamp: 1; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden">{{ $item->description }}</p>
