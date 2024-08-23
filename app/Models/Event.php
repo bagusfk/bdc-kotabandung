@@ -9,7 +9,7 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'event_name', 'event_organizer', 'event_date_start', 'event_date_end', 'description'];
+    protected $fillable = ['id', 'event_name', 'event_organizer', 'event_date_start', 'event_date_end', 'location', 'description'];
 
     public function user()
     {
@@ -19,5 +19,10 @@ class Event extends Model
     public function registeredUsers()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function peserta()
+    {
+        return $this->hasMany(Register_event::class);
     }
 }

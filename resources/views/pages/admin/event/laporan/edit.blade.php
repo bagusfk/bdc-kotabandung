@@ -1,17 +1,20 @@
 @extends('layouts.appadmin')
 @section('title', 'Kelola Event')
 @section('content')
-    <form class="w-full" action="{{ route('create-laporan-event') }}" method="POST">
+    <form class="w-full" action="{{ route('update-laporan-event') }}" method="POST">
         @csrf
         @method('PUT')
+        <input type="text" name="id" class="hidden" value="{{ $data->id }}">
         <div class="grid grid-cols-2 gap-20 pb-[5rem]">
             <div class="">
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Event</label>
                     <select class="block w-full rounded-lg" name="event_name" id="event_name">
-                        <option value="">Pilih</option>
                         @foreach ($events as $event)
-                            <option value="{{ $event->id }}">{{ $event->event_name }} - {{ $event->event_organizer }}
+                            <option value="{{ $event->id }}"
+                                {{ $event->id == $data->register_event->event_id ? 'selected' : '' }}>
+                                {{ $event->event_name }} -
+                                {{ $event->event_organizer }}
                             </option>
                         @endforeach
                     </select>
@@ -24,23 +27,28 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Event</label>
                     <div class="flex items-center gap-4">
                         <input type="text" class="block w-full rounded-lg bg-gray-100 cursor-not-allowed"
-                            name="event_date_start" id="event_date_start" disabled readonly>
+                            name="event_date_start" value="{{ $data->register_event->event->event_date_start }}"
+                            id="event_date_start" disabled readonly>
                         <span>s/d</span>
                         <input type="text" class="block w-full rounded-lg bg-gray-100 cursor-not-allowed"
-                            name="event_date_end" id="event_date_end" disabled readonly>
+                            name="event_date_end" value="{{ $data->register_event->event->event_date_end }}"
+                            id="event_date_end" disabled readonly>
                     </div>
                 </div>
 
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tempat Event</label>
-                    <input type="text" id="location" name="location"
-                        class="block w-full rounded-lg bg-gray-100 cursor-not-allowed" disabled readonly>
+                    <input type="text" value="{{ $data->register_event->event->location }}" id="location"
+                        name="location" class="block w-full rounded-lg bg-gray-100 cursor-not-allowed" disabled readonly>
                 </div>
 
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Peserta Event</label>
                     <select class="block rounded-lg w-full" name="regist_id" id="regist_id">
-                        <!-- Peserta options will be populated dynamically -->
+                        @foreach ($peserta as $pesertas)
+                            <option value="{{ $pesertas->id }}" {{ $pesertas->id == $data->regist_id ? 'selected' : '' }}>
+                                {{ $pesertas->ksm->owner }}</option>
+                        @endforeach
                     </select>
                     @error('regist_id')
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
@@ -48,7 +56,7 @@
                 </div>
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hasil Penjualan</label>
-                    <input type="number" name="sales_result" id="sales_result"
+                    <input type="number" value="{{ $data->sales_result }}" name="sales_result" id="sales_result"
                         class="block w-full p-2 text-gray-900 border rounded-lg bg-gray-50 text-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     @error('sales_result')
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>

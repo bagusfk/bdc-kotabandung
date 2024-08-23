@@ -26,6 +26,9 @@
                         Penyelenggara Event
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Tempat Event
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Peserta
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -47,6 +50,9 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->register_event->event->event_organizer }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $data->register_event->event->location }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->register_event->ksm->owner }}
