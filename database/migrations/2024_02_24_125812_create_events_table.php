@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('event_date_start')->nullable();
             $table->date('event_date_end')->nullable();
             $table->string('event_poster')->nullable();
+            $table->string('location')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
         });

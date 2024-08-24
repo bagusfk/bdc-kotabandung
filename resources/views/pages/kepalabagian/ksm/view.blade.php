@@ -101,7 +101,17 @@
                                         <td class="px-6 py-4">{{ $data->category->category }}</td>
                                         <td class="px-6 py-4">{{ $data->address }}</td>
                                     @endif
-                                    <td class="px-6 py-4">{{ $data->cluster }}</td>
+                                    <td class="px-6 py-4">
+                                        {{ $data->cluster == 'd'
+                                            ? 'D (Reseller)'
+                                            : ($data->cluster == 'c'
+                                                ? 'C (Dokumen tidak lengkap)'
+                                                : ($data->cluster == 'b'
+                                                    ? 'B (Dokumen kurang lengkap)'
+                                                    : ($data->cluster == 'a'
+                                                        ? 'A (Dokumen lengkap)'
+                                                        : 'Tidak ada cluster'))) }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

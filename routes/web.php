@@ -83,6 +83,10 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/laporan-event', [AdminController::class, 'laporan_event'])->name('laporan-event');
         Route::get('/tambah-laporan', [AdminController::class, 'tambah_laporan_event'])->name('tambah-laporan-event');
         Route::put('/create-laporan', [AdminController::class, 'create_laporan_event'])->name('create-laporan-event');
+        Route::get('/edit-laporan/{id}', [AdminController::class, 'edit_laporan_event'])->name('edit-laporan-event');
+        Route::put('/update-laporan', [AdminController::class, 'update_laporan_event'])->name('update-laporan-event');
+        Route::delete('/delete-laporan/{id}', [AdminController::class, 'delete_laporan_event'])->name('delete-laporan-event');
+        Route::get('/get-event-details/{id}', [AdminController::class, 'getEventDetails']);
         //dokumentasi
         Route::get('/dokumentasi-event', [AdminController::class, 'dokumentasi_event'])->name('dokumentasi-event');
         Route::get('/edit-gambar', [AdminController::class, 'event_document'])->name('event-document');

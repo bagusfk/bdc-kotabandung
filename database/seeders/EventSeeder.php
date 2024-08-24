@@ -19,6 +19,7 @@ class EventSeeder extends Seeder
             'event_date_start' => now()->toDateString(),
             'event_date_end' => now()->toDateString(),
             'event_poster' =>  'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
+            'location' => 'Bandung',
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
         ]);
 
@@ -28,6 +29,7 @@ class EventSeeder extends Seeder
             'event_date_start' => now()->toDateString(),
             'event_date_end' => now()->toDateString(),
             'event_poster' =>  'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
+            'location' => 'Bandung',
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
         ]);
 
@@ -37,6 +39,7 @@ class EventSeeder extends Seeder
             'event_date_start' => now()->toDateString(),
             'event_date_end' => now()->toDateString(),
             'event_poster' =>  'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
+            'location' => 'Bandung',
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
         ]);
 
@@ -46,6 +49,7 @@ class EventSeeder extends Seeder
             'event_date_start' => now()->toDateString(),
             'event_date_end' => now()->toDateString(),
             'event_poster' =>  'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
+            'location' => 'Bandung',
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ullam soluta dolore omnis enim expedita. Culpa vero quae dicta, distinctio totam corporis amet ab assumenda aspernatur explicabo expedita nam architecto.'
         ]);
     }
