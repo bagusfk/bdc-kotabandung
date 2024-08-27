@@ -17,8 +17,8 @@
             </a>
             <section class="bg-white">
                 <div class="flex flex-wrap justify-center gap-4 py-[1rem]">
-                    <div class="w-[450px] h-[450px] flex items-center rounded-xl border-2">
-                        <img class="w-full my-auto" src="{{ asset($item->picture_product) }}" alt="" />
+                    <div class="w-[450px] h-[450px] flex items-center overflow-hidden rounded-xl border-2 bg-red-300">
+                        <img class="w-full" src="{{ asset($item->picture_product) }}" alt="" />
                     </div>
                     <div class="flex flex-col flex-1 gap-4 px-8 py-8">
                         <h5 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $item->name }}</h5>
@@ -104,7 +104,7 @@
                     <div class="swiper-scrollbar"></div>
                 </div>
             </section>
-            <section class="my-[1rem] px-[1rem] sm:px-[2rem] lg:px-[4rem] py-[1rem] bg-white">
+            {{-- <section class="my-[1rem] px-[1rem] sm:px-[2rem] lg:px-[4rem] py-[1rem] bg-white">
                 <h5 class="font-bold text-2xl text-gray-900 mb-[1rem]">Ulasan</h5>
                 <div class="flex items-center my-[2rem]">
                     <img class="w-[4rem] h-[4rem] rounded-full bg-slate-500" src="{{ asset($item->picture_product) }}" alt="">
@@ -123,7 +123,7 @@
                     <p class="ml-[2rem]">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque saepe omnis nulla officiis non nisi officia, iste earum ut, impedit voluptates velit quis. Veniam vero ab dignissimos incidunt impedit beatae!</p>
                 </div>
                 <hr>
-            </section>
+            </section> --}}
         </div>
     </div>
 </x-app-layout>

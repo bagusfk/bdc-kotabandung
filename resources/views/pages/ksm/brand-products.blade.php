@@ -78,7 +78,9 @@
             @foreach($products as $product)
                 <a href="{{ route('product_detail_ksm', $product->id) }}" class="flex flex-col w-full p-2 bg-white cursor-pointer rounded-xl active:bg-gray-50 active:scale-[0.99]">
                     <div class="flex flex-wrap gap-2">
-                        <div class="w-16 h-16 bg-red-300 rounded-lg"></div>
+                        <div class="w-16 h-16 bg-red-300 rounded-lg">
+                            <img class="w-full h-full object-cover rounded-lg" src="{{ asset($product->picture_product) }}">
+                        </div>
                         <div class="flex flex-1 rounded-xl">
                             <div class="flex-1 pr-4 text-lg font-semibold leading-none text-wrap">{{ $product->name }}</div>
                             <div class="flex items-center">
