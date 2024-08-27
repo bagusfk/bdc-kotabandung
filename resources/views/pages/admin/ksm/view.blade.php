@@ -106,11 +106,11 @@
                                         {{ $data->cluster == 'd'
                                             ? 'D (Reseller)'
                                             : ($data->cluster == 'c'
-                                                ? 'C (Dokumen tidak lengkap)'
+                                                ? 'C (Legalitas tidak lengkap)'
                                                 : ($data->cluster == 'b'
-                                                    ? 'B (Dokumen kurang lengkap)'
+                                                    ? 'B (Legalitas kurang lengkap)'
                                                     : ($data->cluster == 'a'
-                                                        ? 'A (Dokumen lengkap)'
+                                                        ? 'A (Legalitas lengkap)'
                                                         : 'Tidak ada cluster'))) }}
                                     </td>
                                     <td class="flex px-6 py-4">
