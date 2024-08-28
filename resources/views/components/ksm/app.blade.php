@@ -59,13 +59,13 @@
                         <img class="w-8 h-8 rounded-full me-2" src="{{ asset('assets\default\image\default-picture.jpg') }}" alt="user photo">
                         <div class="flex items-center">
                             {{ Auth::user()->name }}
-                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            {{-- <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
+                            </svg> --}}
                         </div>
                     </button>
                     <!-- Dropdown menu -->
-                    <div id="dropdownDelay" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow min-w-44 dark:bg-gray-700">
+                    {{-- <div id="dropdownDelay" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow min-w-44 dark:bg-gray-700">
                         <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
                             <div>Bonnie Green</div>
                             <div class="font-medium truncate">name@flowbite.com</div>
@@ -84,7 +84,7 @@
                           <div class="py-2">
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
                           </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </nav>
@@ -96,13 +96,13 @@
                         <div class="overflow-hidden bg-blue-300 rounded-full w-28 h-28">
                             {{-- replace to image --}}
                             <div class="w-full h-full bg-red-300 overflow-clip">
-                                <img src="{{ asset('assets\default\image\default-picture.jpg') }}" alt="">
+                                <img src="{{ asset( Auth::user()->ksm()->first()->owner_picture ?? 'assets\default\image\default-picture.jpg') }}" alt="">
                             </div>
                         </div>
                         <div class="px-2 text-lg font-bold leading-none text-gray-800">{{ Auth::user()->name }}</div>
-                        <div class="px-2 text-xs font-semibold text-red-500 border border-red-500 rounded-full bg-red-50">belum punya produk!</div>
+                        {{-- <div class="px-2 text-xs font-semibold text-red-500 border border-red-500 rounded-full bg-red-50">belum punya produk!</div>
                         <div class="px-2 text-xs font-semibold text-red-500 border border-red-500 rounded-full bg-red-50">belum terverifikasi!</div>
-                        <div class="px-2 text-xs font-semibold text-red-500 border border-red-500 rounded-full bg-red-50">belum punya brand!</div>
+                        <div class="px-2 text-xs font-semibold text-red-500 border border-red-500 rounded-full bg-red-50">belum punya brand!</div> --}}
                         {{-- <div class="h-6 bg-blue-300 w-44"></div> --}}
                     </div>
                     {{-- <div class="px-2 text-sm font-bold leading-none text-gray-500">Kategori</div> --}}

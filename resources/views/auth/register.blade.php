@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form x-data="{ show: false }" method="POST" action="{{ route('register') }}">
         @csrf
 
         <!-- Name -->
@@ -13,10 +13,13 @@
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
-            <x-text-input id="password" class="block w-full mt-1"
+            {{-- <x-text-input id="password" class="block w-full mt-1"
                             type="password"
                             name="password"
-                            required autocomplete="new-password" />
+                            required autocomplete="new-password" /> --}}
+            <input id="password" :type="show ? 'text' : 'password'" name="password" required autocomplete="new-password"
+                placeholder="Masukan Password"
+                class="block w-full pr-4 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
@@ -25,11 +28,17 @@
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-            <x-text-input id="password_confirmation" class="block w-full mt-1"
+            {{-- <x-text-input id="password_confirmation" class="block w-full mt-1"
                             type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
+                            name="password_confirmation" required autocomplete="new-password" /> --}}
+            <input id="password_confirmation" :type="show ? 'text' : 'password'" name="password_confirmation" required autocomplete="new-password"
+                placeholder="Masukan Password"
+                class="block w-full pr-4 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            <div class="flex items-center justify-end mt-2">
+                <input type="checkbox" id="show-password-page" x-model="show" class="mr-2 leading-tight">
+                <label for="show-password-page" class="text-sm text-gray-700">Lihat password</label>
+            </div>
         </div>
 
         <!-- No WA -->

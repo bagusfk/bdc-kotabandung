@@ -132,9 +132,9 @@ class KepalabagianController extends Controller
 
     public function list_event_kg()
     {
-        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
-        $data['events'] = Event::paginate(3, ['*'], 'events');
-        $data['ksm'] = Kelola_data_ksm::paginate(3, ['*'], 'ksm');
+        $data['register_event'] = Register_event::all();
+        $data['events'] = Event::all();
+        $data['ksm'] = Kelola_data_ksm::all();
         return view('pages.kepalabagian.event.list', $data);
     }
 

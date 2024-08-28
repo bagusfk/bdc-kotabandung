@@ -347,6 +347,18 @@ class AdminController extends Controller
         $id = $request->get('kelola_data_ksm_id');
         $ksm = Kelola_data_ksm::findOrFail($id);
 
+        if ($ksm->business_entity == 'reseller') {
+            $ksm->cluster = 'D';
+        } else {
+            $ksm->cluster = 'C';
+            if ($ksm->logo_image != null && $ksm->nib_document != null && $ksm->address != null && $ksm->nib != null) {
+                $ksm->cluster = 'B';
+                if ($ksm->permission_letter != null) {
+                    $ksm->cluster = 'A';
+                }
+            }
+        }
+
         DB::transaction(function () use ($ksm, $data, $request) {
             $ksm->update($data);
 
@@ -431,9 +443,9 @@ class AdminController extends Controller
 
     public function list_event()
     {
-        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
-        $data['events'] = Event::paginate(3, ['*'], 'events');
-        $data['ksm'] = Kelola_data_ksm::paginate(3, ['*'], 'ksm');
+        $data['register_event'] = Register_event::all();
+        $data['events'] = Event::all();
+        $data['ksm'] = Kelola_data_ksm::all();
         return view('pages.admin.event.list.view', $data);
     }
 
@@ -460,31 +472,30 @@ class AdminController extends Controller
 
     public function tambah_laporan_event()
     {
-        $participants = Register_event::where('report', 'no')->with('ksm:id,owner,brand_name')
-            ->get()
-            ->groupBy('event_id')
-            ->map(function ($group) {
-                return $group->map(function ($participant) {
-                    return [
-                        'id' => $participant->id,
-                        'ksm' => $participant->ksm,
-                    ];
-                });
-            });
 
         // dd($participants);
 
         $events = Event::all(); // Assuming you need event data for the select options
 
-        return view('pages.admin.event.laporan.add', [
-            'participantsByEvent' => $participants,
-            'events' => $events
-        ]);
+        return view('pages.admin.event.laporan.add', compact('events'));
     }
+
+    public function getEventDetails($id)
+    {
+        $reportedPesertaIds = DB::table('laporan_kegiatan_events')->pluck('regist_id');
+
+        // Ambil event dengan peserta yang belum pernah masuk ke laporan
+        $event = Event::with(['peserta' => function ($query) use ($reportedPesertaIds) {
+            $query->whereNotIn('id', $reportedPesertaIds);
+        }, 'peserta.ksm'])->find($id);
+
+        return response()->json($event);
+    }
+
 
     public function create_laporan_event(Request $request)
     {
-
+        // dd($request->all());
         $request->validate([
             "regist_id" => 'required',
             "sales_result" => 'required',
@@ -502,6 +513,39 @@ class AdminController extends Controller
 
 
         return redirect('/laporan-event');
+    }
+
+    public function edit_laporan_event($id)
+    {
+        $data = Laporan_kegiatan_event::find($id);
+        $events = Event::all();
+        $pesertaEvent = Register_event::where('id', $data->regist_id)->pluck('event_id');
+        $peserta = Register_event::where('event_id', $pesertaEvent)->get();
+
+        // dd($peserta);
+        return view('pages.admin.event.laporan.edit', compact('data', 'events', 'peserta'));
+    }
+
+    public function update_laporan_event(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            "regist_id" => 'required',
+            "sales_result" => 'required',
+        ]);
+        $laporan = Laporan_kegiatan_event::find($request->id);
+        $laporan->regist_id = $request->regist_id;
+        $laporan->sales_result = $request->sales_result;
+        $laporan->save();
+
+        return redirect('/laporan-event');
+    }
+
+    public function delete_laporan_event($id)
+    {
+        $data = Laporan_kegiatan_event::find($id);
+        $data->delete();
+        return redirect()->back();
     }
 
     public function agree($id)
@@ -537,18 +581,16 @@ class AdminController extends Controller
 
     public function create_event(Request $request)
     {
+
         $request->validate([
             'event_name' => 'required',
             'event_organizer' => 'required',
             'event_date_start' => 'required',
             'event_date_end' => 'required',
+            'location' => 'required',
             'event_poster' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'description' => 'required',
         ]);
-
-        // Konversi tanggal start dan end ke timestamp terlebih dahulu
-        $startTimestamp = strtotime($request->event_date_start);
-        $endTimestamp = strtotime($request->event_date_end);
 
         $imagePath = $request->file('event_poster')->store('public/picture_event');
         $imagePath = str_replace('public/', '', $imagePath);
@@ -557,8 +599,9 @@ class AdminController extends Controller
         $event->event_name = $request->event_name;
         $event->event_organizer = $request->event_organizer;
         // Gunakan timestamp yang sudah dikonversi sebagai nilai tanggal
-        $event->event_date_start = date('Y-d-m', $startTimestamp);
-        $event->event_date_end = date('Y-d-m', $endTimestamp);
+        $event->event_date_start = $request->event_date_start;
+        $event->event_date_end = $request->event_date_end;
+        $event->location = $request->location;
         $event->event_poster = 'storage/' . $imagePath;
         $event->description = $request->description;
         $event->save();
@@ -577,19 +620,14 @@ class AdminController extends Controller
         $item = $request->validate([
             'event_name' => 'required',
             'event_organizer' => 'required',
+            'event_date_start' => 'required',
+            'event_date_end' => 'required',
+            'location' => 'required',
             'description' => 'required',
         ]);
 
         $id = $request->get('id');
         $event = Event::find($id);
-
-        // Konversi tanggal start dan end ke timestamp terlebih dahulu
-        $startTimestamp = strtotime($request->event_date_start);
-        $endTimestamp = strtotime($request->event_date_end);
-
-        // Menambahkan kolom tanggal ke dalam data yang divalidasi
-        $item['event_date_start'] = date('Y-d-m', $startTimestamp);
-        $item['event_date_end'] = date('Y-d-m', $endTimestamp);
 
         // Update data Event
         $event->update($item);
@@ -754,6 +792,8 @@ class AdminController extends Controller
             ->join('users', 'transactions.buyer_id', '=', 'users.id')
             ->groupBy('transaction', 'product_name', 'price', 'brand_name')
             ->get();
+
+        // dd($data['order']);
 
         $productsByCategory = $this->getLarisProductsByCategory();
         $data['penjualan'] = Laporan_penjualan::all();

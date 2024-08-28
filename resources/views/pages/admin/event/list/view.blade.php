@@ -28,6 +28,9 @@
                         Penyelenggara
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Tempat Event
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Deskripsi
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -45,14 +48,17 @@
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ date('d/m/Y', strtotime($data->event_date_start)) }} -
-                            {{ date('d/m/Y', strtotime($data->event_date_end)) }}
+                            {{ \Carbon\Carbon::parse($data->event_date_start)->format('d-m-Y') }} -
+                            {{ \Carbon\Carbon::parse($data->event_date_end)->format('d-m-Y') }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->event_name }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->event_organizer }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $data->location }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->description }}

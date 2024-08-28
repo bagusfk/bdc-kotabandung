@@ -26,6 +26,11 @@
         }
     </style>
 
+    @if (session('status'))
+        <div class="p-4 mb-4 text-green-700 bg-green-100 rounded-lg">
+            {{ session('status') }}
+        </div>
+    @endif
     <div class="flex justify-between mb-[2rem]">
         <div class="flex items-center">
             <svg class="w-6 h-6 inline-flex" xmlns="http://www.w3.org/2000/svg"
@@ -175,6 +180,7 @@
             </tbody>
         </table>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -203,15 +209,13 @@
         });
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('/report-item-json')
-                .then(response => response.json())
-                .then(data => {
+        document.addEventListener('DOMContentLoaded', () => {
+            axios.get('/report-item-json')
+                .then(function(response) {
                     const categories = [];
                     const totalSold = [];
-
                     // Mengelompokkan data berdasarkan kategori
-                    data.forEach(item => {
+                    response.data.forEach(item => {
                         if (!categories.includes(item.category_name)) {
                             categories.push(item.category_name);
                             totalSold.push(item.total_sold);
@@ -245,7 +249,53 @@
                         }
                     });
                 })
-                .catch(error => console.error('Error fetching data:', error));
-        });
+        })
+    </script>
+    <script>
+        //     document.addEventListener("DOMContentLoaded", function() {
+        //         fetch('/report-item-json')
+        //             .then(console.log(response.json()))
+        //             .then(data => {
+        //                 const categories = [];
+        //                 const totalSold = [];
+        //                 console.log(response);
+        //                 // Mengelompokkan data berdasarkan kategori
+        //                 data.forEach(item => {
+        //                     if (!categories.includes(item.category_name)) {
+        //                         categories.push(item.category_name);
+        //                         totalSold.push(item.total_sold);
+        //                     } else {
+        //                         // Jika kategori sudah ada, update total penjualan
+        //                         const index = categories.indexOf(item.category_name);
+        //                         totalSold[index] += item.total_sold;
+        //                     }
+        //                 });
+
+        //                 const ctx = document.getElementById('report_item').getContext('2d');
+
+        //                 new Chart(ctx, {
+        //                     type: 'bar',
+        //                     data: {
+        //                         labels: categories,
+        //                         datasets: [{
+        //                             label: 'Total Sold',
+        //                             data: totalSold,
+        //                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        //                             borderColor: 'rgba(75, 192, 192, 1)',
+        //                             borderWidth: 1
+        //                         }]
+        //                     },
+        //                     options: {
+        //                         scales: {
+        //                             y: {
+        //                                 beginAtZero: true
+        //                             }
+        //                         }
+        //                     }
+        //                 });
+        //             })
+        //             .catch(error => console.error('Error fetching data:', error));
+        //     });
+        //
     </script>
 @endsection()
