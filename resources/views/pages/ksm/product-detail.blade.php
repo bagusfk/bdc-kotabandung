@@ -9,7 +9,9 @@
     </div>
     <div class="gap-4 px-4 py-4 text-lg font-bold leading-none text-gray-800 bg-white rounded-xl">
         <div class="flex flex-wrap gap-2 ">
-            <div class="bg-red-300 rounded-lg w-72 h-72"></div>
+            <div class="bg-red-300 rounded-lg w-72 h-72">
+                <img class="w-full h-full object-cover rounded-lg" src="{{ asset($product->picture_product) }}">
+            </div>
             <div class="flex flex-col flex-1 rounded-xl">
                 <div class="pr-4 text-3xl font-semibold leading-none text-wrap">{{ $product->name }}</div>
                 <div class="flex-1 py-6 pr-4 text-xl font-semibold text-wrap">

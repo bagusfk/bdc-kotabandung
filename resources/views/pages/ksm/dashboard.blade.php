@@ -11,7 +11,21 @@
                     @endisset
                 </div>
                 <div class="flex-1 w-32 h-32 text-xs">
-                    <div class="text-2xl font-semibold text-wrap">{{ $brand->brand_name }} <span class="px-2 py-0 text-base bg-green-200 border border-green-500 rounded-full">{{ $brand->business_entity }}</span></div>
+                    <div class="text-2xl font-semibold text-wrap">
+                        {{ $brand->brand_name }}
+                        <span class="px-2 py-0 text-base bg-green-200 border border-green-500 rounded-full">
+                            {{ ($brand->business_entity == 'reseller' ? 'Reseller'
+                                : ($brand->business_entity == 'br' ? 'Bisnis Rumahan'
+                                : ($brand->business_entity == 'toko' ? 'Toko/Warung'
+                                : ($brand->business_entity == 'po' ? 'Perusahaan Perseorangan'
+                                : ($brand->business_entity == 'koperasi' ? 'Koperasi'
+                                : ($brand->business_entity == 'persero' ? 'Perusahaan Perseroan (Persero)'
+                                : ($brand->business_entity == 'fa' ? 'Firma (Fa)'
+                                : ($brand->business_entity == 'cv' ? 'Commanditaire Vennootschap (CV)'
+                                : ($brand->business_entity == 'pt' ? 'Perseroan Terbatas (PT)' :'')))))))))
+                            }}
+                        </span>
+                    </div>
                     <div>Pemilik: {{ $brand->owner }}</div>
                     <div>Kategory produk: {{ $brand->category->category }}</div>
                     <div>Jumlah produk: {{ $brand->item->count() }}</div>

@@ -840,6 +840,8 @@ class AdminController extends Controller
             ->groupBy('transaction', 'product_name', 'price', 'brand_name')
             ->get();
 
+        // dd($data['order']);
+
         $productsByCategory = $this->getLarisProductsByCategory();
         $data['penjualan'] = Laporan_penjualan::all();
         $data['penjual'] = Stokbarang::all();

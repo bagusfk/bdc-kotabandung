@@ -84,9 +84,9 @@
                         @endif
                         <td class="px-6 py-4">
                             {{ $data->ksm->cluster == 'd' ? 'D (Reseller)'
-                                : ($data->ksm->cluster == 'c' ? 'C (Dokumen tidak lengkap)'
-                                : ($data->ksm->cluster == 'b' ? 'B (Tidak ada NIB)'
-                                : ($data->ksm->cluster == 'a' ? 'A (Dokumen lengkap)'
+                                : ($data->ksm->cluster == 'c' ? 'C (Legalitas tidak lengkap)'
+                                : ($data->ksm->cluster == 'b' ? 'B (Legalitas kurang lengkap)'
+                                : ($data->ksm->cluster == 'a' ? 'A (Legalitas lengkap)'
                                 : 'Tidak ada cluster'))) }}
                         </td>
                         <td class="px-6 py-4">
