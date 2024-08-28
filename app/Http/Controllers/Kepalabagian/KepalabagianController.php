@@ -113,6 +113,46 @@ class KepalabagianController extends Controller
         return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
     }
 
+    public function laris_kg($id)
+    {
+        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
+            ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
+            ->whereNotNull('transaction_id')
+            ->groupBy('category_name', 'category_url')
+            ->orderBy('total_qty', 'desc')
+            ->get();
+
+        $order = Order::select('stokbarangs.name as product_name', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
+            ->join('categories', 'categories.id', '=', 'stokbarangs.category_id')
+            ->where('categories.id', $id)
+            ->whereNotNull('transaction_id')
+            ->groupBy('stokbarangs.name')
+            ->get();
+        return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
+    }
+
+    public function kurang_laris_kg($id)
+    {
+        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
+            ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
+            ->whereNotNull('transaction_id')
+            ->groupBy('category_name', 'category_url')
+            ->orderBy('total_qty', 'desc')
+            ->get();
+
+        $order = Order::select('stokbarangs.name as product_name', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
+            ->join('categories', 'categories.id', '=', 'stokbarangs.category_id')
+            ->where('categories.id', $id)
+            ->whereNotNull('transaction_id')
+            ->groupBy('stokbarangs.name')
+            ->get();
+        return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
+    }
+
     public function manage_ksm()
     {
         $today = Carbon::today();

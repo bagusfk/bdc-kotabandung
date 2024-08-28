@@ -20,6 +20,7 @@ use App\Models\Picture_event;
 use App\Models\Omzet;
 use App\Models\Register_event;
 use App\Models\Stokbarang;
+use App\Models\Product_pictures;
 use App\Models\category;
 use App\Models\Kelola_data_keuangan;
 use App\Models\Kelola_data_penjualan;
@@ -110,7 +111,7 @@ class AdminController extends Controller
             'id' => 'required',
             'category_id' => 'required',
             'ksm_id' => 'required',
-            'picture_product' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'picture_product.*' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Validasi banyak gambar
             'name' => 'required',
             'weight' => 'required',
             'stock' => 'required',
@@ -118,20 +119,28 @@ class AdminController extends Controller
             'description' => 'required',
         ]);
 
-        $imagePath = $request->file('picture_product')->store('public/items');
-        $imagePath = str_replace('public/', '', $imagePath);
-
         $stokbarang = new Stokbarang();
         $stokbarang->id = $request->id;
         $stokbarang->category_id = $request->category_id;
         $stokbarang->kelola_data_ksm_id = $request->ksm_id;
-        $stokbarang->picture_product = 'storage/' . $imagePath;
         $stokbarang->name = $request->name;
         $stokbarang->weight = $request->weight;
         $stokbarang->stock = $request->stock;
         $stokbarang->price = $request->price;
         $stokbarang->description = $request->description;
         $stokbarang->save();
+
+        if ($request->hasFile('picture_product')) {
+            foreach ($request->file('picture_product') as $image) {
+                $imagePath = $image->store('public/items');
+                $imagePath = str_replace('public/', '', $imagePath);
+
+                $productPicture = new Product_pictures();
+                $productPicture->product_id = $stokbarang->id;
+                $productPicture->product_picture = 'storage/' . $imagePath;
+                $productPicture->save();
+            }
+        }
 
         $ksm = Kelola_data_ksm::findOrFail($request->ksm_id);
         if ($ksm->business_entity == 'reseller') {
@@ -145,17 +154,11 @@ class AdminController extends Controller
                 }
             }
         }
-        // if ($logoPath && $nibPath && $request->address && $request->nib) {
-        //     $cluster = 'B';
-
-        //     if ($permissionPath) {
-        //         $cluster = 'A';
-        //     }
-        // }
         $ksm->save();
 
         return redirect('/kelola-barang');
     }
+
 
     public function edit_item($id)
     {
@@ -241,14 +244,50 @@ class AdminController extends Controller
             ->get();
 
         return view('pages.admin.barang.fashion.view', compact('order', 'category'));
+    }
 
-        // if ($id == 1) {
-        //     return view('pages.admin.barang.fashion.view', compact('order', 'countOrder'));
-        // } elseif ($id == 2) {
-        //     return view('pages.admin.barang.kriya.view', compact('order', 'countOrder'));
-        // } elseif ($id == 3) {
-        //     return view('pages.admin.barang.kuliner.view', compact('order', 'countOrder'));
-        // }
+    public function laris_id($id)
+    {
+
+        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
+            ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
+            ->whereNotNull('transaction_id')
+            ->groupBy('category_name', 'category_url')
+            ->orderBy('total_qty', 'desc')
+            ->get();
+
+        $order = Order::select('stokbarangs.name as product_name', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
+            ->join('categories', 'categories.id', '=', 'stokbarangs.category_id')
+            ->where('categories.id', $id)
+            ->whereNotNull('transaction_id')
+            ->groupBy('stokbarangs.name')
+            ->get();
+
+        return view('pages.admin.barang.fashion.view', compact('order', 'category'));
+    }
+
+    public function kurang_laris_id($id)
+    {
+
+        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
+            ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
+            ->whereNotNull('transaction_id')
+            ->groupBy('category_name', 'category_url')
+            ->orderBy('total_qty', 'desc')
+            ->get();
+
+        $order = Order::select('stokbarangs.name as product_name', DB::raw('SUM(orders.qty) as total_qty'))
+            ->join('stokbarangs', 'stokbarangs.id', '=', 'orders.product_id')
+            ->join('categories', 'categories.id', '=', 'stokbarangs.category_id')
+            ->where('categories.id', $id)
+            ->whereNotNull('transaction_id')
+            ->groupBy('stokbarangs.name')
+            ->get();
+
+        return view('pages.admin.barang.fashion.view', compact('order', 'category'));
     }
 
     // public function kriya()
@@ -490,6 +529,14 @@ class AdminController extends Controller
         }, 'peserta.ksm'])->find($id);
 
         return response()->json($event);
+    }
+
+    public function getOwnerKsm($id)
+    {
+        $ksm = Kelola_data_ksm::where('category_id', $id)->get();
+        // dd($ksm);
+
+        return response()->json($ksm);
     }
 
 

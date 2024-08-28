@@ -55,7 +55,7 @@
                             {{ $data->event_organizer }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $data->event_location }}
+                            {{ $data->location }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->description }}

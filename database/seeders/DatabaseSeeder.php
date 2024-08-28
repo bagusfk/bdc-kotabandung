@@ -11,6 +11,7 @@ use App\Models\Event;
 use App\Models\Beli;
 use App\Models\Order;
 use App\Models\Kelola_data_keuangan;
+use App\Models\Product_pictures;
 use App\Models\Transaction;
 //cities
 use Database\Seeders\CitySeeder;
@@ -74,9 +75,9 @@ class DatabaseSeeder extends Seeder
         if (Kelola_data_keuangan::count() == 0) {
             $seeder[] = BalanceSeeder::class;
         }
-        // if (Beli::count() == 0) {
-        //     $seeder[] = BeliSeeder::class;
-        // }
+        if (Product_pictures::count() == 0) {
+            $seeder[] = ProductPictureSeeder::class;
+        }
 
         $this->call($seeder);
     }

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('kelola_data_ksm_id')->constrained('kelola_data_ksms')->onDelete('cascade');
-            $table->string('picture_product', 128)->nullable();
             $table->string('name', 128)->nullable();
             $table->integer('weight')->nullable();
             $table->integer('stock')->nullable();

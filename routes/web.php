@@ -54,6 +54,8 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         //terlaris
         Route::get('/terlaris', [AdminController::class, 'terlaris'])->name('terlaris');
         Route::get('/terlaris/{id}', [AdminController::class, 'terlaris_id'])->name('terlaris_id');
+        Route::get('/laris/{id}', [AdminController::class, 'laris_id'])->name('laris_id');
+        Route::get('/kurang_laris/{id}', [AdminController::class, 'kurang_laris_id'])->name('kurang_laris_id');
         // laporan
         Route::get('/laporan-barang', [AdminController::class, 'report_item'])->name('report_item');
         Route::get('/report-item-json', [AdminController::class, 'report_item_json'])->name('report_item_json');
@@ -87,6 +89,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::put('/update-laporan', [AdminController::class, 'update_laporan_event'])->name('update-laporan-event');
         Route::delete('/delete-laporan/{id}', [AdminController::class, 'delete_laporan_event'])->name('delete-laporan-event');
         Route::get('/get-event-details/{id}', [AdminController::class, 'getEventDetails']);
+        Route::get('/get-owner-ksm/{id}', [AdminController::class, 'getOwnerKsm']);
         //dokumentasi
         Route::get('/dokumentasi-event', [AdminController::class, 'dokumentasi_event'])->name('dokumentasi-event');
         Route::get('/edit-gambar', [AdminController::class, 'event_document'])->name('event-document');
@@ -114,6 +117,8 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/dashboard/kepalabagian', [KepalabagianController::class, 'index'])->name('kepalabagiandashboard');
         Route::get('/kelola_barang', [KepalabagianController::class, 'manage_items_kg'])->name('manage_items_kg');
         Route::get('/terlaris_/{id}', [KepalabagianController::class, 'terlaris_kg'])->name('terlaris_kg');
+        Route::get('/laris_/{id}', [KepalabagianController::class, 'laris_kg'])->name('laris_kg');
+        Route::get('/kurang_laris_/{id}', [KepalabagianController::class, 'kurang_laris_kg'])->name('kurang_laris_kg');
         Route::get('/manage_ksm_kg', [KepalabagianController::class, 'manage_ksm'])->name('manage_ksm_kg');
         Route::get('/list_event_kg', [KepalabagianController::class, 'list_event_kg'])->name('list_event_kg');
         Route::get('/daftar_event_kg', [KepalabagianController::class, 'daftar_event_kg'])->name('daftar_event_kg');
