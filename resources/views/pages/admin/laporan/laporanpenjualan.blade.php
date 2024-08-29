@@ -41,6 +41,21 @@
             <span class="text-2xl font-semibold ml-[1rem]">Kelola Penjualan</span>
         </div>
     </div>
+    <div class="w-full flex justify-end">
+        {{-- <button class="bg-primary text-white p-[.5rem] mr-2" onclick="sortData('asc')">Sort Ascending</button>
+        <button class="bg-primary text-white p-[.5rem] mr-2" onclick="sortData('desc')">Sort Descending</button>
+        <button class="bg-primary text-white p-[.5rem]" onclick="clearSorting()">Clear Sorting</button> --}}
+    </div>
+
+    <div class=" dark:bg-gray-800 md:p-6">
+        <div class="">
+            <canvas id="report_item"></canvas>
+        </div>
+    </div>
+
+    <div class="w-fit mt-[1rem]">
+        <h2 class="text-lg font-semibold border-b-2 border-black">Data Pesanan Masuk</h2>
+    </div>
 
     <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
         <table id="dataTable" class="display nowrap text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -165,10 +180,75 @@
             </tbody>
         </table>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#dataTable').DataTable();
+            $('#dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excel',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'pdf',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            },
+                            {
+                                extend: 'print',
+                                messageTop: 'Pendaftar KSM hari ini'
+                                // messageBottom: null
+                            }
+                        ]
+                    }
+                }
+            });
         });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            axios.get('/report-item-json')
+                .then(function(response) {
+                    const categories = [];
+                    const totalSold = [];
+                    // Mengelompokkan data berdasarkan kategori
+                    response.data.forEach(item => {
+                        if (!categories.includes(item.category_name)) {
+                            categories.push(item.category_name);
+                            totalSold.push(item.total_sold);
+                        } else {
+                            // Jika kategori sudah ada, update total penjualan
+                            const index = categories.indexOf(item.category_name);
+                            totalSold[index] += item.total_sold;
+                        }
+                    });
+
+                    const ctx = document.getElementById('report_item').getContext('2d');
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: categories,
+                            datasets: [{
+                                label: 'Total Sold',
+                                data: totalSold,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+        })
     </script>
 @endsection()

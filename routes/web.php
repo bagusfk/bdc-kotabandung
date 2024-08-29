@@ -82,7 +82,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::put('/agree/{id}', [AdminController::class, 'agree']);
         Route::put('/reject/{id}', [AdminController::class, 'reject']);
         //laporan
-        Route::get('/laporan-event', [AdminController::class, 'laporan_event'])->name('laporan-event');
+        Route::get('/penjualan-event', [AdminController::class, 'penjualan_event'])->name('penjualan-event');
         Route::get('/tambah-laporan', [AdminController::class, 'tambah_laporan_event'])->name('tambah-laporan-event');
         Route::put('/create-laporan', [AdminController::class, 'create_laporan_event'])->name('create-laporan-event');
         Route::get('/edit-laporan/{id}', [AdminController::class, 'edit_laporan_event'])->name('edit-laporan-event');
@@ -111,6 +111,12 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/tambah', [AdminController::class, 'add_neraca'])->name('add_neraca');
         Route::put('/neraca_update/{id}', [AdminController::class, 'neraca_update'])->name('neraca_update');
         Route::delete('/neraca_destroy/{id}', [AdminController::class, 'neraca_destroy'])->name('neraca_destroy');
+
+
+        Route::get('/laporan-event', [AdminController::class, 'laporan_event'])->name('laporan-event');
+        Route::get('/laporan-produk', [AdminController::class, 'laporan_produk'])->name('laporan-produk');
+        Route::get('/laporan-user', [AdminController::class, 'laporan_user'])->name('laporan-user');
+        Route::get('/laporan-penjualan', [AdminController::class, 'laporan_penjualan'])->name('laporan-penjualan');
     });
 
     Route::middleware('role:kepalabagian')->group(function () {

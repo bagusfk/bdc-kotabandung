@@ -66,7 +66,7 @@
         </div>
         <div id="regist_id" class="hidden mt-[1rem] text-gray-900 dark:text-white"></div>
         <div class="flex justify-end">
-            <a href="{{ route('laporan-event') }}"
+            <a href="{{ route('penjualan-event') }}"
                 class="text-sm font-medium text-primary p-2.5 bg-white border border-primary rounded-lg mt-[1rem] mr-2">Batal</a>
             <button type="submit"
                 class="text-sm font-medium text-white p-2.5 bg-primary rounded-lg mt-[1rem]">Simpan</button>

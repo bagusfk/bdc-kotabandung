@@ -1,40 +1,7 @@
 @extends('layouts.appadmin')
 @section('content')
     <style>
-        select#dt-length-0 {
-            padding-right: 2.5rem;
-        }
-
-        select#dt-length-1 {
-            padding-right: 2.5rem;
-        }
-
-        select#dt-length-2 {
-            padding-right: 2.5rem;
-        }
-
-        select#dt-length-3 {
-            padding-right: 2.5rem;
-        }
-
-        table.dataTable td.dt-type-numeric {
-            text-align: center;
-        }
-
-        table.dataTable th.dt-type-numeric {
-            text-align: left;
-        }
-
-        .border-bottom {
-            border: none;
-            border-bottom: 1px solid #000000;
-            background: none;
-        }
-
-        .border-bottom:focus {
-            border: none;
-        }
-
+        /* Optional: Add some basic styling */
         .hidden {
             display: none;
         }
@@ -115,7 +82,6 @@
                                 <th scope="col" class="px-6 py-3">Jenis Produk</th>
                                 <th scope="col" class="px-6 py-3">Alamat KSM</th>
                                 <th scope="col" class="px-6 py-3">Cluster KSM</th>
-                                <th scope="col" class="px-6 py-3">#</th>
                             </tr>
                         </thead>
                         <tbody id="dataList2">
@@ -145,18 +111,6 @@
                                                     : ($data->cluster == 'a'
                                                         ? 'A (Legalitas lengkap)'
                                                         : 'Tidak ada cluster'))) }}
-                                    </td>
-                                    <td class="flex px-6 py-4">
-                                        <a href="{{ url('/edit-ksm/' . $data->id) }}"
-                                            class="mr-2 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                        <form method="POST" action="{{ url('/delete-ksm/' . $data->id) }}"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit"
-                                                class="font-medium text-red-700 dark:text-blue-500 hover:underline"
-                                                onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -215,7 +169,6 @@
                                 <th scope="col" class="px-6 py-3">Email</th>
                                 <th scope="col" class="px-6 py-3">No Whatsapp</th>
                                 <th scope="col" class="px-6 py-3">Alamat</th>
-                                <th scope="col" class="px-6 py-3">#</th>
                             </tr>
                         </thead>
                         <tbody id="dataList4">
@@ -233,18 +186,6 @@
                                     @else
                                         <td class="px-6 py-4">{{ $data->address }}</td>
                                     @endif
-                                    <td class="flex px-6 py-4">
-                                        <a href="{{ url('/edit-pembeli/' . $data->id) }}"
-                                            class="mr-2 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                        <form method="POST" action="{{ url('/delete-pembeli/' . $data->id) }}"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit"
-                                                class="font-medium text-red-700 dark:text-blue-500 hover:underline"
-                                                onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                                        </form>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -284,10 +225,82 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable();
-            $('#dataTable2').DataTable();
-            $('#dataTable3').DataTable();
-            $('#dataTable4').DataTable();
+            $('#dataTable').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excel',
+                                messageTop: 'Pendaftar KSM hari ini'
+                            },
+                            {
+                                extend: 'pdf',
+                                messageTop: 'Pendaftar KSM hari ini'
+                            },
+                            {
+                                extend: 'print',
+                                messageTop: 'Pendaftar KSM hari ini'
+                            }
+                        ]
+                    }
+                }
+            });
+            $('#dataTable2').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excel',
+                                messageTop: 'Data KSM'
+                            },
+                            {
+                                extend: 'pdf',
+                                messageTop: 'Data KSM'
+                            },
+                            {
+                                extend: 'print',
+                                messageTop: 'Data KSM'
+                            }
+                        ]
+                    }
+                }
+            });
+            $('#dataTable3').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excel',
+                                messageTop: 'Pendaftar user hari ini',
+                            },
+                            {
+                                extend: 'pdf',
+                                messageTop: 'Pendaftar user hari ini',
+                            },
+                            {
+                                extend: 'print',
+                                messageTop: 'Pendaftar user hari ini',
+                            }
+                        ]
+                    }
+                }
+            });
+            $('#dataTable4').DataTable({
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excel',
+                                messageTop: 'Data User'
+                            },
+                            {
+                                extend: 'pdf',
+                                messageTop: 'Data User'
+                            },
+                            {
+                                extend: 'print',
+                                messageTop: 'Data User'
+                            }
+                        ]
+                    }
+                }
+            });
         });
     </script>
 @endsection()

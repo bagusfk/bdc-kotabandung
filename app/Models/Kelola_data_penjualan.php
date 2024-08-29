@@ -7,19 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kelola_data_penjualan extends Model
 {
-    use HasFactory;
-
-    protected $table = 'kelola_data_penjualans';
     protected $fillable = [
-        'date_sale',
-        'kelola_data_ksm_id',
-        'sale',
-        'profit',
-        'loss',
+        'kas',
+        'bank_bjb',
+        'bank_bandung',
+        'sewa_bayar_dimuka',
+        'piutang',
+        'persediaan',
+        'inventaris',
+        'investasi',
+        'harta_tetap',
+        'penyusutan_harta_tetap',
+        'hutang',
+        'alokasi_bop_komite',
+        'alokasi_bop_pengelola',
+        'alokasi_gaji_pengelola',
+        'alokasi_gaji_tenaga_ahli',
+        'alokasi_pengembangan_kapasitas',
+        'alokasi_sewa_kantor_dan_peralatan',
+        'modal_bdc',
+        'modal_awal',
+        'pemupukan_modal_dari_laba',
+        'lr_tahun_lalu',
+        'lr_tahun_berjalan',
     ];
-
-    public function ksm()
-    {
-        return $this->belongsTo(Kelola_data_ksm::class, 'kelola_data_ksm_id');
-    }
 }

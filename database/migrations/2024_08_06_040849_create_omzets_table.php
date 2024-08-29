@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('omzets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kelola_data_ksm_id')->constrained('kelola_data_ksms')->onDelete('cascade');
+            $table->string('month', 128)->nullable();
             $table->double('omzet')->nullable();
+            $table->double('total_omzet')->nullable();
+            $table->double('profit')->nullable();
             $table->timestamps();
         });
     }

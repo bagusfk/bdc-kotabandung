@@ -40,9 +40,6 @@
                     <th scope="col" class="px-6 py-3">
                         Kategori Barang
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        #
-                    </th>
                 </tr>
             </thead>
             <tbody id="dataList">
@@ -75,19 +72,6 @@
                         <td class="px-6 py-4">
                             {{ $data->category->category }}
                         </td>
-                        <td class="px-6 py-4 flex">
-                            <a href="{{ url('/edit-item/' . $data->id) }}"
-                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
-                            <form method="POST" action="{{ url('/delete-item/' . $data->id) }}"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('delete')
-                                <button type="submit" class="font-medium text-red-700 dark:text-blue-500 hover:underline"
-                                    onclick="return confirm('Are you sure you want to search Google?')">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -98,11 +82,15 @@
             layout: {
                 topStart: {
                     buttons: [{
-                        text: 'Add',
-                        action: function() {
-                            window.location.href = '/tambah-barang';
+                            extend: 'excel'
+                        },
+                        {
+                            extend: 'pdf'
+                        },
+                        {
+                            extend: 'print'
                         }
-                    }]
+                    ]
                 }
             }
         });

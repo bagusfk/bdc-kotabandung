@@ -11,12 +11,9 @@ class Omzet extends Model
 
     protected $table = 'omzets';
     protected $fillable = [
-        'kelola_data_ksm_id',
-        'omzet'
+        'month',
+        'omzet',
+        'total_omzet',
+        'profit'
     ];
-
-    public function ksm()
-    {
-        return $this->belongsTo(Kelola_data_ksm::class, 'kelola_data_ksm_id');
-    }
 }

@@ -22,6 +22,12 @@
         .dataTables_length>label>select {
             width: 75px;
         }
+
+        .table12,
+        .table12 td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
     </style>
 
     <div class="flex justify-between">
@@ -359,111 +365,174 @@
     </div>
 
     <div id="labarugi_content">
-        <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
+        <div class="relative overflow-x-auto my-[1rem] min-h-[20rem]">
             <label for="" class="font-bold text-lg block text-center">Laba / Rugi</label>
-            <table class="display nowrap text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 pt-[.5rem]"
-                id="dataTable2" style="width: 100%;">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Tanggal
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Nama KSM
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Penjualan
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Laba
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            Rugi
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            #
-                        </th>
+            <button type="button"
+                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
+                data-modal-toggle="createModalButton" data-modal-target="createModalButton"
+                id="createAddButton">Edit</button>
+            @foreach ($finance as $data)
+                <table class="table12" width="100%" cellspacing="0" cellpadding="10">
+                    <tr style="font-weight: bold">
+                        <td colspan="3" align="center">AKTIVA</td>
+                        <td colspan="3" align="center">PASSIVA</td>
                     </tr>
-                </thead>
-                <tbody id="dataList2">
-                    @if ($finance->isEmpty())
-                        <!-- Anda dapat menambahkan pesan atau tindakan lain jika tidak ada data -->
-                    @else
-                        @foreach ($finance as $finances)
-                            <tr>
-                                <td class="px-6 py-4 text-center">
-                                    {{ \Carbon\Carbon::parse($finances->date_sale)->format('d M Y') }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    {{ $finances->ksm->owner }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    {{ $finances->sale }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    {{ $finances->profit }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    {{ $finances->loss }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-
-                                    <button data-modal-target="popup-modal2" data-modal-toggle="popup-modal2"
-                                        class="text-red-600 border border-red-600 p-1.5" type="button">
-                                        Hapus
-                                    </button>
-
-                                    <div id="popup-modal2" tabindex="-1"
-                                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                        <div class="relative p-4 w-full max-w-md max-h-full">
-                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                                <button type="button"
-                                                    class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                    data-modal-hide="popup-modal2">
-                                                    <svg class="w-3 h-3" aria-hidden="true"
-                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 14 14">
-                                                        <path stroke="currentColor" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="2"
-                                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                    </svg>
-                                                    <span class="sr-only">Close modal</span>
-                                                </button>
-                                                <div class="p-4 md:p-5 text-center">
-                                                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
-                                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none" viewBox="0 0 20 20">
-                                                        <path stroke="currentColor" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="2"
-                                                            d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                    </svg>
-                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                                                        Hapus?</h3>
-                                                    <form action="{{ url('labarugi_destroy/' . $finances->id) }}"
-                                                        method="POST" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button data-modal-hide="popup-modal2" type="submit"
-                                                            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                                            Hapus
-                                                        </button>
-                                                    </form>
-                                                    <button data-modal-hide="popup-modal2" type="button"
-                                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tidak</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                </tbody>
-            </table>
+                    <tr>
+                        <td width="7%">1100</td>
+                        <td width="28%">KAS</td>
+                        <td width="15%">{{ $data->kas }}</td>
+                        <td width="7%">2100</td>
+                        <td width="28%">Hutang</td>
+                        <td width="15%">{{ $data->hutang }}</td>
+                    </tr>
+                    <tr>
+                        <td>1110</td>
+                        <td>Bank BJB</td>
+                        <td>{{ $data->bank_bjb }}</td>
+                        <td>2110</td>
+                        <td>Alokasi BOP Komite</td>
+                        <td>{{ $data->alokasi_bop_komite }}</td>
+                    </tr>
+                    <tr>
+                        <td>1111</td>
+                        <td>Bank BANDUNG</td>
+                        <td>{{ $data->bank_bandung }}</td>
+                        <td>2120</td>
+                        <td>Alokasi BOP Pengelola</td>
+                        <td>{{ $data->alokasi_bop_pengelola }}</td>
+                    </tr>
+                    <tr>
+                        <td>1120</td>
+                        <td>Sewa Bayar Dimuka</td>
+                        <td>{{ $data->sewa_bayar_dimuka }}</td>
+                        <td>2130</td>
+                        <td>Alokasi Gaji Pengelola</td>
+                        <td>{{ $data->alokasi_gaji_pengelola }}</td>
+                    </tr>
+                    <tr>
+                        <td>1130</td>
+                        <td>Piutang</td>
+                        <td>{{ $data->piutang }}</td>
+                        <td>2140</td>
+                        <td>Alokasi Gaji Tenaga Ahli</td>
+                        <td>{{ $data->alokasi_gaji_tenaga_ahli }}</td>
+                    </tr>
+                    <tr>
+                        <td>1140</td>
+                        <td>Persediaan</td>
+                        <td>{{ $data->persediaan }}</td>
+                        <td>2150</td>
+                        <td>Alokasi Pengembangan Kapasitas</td>
+                        <td>{{ $data->alokasi_pengembangan_kapasitas }}</td>
+                    </tr>
+                    <tr>
+                        <td>1150</td>
+                        <td>Inventaris</td>
+                        <td>{{ $data->inventaris }}</td>
+                        <td>2160</td>
+                        <td>Alokasi Sewa Kantor dan Peralatan</td>
+                        <td>{{ $data->alokasi_sewa_kantor_dan_peralatan }}</td>
+                    </tr>
+                    <tr>
+                        <td>1160</td>
+                        <td>Investasi</td>
+                        <td>{{ $data->investasi }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>1170</td>
+                        <td>Harta Tetap</td>
+                        <td>{{ $data->harta_tetap }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Penyusutan Harta Tetap</td>
+                        <td>{{ $data->penyusutan_harta_tetap }}</td>
+                        <td></td>
+                        <td align="right">Total Hutang</td>
+                        <td>{{ $totalHutang =
+                            $data->hutang +
+                            $data->alokasi_bop_komite +
+                            $data->alokasi_bop_pengelola +
+                            $data->alokasi_gaji_pengelola +
+                            $data->alokasi_gaji_tenaga_ahli +
+                            $data->alokasi_pengembangan_kapasitas +
+                            $data->alokasi_sewa_kantor_dan_peralatan }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>3100</td>
+                        <td>Modal BDC</td>
+                        <td>{{ $data->modal_bdc }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>3110</td>
+                        <td>Modal Awal</td>
+                        <td>{{ $data->modal_awal }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>3120</td>
+                        <td>Pemupukan Modal Dari Laba</td>
+                        <td>{{ $data->pemupukan_modal_dari_laba }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>L/R Tahun Lalu</td>
+                        <td>{{ $data->lr_tahun_lalu }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>L/R Tahun Berjalan</td>
+                        <td>{{ $data->lr_tahun_berjalan }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td align="right">Total Modal</td>
+                        <td>{{ $totalModal = $data->modal_bdc + $data->modal_awal + $data->pemupukan_modal_dari_laba + $data->lr_tahun_lalu + $data->lr_tahun_berjalan }}
+                        </td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td colspan="2">TOTAL KEKAYAAN</td>
+                        <td>{{ $data->kas + $data->bank_bjb + $data->bank_bandung + $data->sewa_bayar_dimuka + $data->piutang + $data->persediaan + $data->inventaris + $data->investasi + $data->harta_tetap + $data->penyusutan_harta_tetap }}
+                        </td>
+                        <td colspan="2">TOTAL KEWAJIBAN MODAL</td>
+                        <td>{{ $totalHutang + $totalModal }}
+                        </td>
+                    </tr>
+                </table>
+            @endforeach
         </div>
-
-        <button type="button" class="btn btn-primary" data-modal-toggle="createModalButton"
-            data-modal-target="createModalButton" style="display:none;" id="createAddButton">Add</button>
 
 
         <div id="createModalButton" tabindex="-1" role="dialog"
@@ -472,7 +541,7 @@
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Tambah Data
+                            Edit Data
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -491,33 +560,134 @@
                             @csrf
                             @method('PUT')
                             <div class="mb-4">
-                                <label for="date_sale" class="block text-sm font-medium text-gray-700">Tanggal</label>
-                                <input type="date" name="date_sale" id="date_sale"
+                                <label for="kas" class="block text-sm font-medium text-gray-700">Kas</label>
+                                <input onkeypress="" type="number" name="kas" id="kas"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                             <div class="mb-4">
-                                <label for="kelola_data_ksm_id" class="block text-sm font-medium text-gray-700">Nama
-                                    KSM</label>
-                                <select name="kelola_data_ksm_id" id="kelola_data_ksm_id"
-                                    class="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @foreach ($ksm as $ksms)
-                                        <option value="{{ $ksms->id }}">{{ $ksms->owner }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label for="sale" class="block text-sm font-medium text-gray-700">Penjualan</label>
-                                <input onkeypress="" type="number" name="sale" id="sale"
+                                <label for="bank_bjb" class="block text-sm font-medium text-gray-700">Bank BJB</label>
+                                <input onkeypress="" type="number" name="bank_bjb" id="bank_bjb"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                             <div class="mb-4">
-                                <label for="profit" class="block text-sm font-medium text-gray-700">Laba</label>
-                                <input onkeypress="" type="number" name="profit" id="profit"
+                                <label for="bank_bandung" class="block text-sm font-medium text-gray-700">Bank
+                                    BANDUNG</label>
+                                <input onkeypress="" type="number" name="bank_bandung" id="bank_bandung"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                             <div class="mb-4">
-                                <label for="loss" class="block text-sm font-medium text-gray-700">Rugi</label>
-                                <input onkeypress="" type="number" name="loss" id="loss"
+                                <label for="sewa_bayar_dimuka" class="block text-sm font-medium text-gray-700">Sewa Bayar
+                                    Dimuka</label>
+                                <input onkeypress="" type="number" name="sewa_bayar_dimuka" id="sewa_bayar_dimuka"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="piutang" class="block text-sm font-medium text-gray-700">Piutang</label>
+                                <input onkeypress="" type="number" name="piutang" id="piutang"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="persediaan" class="block text-sm font-medium text-gray-700">Persediaan</label>
+                                <input onkeypress="" type="number" name="persediaan" id="persediaan"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="inventaris" class="block text-sm font-medium text-gray-700">Inventaris</label>
+                                <input onkeypress="" type="number" name="inventaris" id="inventaris"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="investasi" class="block text-sm font-medium text-gray-700">Investasi</label>
+                                <input onkeypress="" type="number" name="investasi" id="investasi"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="harta_tetap" class="block text-sm font-medium text-gray-700">Harta
+                                    Tetap</label>
+                                <input onkeypress="" type="number" name="harta_tetap" id="harta_tetap"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="penyusutan_harta_tetap"
+                                    class="block text-sm font-medium text-gray-700">Penyusutan Harta Tetap</label>
+                                <input onkeypress="" type="number" name="penyusutan_harta_tetap"
+                                    id="penyusutan_harta_tetap"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="hutang" class="block text-sm font-medium text-gray-700">Hutang</label>
+                                <input onkeypress="" type="number" name="hutang" id="hutang"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="alokasi_bop_komite" class="block text-sm font-medium text-gray-700">Alokasi
+                                    BOP Komite</label>
+                                <input onkeypress="" type="number" name="alokasi_bop_komite" id="alokasi_bop_komite"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="alokasi_bop_pengelola" class="block text-sm font-medium text-gray-700">Alokasi
+                                    BOP Pengelola</label>
+                                <input onkeypress="" type="number" name="alokasi_bop_pengelola"
+                                    id="alokasi_bop_pengelola"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="alokasi_gaji_pengelola"
+                                    class="block text-sm font-medium text-gray-700">Alokasi gaji Pengelola</label>
+                                <input onkeypress="" type="number" name="alokasi_gaji_pengelola"
+                                    id="alokasi_gaji_pengelola"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="alokasi_gaji_tenaga_ahli"
+                                    class="block text-sm font-medium text-gray-700">Alokasi Gaji Tenaga Ahli</label>
+                                <input onkeypress="" type="number" name="alokasi_gaji_tenaga_ahli"
+                                    id="alokasi_gaji_tenaga_ahli"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="alokasi_pengembangan_kapasitas"
+                                    class="block text-sm font-medium text-gray-700">Alokasi Pengembangan Kapasitas</label>
+                                <input onkeypress="" type="number" name="alokasi_pengembangan_kapasitas"
+                                    id="alokasi_pengembangan_kapasitas"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="alokasi_sewa_kantor_dan_peralatan"
+                                    class="block text-sm font-medium text-gray-700">Alokasi Sewa Kantor dan
+                                    Peralatan</label>
+                                <input onkeypress="" type="number" name="alokasi_sewa_kantor_dan_peralatan"
+                                    id="alokasi_sewa_kantor_dan_peralatan"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="modal_bdc" class="block text-sm font-medium text-gray-700">Modal BDC</label>
+                                <input onkeypress="" type="number" name="modal_bdc" id="modal_bdc"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="modal_awal" class="block text-sm font-medium text-gray-700">Modal Awal</label>
+                                <input onkeypress="" type="number" name="modal_awal" id="modal_awal"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="pemupukan_modal_dari_laba"
+                                    class="block text-sm font-medium text-gray-700">Pemupukan Modal Dari Laba</label>
+                                <input onkeypress="" type="number" name="pemupukan_modal_dari_laba"
+                                    id="pemupukan_modal_dari_laba"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="lr_tahun_lalu" class="block text-sm font-medium text-gray-700">L/R Tahun
+                                    Lalu</label>
+                                <input onkeypress="" type="number" name="lr_tahun_lalu" id="lr_tahun_lalu"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="lr_tahun_berjalan" class="block text-sm font-medium text-gray-700">L/R Tahun
+                                    Berjalan</label>
+                                <input onkeypress="" type="number" name="lr_tahun_berjalan" id="lr_tahun_berjalan"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                             <div class="flex items-center justify-end">
@@ -534,11 +704,6 @@
     </div>
 
     <div id="omzet_content" class="relative">
-        <label for="" class="font-bold text-lg block text-center">Omzet / {{ $currentMonthName }}</label>
-
-        <div class="w-2/5 rounded-lg dark:bg-gray-800 p-4 md:p-6">
-            <canvas id="chartLine"></canvas>
-        </div>
 
         <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
             <label for="" class="font-bold text-lg block text-center">Omzet</label>
@@ -547,16 +712,28 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center">
-                            Nama KSM
+                            No
                         </th>
                         <th scope="col" class="px-6 py-3 text-center">
-                            Omzet
+                            Bulan
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Omzet / Bulan (Rp .)
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Jumlah Omzet (Rp .) (Akumulasi)
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Profit (Rp .)
                         </th>
                         <th scope="col" class="px-6 py-3 text-center">
                             #
                         </th>
                     </tr>
                 </thead>
+                @php
+                    $no = 1;
+                @endphp
                 <tbody id="dataList3">
                     @if ($omzet->isEmpty())
                         <!-- Anda dapat menambahkan pesan atau tindakan lain jika tidak ada data -->
@@ -564,10 +741,19 @@
                         @foreach ($omzet as $omzets)
                             <tr>
                                 <td class="px-6 py-4 text-center">
-                                    {{ $omzets->ksm->owner }}
+                                    {{ $no++ }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    {{ $omzets->omzet }}
+                                    {{ $omzets->month }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {{ 'Rp. ' . number_format($omzets->omzet, 0, ',', '.') }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {{ 'Rp. ' . number_format($omzets->total_omzet, 0, ',', '.') }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {{ 'Rp. ' . number_format($omzets->profit, 0, ',', '.') }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
 
@@ -623,6 +809,12 @@
                         @endforeach
                     @endif
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4">Jumlah Profit Tahun 2024 :</th>
+                        <th></th> <!-- This is where the total will be displayed -->
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
@@ -655,18 +847,25 @@
                             @csrf
                             @method('PUT')
                             <div class="mb-4">
-                                <label for="kelola_data_ksm_id" class="block text-sm font-medium text-gray-700">Nama
-                                    KSM</label>
-                                <select name="kelola_data_ksm_id" id="kelola_data_ksm_id"
-                                    class="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @foreach ($ksm as $ksms)
-                                        <option value="{{ $ksms->id }}">{{ $ksms->owner }}</option>
-                                    @endforeach
-                                </select>
+                                <label for="bulan" class="block text-sm font-medium text-gray-700">Bulan</label>
+                                <input onkeypress="" type="text" name="month" id="bulan"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                             <div class="mb-4">
-                                <label for="omzet" class="block text-sm font-medium text-gray-700">Omzet</label>
-                                <input onkeypress="" type="number" name="omzet" id="omzet"
+                                <label for="omzet_bulan" class="block text-sm font-medium text-gray-700">Omzet / Bulan (Rp
+                                    .)</label>
+                                <input onkeypress="" type="number" name="omzet" id="omzet_bulan"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="jumlah_omzet" class="block text-sm font-medium text-gray-700">Jumlah Omzet (Rp
+                                    .) (Akumulasi)</label>
+                                <input onkeypress="" type="number" name="total_omzet" id="jumlah_omzet"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="profit" class="block text-sm font-medium text-gray-700">Profit</label>
+                                <input onkeypress="" type="number" name="profit" id="profit"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                             <div class="flex items-center justify-end">
@@ -731,39 +930,49 @@
                     }
                 }
             });
-            $('#dataTable2').DataTable({
-                layout: {
-                    topStart: {
-                        buttons: [{
-                                text: 'Add',
-                                action: function() {
-                                    // Trigger the hidden button with data-target for create
-                                    $('#createAddButton').click();
-                                }
-                            },
-                            {
-                                extend: 'excel',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                            },
-                            {
-                                extend: 'pdf',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                            },
-                            {
-                                extend: 'print',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                            }
-                        ]
-                    }
-                }
-            });
             $('#dataTable3').DataTable({
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api();
+
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\Rp.,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i :
+                            0;
+                    };
+
+                    // Total over all pages
+                    total = api
+                        .column(4)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Total over this page
+                    pageTotal = api
+                        .column(4, {
+                            page: 'current'
+                        })
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var formatRupiah = function(num) {
+                        return 'Rp. ' + num.toLocaleString('id-ID', {
+                            style: 'decimal',
+                            maximumFractionDigits: 0
+                        });
+                    };
+
+                    // Update footer with formatted totals
+                    $(api.column(4).footer()).html(
+                        formatRupiah(pageTotal) + ' ( ' + formatRupiah(total) + ' total)'
+                    );
+                },
                 layout: {
                     topStart: {
                         buttons: [{
@@ -826,60 +1035,6 @@
                     omzetContent.classList.remove('hidden');
                 }
             });
-        });
-        // Data dari server (Laravel Blade template)
-        var debt = @json($debt);
-        var labels = @json($labels);
-
-        // Fungsi untuk menghasilkan warna RGB acak
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        // Generate array warna yang sama panjang dengan data
-        var backgroundColors = debt.map(() => getRandomColor());
-
-        const ctx = document.getElementById('chartLine').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Omzet',
-                    data: debt,
-                    backgroundColor: backgroundColors,
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    datalabels: {
-                        display: true,
-                        color: '#fff',
-                        anchor: 'center',
-                        align: 'center',
-                        formatter: (value) => {
-                            return `${value}`; // Menampilkan nilai omzet
-                        },
-                        font: {
-                            weight: 'bold',
-                            size: 14
-                        },
-                        offset: 0
-                    },
-                    legend: {
-                        position: 'top',
-                    }
-                }
-            },
-            plugins: [ChartDataLabels]
         });
     </script>
 

@@ -495,11 +495,100 @@ class AdminController extends Controller
         return view('pages.admin.event.daftar.view', $data);
     }
 
+    public function penjualan_event()
+    {
+        $data['laporan'] = Laporan_kegiatan_event::all();
+        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
+
+        return view('pages.admin.event.laporan.penjualan', $data);
+    }
+
     public function laporan_event()
     {
         $data['laporan'] = Laporan_kegiatan_event::all();
+        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
 
-        return view('pages.admin.event.laporan.view', $data);
+        return view('pages.admin.laporan.laporanevent', $data);
+    }
+
+    public function laporan_produk()
+    {
+        $data['items'] = Stokbarang::all();
+
+        return view('pages.admin.laporan.laporanproduk', $data);
+    }
+
+    public function laporan_penjualan()
+
+    {
+        $data['order'] = Order::select('orders.transaction_id as transaction', 'stokbarangs.name as product_name', 'transactions.total_qty as total_qty', 'orders.price as price', 'kelola_data_ksms.brand_name as brand_name', 'users.name as user_name', 'users.address as user_address', 'transactions.expedition as expedition', 'transactions.expedition_type as expedition_type', 'transactions.no_resi as no_resi', 'transactions.total_price as total_price', 'transactions.order_status as order_status')
+            ->join('stokbarangs', 'orders.product_id', '=', 'stokbarangs.id')
+            ->join('kelola_data_ksms', 'kelola_data_ksms.id', '=', 'stokbarangs.kelola_data_ksm_id')
+            ->join('transactions', 'orders.transaction_id', '=', 'transactions.id')
+            ->join('users', 'transactions.buyer_id', '=', 'users.id')
+            ->groupBy('transaction', 'product_name', 'price', 'brand_name')
+            ->get();
+
+        // dd($data['order']);
+
+        $productsByCategory = $this->getLarisProductsByCategory();
+        $data['penjualan'] = Laporan_penjualan::all();
+        $data['penjual'] = Stokbarang::all();
+        $data['pembeli'] = Beli::all();
+
+        // Inisialisasi array untuk labels dan data
+        $labels = [];
+        $qty = [];
+        $ksm = [];
+
+        $ksmCounts = [];
+        $labelCount = [];
+        $ksmTotalCounts = [];
+
+        // Loop melalui data pembelian untuk mendapatkan nama produk dan kuantitas
+        foreach ($data['pembeli'] as $pembeli) {
+            $productName = $pembeli->product->name;
+            $quantity = $pembeli->qty;
+            $ksmName = $pembeli->product->user->ksm->brand_name;
+
+            $labels[] = $productName;
+            $qty[] = $quantity;
+            $ksm[] = $ksmName;
+
+            if (!isset($ksmCounts[$ksmName])) {
+                $ksmCounts[$ksmName] = 0;
+                $ksmTotalCounts[$ksmName] = 0;
+            }
+
+            if (!isset($labelCount[$productName])) {
+                $labelCount[$productName] = 0;
+            }
+            $ksmCounts[$ksmName] += $quantity;
+            $labelCount[$productName] += $quantity;
+        }
+        // Siapkan data untuk chart
+        $data['chartSale'] = [
+            'labels' => $labels,
+            'qty' => $qty,
+            'ksmCount' => array_keys($ksmCounts),
+            'labelCount' => array_keys($labelCount),
+            'qtyCount' => array_values($labelCount),
+            'ksm' => $ksm,
+            'ksmTotalCounts' => array_values($ksmCounts) // Total per KSM
+        ];
+
+        return view('pages.admin.laporan.laporanpenjualan', $data, compact('productsByCategory'));
+    }
+
+    public function laporan_user()
+    {
+        $today = Carbon::today();
+        $data['ksm1'] = Kelola_data_ksm::whereDate('created_at', $today)->get();
+        $data['ksm2'] = Kelola_data_ksm::all();
+        $data['pembeli'] = User::whereDate('created_at', $today)->get();
+        $data['pembeli2'] = User::all();
+
+        return view('pages.admin.laporan.laporanuser', $data);
     }
 
     public function dokumentasi_event()
@@ -559,7 +648,7 @@ class AdminController extends Controller
         $laporan->save();
 
 
-        return redirect('/laporan-event');
+        return redirect('/penjualan-event');
     }
 
     public function edit_laporan_event($id)
@@ -840,55 +929,7 @@ class AdminController extends Controller
             ->groupBy('transaction', 'product_name', 'price', 'brand_name')
             ->get();
 
-        // dd($data['order']);
-
-        $productsByCategory = $this->getLarisProductsByCategory();
-        $data['penjualan'] = Laporan_penjualan::all();
-        $data['penjual'] = Stokbarang::all();
-        $data['pembeli'] = Beli::all();
-
-        // Inisialisasi array untuk labels dan data
-        $labels = [];
-        $qty = [];
-        $ksm = [];
-
-        $ksmCounts = [];
-        $labelCount = [];
-        $ksmTotalCounts = [];
-
-        // Loop melalui data pembelian untuk mendapatkan nama produk dan kuantitas
-        foreach ($data['pembeli'] as $pembeli) {
-            $productName = $pembeli->product->name;
-            $quantity = $pembeli->qty;
-            $ksmName = $pembeli->product->user->ksm->brand_name;
-
-            $labels[] = $productName;
-            $qty[] = $quantity;
-            $ksm[] = $ksmName;
-
-            if (!isset($ksmCounts[$ksmName])) {
-                $ksmCounts[$ksmName] = 0;
-                $ksmTotalCounts[$ksmName] = 0;
-            }
-
-            if (!isset($labelCount[$productName])) {
-                $labelCount[$productName] = 0;
-            }
-            $ksmCounts[$ksmName] += $quantity;
-            $labelCount[$productName] += $quantity;
-        }
-        // Siapkan data untuk chart
-        $data['chartSale'] = [
-            'labels' => $labels,
-            'qty' => $qty,
-            'ksmCount' => array_keys($ksmCounts),
-            'labelCount' => array_keys($labelCount),
-            'qtyCount' => array_values($labelCount),
-            'ksm' => $ksm,
-            'ksmTotalCounts' => array_values($ksmCounts) // Total per KSM
-        ];
-
-        return view('pages.admin.sale.view', $data, compact('productsByCategory'));
+        return view('pages.admin.sale.view', $data);
     }
 
     public function manage_finance()
@@ -921,38 +962,20 @@ class AdminController extends Controller
         $currentMonth = Carbon::now()->format('m'); // For numeric representation
         // or
         $currentMonthName = Carbon::now()->translatedFormat('F'); // For full month name
-        $debtData = Omzet::select(
-            'kelola_data_ksm_id',
-            'kelola_data_ksms.owner as ksm_owner', // Add the column from kelola_data_ksm table
-            DB::raw('SUM(omzet) as total_omzet'),
-            DB::raw('DATE_FORMAT(omzets.created_at, "%m") as month')
-        )
-            ->join('kelola_data_ksms', 'kelola_data_ksms.id', '=', 'omzets.kelola_data_ksm_id') // Adjust if needed
-            ->whereMonth('omzets.created_at', $currentMonth)
-            ->groupBy('month', 'kelola_data_ksm_id', 'ksm_owner')
-            ->get();
 
-        // Extract total_omzet values
-        $debt = $debtData->pluck('total_omzet')->toArray();
-        // Extract month labels and KSM names
-        $labels = $debtData->map(function ($item) {
-            return $item->ksm_owner; // Combine KSM name and month
-        })->toArray();
-        return view('pages.admin.finance.view', compact('neraca', 'finance', 'labels', 'debt', 'currentMonthName', 'ksm', 'omzet'));
+        return view('pages.admin.finance.view', compact('neraca', 'finance', 'currentMonthName', 'ksm', 'omzet'));
     }
 
     public function omzet_store(Request $request)
     {
-        $request->validate([
-            'kelola_data_ksm_id' => 'required',
+        $add = $request->validate([
+            'month' => 'required',
             'omzet' => 'required',
+            'total_omzet' => 'required',
+            'profit' => 'required',
         ]);
 
-        Omzet::create([
-            'kelola_data_ksm_id' => $request->input('kelola_data_ksm_id'),
-            'omzet' => $request->input('omzet'),
-        ]);
-        // dd($request);
+        Omzet::create($add);
         return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
     }
 
@@ -964,20 +987,41 @@ class AdminController extends Controller
 
     public function labarugi_store(Request $request)
     {
-        $request->validate([
-            'date_sale' => 'required',
-            'kelola_data_ksm_id' => 'required',
-            'sale' => 'required',
-            'profit' => 'required',
-            'loss' => 'required',
+        $data = $request->validate([
+            'kas' => 'nullable|numeric',
+            'bank_bjb' => 'nullable|numeric',
+            'bank_bandung' => 'nullable|numeric',
+            'sewa_bayar_dimuka' => 'nullable|numeric',
+            'piutang' => 'nullable|numeric',
+            'persediaan' => 'nullable|numeric',
+            'inventaris' => 'nullable|numeric',
+            'investasi' => 'nullable|numeric',
+            'harta_tetap' => 'nullable|numeric',
+            'penyusutan_harta_tetap' => 'nullable|numeric',
+            'hutang' => 'nullable|numeric',
+            'alokasi_bop_komite' => 'nullable|numeric',
+            'alokasi_bop_pengelola' => 'nullable|numeric',
+            'alokasi_gaji_pengelola' => 'nullable|numeric',
+            'alokasi_gaji_tenaga_ahli' => 'nullable|numeric',
+            'alokasi_pengembangan_kapasitas' => 'nullable|numeric',
+            'alokasi_sewa_kantor_dan_peralatan' => 'nullable|numeric',
+            'modal_bdc' => 'nullable|numeric',
+            'modal_awal' => 'nullable|numeric',
+            'pemupukan_modal_dari_laba' => 'nullable|numeric',
+            'lr_tahun_lalu' => 'nullable|numeric',
+            'lr_tahun_berjalan' => 'nullable|numeric',
         ]);
-        Kelola_data_penjualan::create([
-            'date_sale' => $request->input('date_sale'),
-            'kelola_data_ksm_id' => $request->input('kelola_data_ksm_id'),
-            'sale' => $request->input('sale'),
-            'profit' => $request->input('profit'),
-            'loss' => $request->input('loss')
-        ]);
+
+        $penjualan = Kelola_data_penjualan::find(1);
+
+        if ($penjualan) {
+            // Jika data ditemukan, lakukan update
+            $penjualan->update($data);
+        } else {
+            // Jika data tidak ditemukan, lakukan create
+            Kelola_data_penjualan::create($data);
+        }
+
         return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
     }
 

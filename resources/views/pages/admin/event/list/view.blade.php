@@ -89,33 +89,11 @@
                 layout: {
                     topStart: {
                         buttons: [{
-                                text: 'Add',
-                                action: function() {
-                                    window.location.href = '/tambah-event';
-                                }
-                            },
-                            {
-                                extend: 'excel',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                                // messageBottom: null
-                            },
-                            {
-                                extend: 'pdf',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                                // messageBottom: null
-                            },
-                            {
-                                extend: 'print',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                                // messageBottom: null
+                            text: 'Add',
+                            action: function() {
+                                window.location.href = '/tambah-event';
                             }
-                        ]
+                        }]
                     }
                 }
             });
