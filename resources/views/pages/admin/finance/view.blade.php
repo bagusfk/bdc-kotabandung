@@ -1,6 +1,9 @@
 @extends('layouts.appadmin')
 @section('title', 'Kelola Penjualan')
 @section('content')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+
 
     <style>
         th {
@@ -108,111 +111,157 @@
                 </div>
             @endif
         </div>
-        <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
+        <div class="relative overflow-x-auto my-[1rem] min-h-[20rem]">
             <label for="" class="font-bold text-lg block text-center">Neraca</label>
-            <table class="display nowrap text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 pt-[.5rem]"
-                id="dataTable" style="width:100%;">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+            <button type="button"
+                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
+                data-modal-toggle="tableModal1" data-modal-target="tableModal1" id="openModal">Edit</button>
+            <button
+                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
+                onclick="exportToExcel('neraca_table', 'Laporan_Neraca')">Export to Excel</button>
+            <button
+                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
+                onclick="exportToPDF('neraca_table', 'Laporan_Neraca')">Export to PDF</button>
+            @foreach ($neraca as $neracas)
+                @php
+                    $harga_peroleh =
+                        $neracas->persediaan_barang_awal +
+                        $neracas->pembelian_barang +
+                        $neracas->biaya_pengiriman +
+                        $neracas->biaya_lain;
+                @endphp
+                <table id="neraca_table" class="table12" width="100%" cellspacing="0" cellpadding="10">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-center">Tanggal</th>
-                        <th scope="col" class="px-6 py-3 text-center">Kas</th>
-                        <th scope="col" class="px-6 py-3 text-center">Piutang</th>
-                        <th scope="col" class="px-6 py-3 text-center">Perlengkapan</th>
-                        <th scope="col" class="px-6 py-3 text-center">Peralatan</th>
-                        <th scope="col" class="px-6 py-3 text-center">Utang</th>
-                        <th scope="col" class="px-6 py-3 text-center">Modal</th>
-                        <th scope="col" class="px-6 py-3 text-center">Keterangan</th>
-                        <th scope="col" class="px-6 py-3 text-center">#</th>
+                        <td>KODE</td>
+                        <td>PENJUALAN DAN PENDAPATAN</td>
+                        <td></td>
+                        <td></td>
                     </tr>
-                </thead>
-                <tbody id="dataList">
-                    @foreach ($neraca as $data)
-                        <tr class="text-center border-b border-black">
-                            <td class="pt-3 pb-1 px-6 border-r border-slate-400">
-                                {{ \Carbon\Carbon::parse($data->input_date)->format('d M Y') }}</td>
-                            <td class="pt-3 pb-1 px-6 border-r border-slate-400">{{ $data->cash }}</td>
-                            <td class="pt-3 pb-1 px-6 border-r border-slate-400">{{ $data->receivables }}</td>
-                            <td class="pt-3 pb-1 px-6 border-r border-slate-400">{{ $data->supplies }}</td>
-                            <td class="pt-3 pb-1 px-6 border-r border-slate-400">{{ $data->equipment }}</td>
-                            <td class="pt-3 pb-1 px-6 border-r border-slate-400">{{ $data->debt }}</td>
-                            <td class="pt-3 pb-1 px-6 border-r border-slate-400">{{ $data->capital }}</td>
-                            <td class="pt-3 pb-1 px-6">{{ $data->information }}</td>
-                            <td>
-                                <button class="text-primary border border-primary p-1.5" data-modal-target="editModal"
-                                    data-modal-toggle="editModal" onclick="editData({{ $data }})">Edit</button>
-
-
-                                <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
-                                    class="text-red-600 border border-red-600 p-1.5" type="button">
-                                    Hapus
-                                </button>
-
-
-
-                                <div id="popup-modal" tabindex="-1"
-                                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                    <div class="relative p-4 w-full max-w-md max-h-full">
-                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                            <button type="button"
-                                                class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                data-modal-hide="popup-modal">
-                                                <svg class="w-3 h-3" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 14 14">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" stroke-width="2"
-                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                </svg>
-                                                <span class="sr-only">Close modal</span>
-                                            </button>
-                                            <div class="p-4 md:p-5 text-center">
-                                                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
-                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 20 20">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" stroke-width="2"
-                                                        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                </svg>
-                                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                                                    Hapus?</h3>
-                                                <form action="{{ url('neraca_destroy/' . $data->id) }}" method="POST"
-                                                    style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button data-modal-hide="popup-modal" type="submit"
-                                                        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                                        Hapus
-                                                    </button>
-                                                </form>
-                                                <button data-modal-hide="popup-modal" type="button"
-                                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tidak</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    <tr>
+                        <td>4100</td>
+                        <td>Penjualan</td>
+                        <td></td>
+                        <td>{{ $neracas->penjualan }}</td>
+                    </tr>
+                    <tr>
+                        <td>4120</td>
+                        <td>Diskon</td>
+                        <td></td>
+                        <td>{{ $neracas->diskon }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Jumlah Penjualan</td>
+                        <td></td>
+                        <td>{{ 'Rp' . number_format($neracas->penjualan + $neracas->diskon, 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>PENDAPATAN</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>4300</td>
+                        <td>Pendapatan Komisi</td>
+                        <td></td>
+                        <td>{{ $neracas->pendapatan_komisi }}</td>
+                    </tr>
+                    <tr>
+                        <td>4400</td>
+                        <td>Jasa Bank</td>
+                        <td></td>
+                        <td>{{ $neracas->jasa_bank }}</td>
+                    </tr>
+                    <tr>
+                        <td>4500</td>
+                        <td>Pendapatan Lainnya</td>
+                        <td></td>
+                        <td>{{ $neracas->pendapatan_lainnya }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Jumlah Pendapatan</td>
+                        <td></td>
+                        <td>{{ 'Rp . ' . number_format($neracas->jasa_bank + $neracas->pendapatan_lainnya + $neracas->pendapatan_komisi, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>TOTAL PENJUALAN DAN PENDAPATAN</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Persediaan Barang Dagang Awal</td>
+                        <td></td>
+                        <td>{{ $neracas->persediaan_barang_awal }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Harga Pokok Penjualan</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>5010</td>
+                        <td>Pembelian Barang</td>
+                        <td></td>
+                        <td>{{ $neracas->pembelian_barang }}</td>
+                    </tr>
+                    <tr>
+                        <td>5020</td>
+                        <td>Biaya Pengiriman Barang</td>
+                        <td></td>
+                        <td>{{ $neracas->biaya_pengiriman }}</td>
+                    </tr>
+                    <tr>
+                        <td>5030</td>
+                        <td>Biaya Lain-lain</td>
+                        <td></td>
+                        <td>{{ $neracas->biaya_lain }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Harga Perolehan</td>
+                        <td></td>
+                        <td>{{ 'Rp . ' . number_format($harga_peroleh, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Persediaan Barang Dagang Akhir</td>
+                        <td></td>
+                        <td>{{ $neracas->persediaan_barang_akhir }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Harga Pokok Penjualan</td>
+                        <td></td>
+                        <td>{{ 'Rp . ' . number_format($harga_peroleh - $neracas->persediaan_barang_akhir, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                </table>
+            @endforeach
         </div>
-
-        <!-- Hidden button to trigger the modal -->
-        <button type="button" class="btn btn-primary" data-modal-toggle="createModal" data-modal-target="createModal"
-            style="display:none;" id="triggerCreateModalButton">Add</button>
-
-        <!-- Modal HTML -->
-        <div id="createModal" tabindex="-1" role="dialog"
+        <div id="tableModal1" tabindex="-1" role="dialog"
             class="fixed top-0 modal left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative w-full max-w-2xl max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Tambah Data Neraca
+                            Edit Data
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="createModal">
+                            data-modal-hide="tableModal1">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
@@ -222,140 +271,88 @@
                             <span class="sr-only">Close modal</span>
                         </button>
                     </div>
+
+                    <!-- Modal Body with Form -->
                     <div class="p-6 space-y-6">
                         <form id="createForm" action="{{ route('neraca_store') }}" method="POST">
                             @csrf
                             @method('PUT')
+                            <!-- Penjualan -->
                             <div class="mb-4">
-                                <label for="input_date" class="block text-sm font-medium text-gray-700">Tanggal</label>
-                                <input type="date" name="input_date" id="input_date"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                            <div class="mb-4">
-                                <label for="cash" class="block text-sm font-medium text-gray-700">Kas</label>
-                                <input onkeypress="" type="number" name="cash" id="cash"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                            <div class="mb-4">
-                                <label for="receivables" class="block text-sm font-medium text-gray-700">Piutang</label>
-                                <input onkeypress="" type="number" name="receivables" id="receivables"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                            <div class="mb-4">
-                                <label for="supplies" class="block text-sm font-medium text-gray-700">Perlengkapan</label>
-                                <input onkeypress="" type="number" name="supplies" id="supplies"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                            <div class="mb-4">
-                                <label for="equipment" class="block text-sm font-medium text-gray-700">Peralatan</label>
-                                <input onkeypress="" type="number" name="equipment" id="equipment"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                            <div class="mb-4">
-                                <label for="debt" class="block text-sm font-medium text-gray-700">Utang</label>
-                                <input onkeypress="" type="number" name="debt" id="debt"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                            <div class="mb-4">
-                                <label for="capital" class="block text-sm font-medium text-gray-700">Modal</label>
-                                <input onkeypress="" type="number" name="capital" id="capital"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                            <div class="mb-4">
-                                <label for="information"
-                                    class="block text-sm font-medium text-gray-700">Keterangan</label>
-                                <textarea name="information" id="information"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
-                            </div>
-                            <div class="flex items-center justify-end">
-                                <button type="submit"
-                                    class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Simpan
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Edit Modal --}}
-        <div id="editModal" tabindex="-1"
-            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative w-full max-w-2xl max-h-full">
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Edit Data Neraca
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="editModal">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <div class="p-6 space-y-6">
-                        <form id="editForm" action="" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="id" id="edit_id">
-                            <div class="mb-4">
-                                <label for="edit_input_date"
-                                    class="block text-sm font-medium text-gray-700">Tanggal</label>
-                                <input type="date" name="input_date" id="edit_input_date"
+                                <label for="penjualan" class="block text-sm font-medium text-gray-700">Penjualan</label>
+                                <input type="number" name="penjualan" id="penjualan"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     required>
                             </div>
+                            <!-- Diskon -->
                             <div class="mb-4">
-                                <label for="edit_cash" class="block text-sm font-medium text-gray-700">Kas</label>
-                                <input type="number" name="cash" id="edit_cash"
+                                <label for="diskon" class="block text-sm font-medium text-gray-700">Diskon</label>
+                                <input type="number" name="diskon" id="diskon"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
+                            <!-- Pendapatan Komisi -->
                             <div class="mb-4">
-                                <label for="edit_receivables"
-                                    class="block text-sm font-medium text-gray-700">Piutang</label>
-                                <input type="number" name="receivables" id="edit_receivables"
+                                <label for="pendapatan_komisi" class="block text-sm font-medium text-gray-700">Pendapatan
+                                    Komisi</label>
+                                <input type="number" name="pendapatan_komisi" id="pendapatan_komisi"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
+                            <!-- Jasa Bank -->
                             <div class="mb-4">
-                                <label for="edit_supplies"
-                                    class="block text-sm font-medium text-gray-700">Perlengkapan</label>
-                                <input type="number" name="supplies" id="edit_supplies"
+                                <label for="jasa_bank" class="block text-sm font-medium text-gray-700">Jasa Bank</label>
+                                <input type="number" name="jasa_bank" id="jasa_bank"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
+                            <!-- Pendapatan Lainnya -->
                             <div class="mb-4">
-                                <label for="edit_equipment"
-                                    class="block text-sm font-medium text-gray-700">Peralatan</label>
-                                <input type="number" name="equipment" id="edit_equipment"
+                                <label for="pendapatan_lainnya" class="block text-sm font-medium text-gray-700">Pendapatan
+                                    Lainnya</label>
+                                <input type="number" name="pendapatan_lainnya" id="pendapatan_lainnya"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
+                            <!-- Persediaan Barang Dagang Awal -->
                             <div class="mb-4">
-                                <label for="edit_debt" class="block text-sm font-medium text-gray-700">Utang</label>
-                                <input type="number" name="debt" id="edit_debt"
+                                <label for="persediaan_barang_awal"
+                                    class="block text-sm font-medium text-gray-700">Persediaan Barang Dagang Awal</label>
+                                <input type="number" name="persediaan_barang_awal" id="persediaan_barang_awal"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
+                            <!-- Pembelian Barang -->
                             <div class="mb-4">
-                                <label for="edit_capital" class="block text-sm font-medium text-gray-700">Modal</label>
-                                <input type="number" name="capital" id="edit_capital"
+                                <label for="pembelian_barang" class="block text-sm font-medium text-gray-700">Pembelian
+                                    Barang</label>
+                                <input type="number" name="pembelian_barang" id="pembelian_barang"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
+                            <!-- Biaya Pengiriman Barang -->
                             <div class="mb-4">
-                                <label for="edit_information"
-                                    class="block text-sm font-medium text-gray-700">Keterangan</label>
-                                <textarea name="information" id="edit_information"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                                <label for="biaya_pengiriman" class="block text-sm font-medium text-gray-700">Biaya
+                                    Pengiriman Barang</label>
+                                <input type="number" name="biaya_pengiriman" id="biaya_pengiriman"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
-                            <div class="flex items-center justify-end">
+                            <!-- Biaya Lain-lain -->
+                            <div class="mb-4">
+                                <label for="biaya_lain" class="block text-sm font-medium text-gray-700">Biaya
+                                    Lain-lain</label>
+                                <input type="number" name="biaya_lain" id="biaya_lain"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <!-- Persediaan Barang Dagang Akhir -->
+                            <div class="mb-4">
+                                <label for="persediaan_barang_akhir"
+                                    class="block text-sm font-medium text-gray-700">Persediaan Barang Dagang Akhir</label>
+                                <input type="number" name="persediaan_barang_akhir" id="persediaan_barang_akhir"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+
+                            <!-- Modal Footer with Submit Button -->
+                            <div class="flex justify-end mt-6">
+                                <button type="button"
+                                    class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 mr-2"
+                                    data-modal-toggle="tableModal1">Close</button>
                                 <button type="submit"
-                                    class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Simpan
-                                </button>
+                                    class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2">Simpan</button>
                             </div>
                         </form>
                     </div>
@@ -371,8 +368,14 @@
                 class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
                 data-modal-toggle="createModalButton" data-modal-target="createModalButton"
                 id="createAddButton">Edit</button>
+            <button
+                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
+                onclick="exportToExcel('labarugi_table', 'Laporan_Labarugi')">Export to Excel</button>
+            <button
+                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
+                onclick="exportToPDF('labarugi_table', 'Laporan_Labarugi')">Export to PDF</button>
             @foreach ($finance as $data)
-                <table class="table12" width="100%" cellspacing="0" cellpadding="10">
+                <table class="table12" width="100%" id="labarugi_table" cellspacing="0" cellpadding="10">
                     <tr style="font-weight: bold">
                         <td colspan="3" align="center">AKTIVA</td>
                         <td colspan="3" align="center">PASSIVA</td>
@@ -691,8 +694,11 @@
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                             <div class="flex items-center justify-end">
+                                <button type="button"
+                                    class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 mr-2"
+                                    data-modal-toggle="createModalButton">Close</button>
                                 <button type="submit"
-                                    class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2">
                                     Simpan
                                 </button>
                             </div>
@@ -898,38 +904,6 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#dataTable').DataTable({
-                layout: {
-                    topStart: {
-                        buttons: [{
-                                text: 'Add',
-                                action: function() {
-                                    // Trigger the hidden button with data-target for create
-                                    $('#triggerCreateModalButton').click();
-                                }
-                            },
-                            {
-                                extend: 'excel',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                            },
-                            {
-                                extend: 'pdf',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                            },
-                            {
-                                extend: 'print',
-                                exportOptions: {
-                                    columns: ':not(:last-child)'
-                                }
-                            }
-                        ]
-                    }
-                }
-            });
             $('#dataTable3').DataTable({
                 footerCallback: function(row, data, start, end, display) {
                     var api = this.api();
@@ -1008,34 +982,121 @@
     </script>
 
     <script>
-        const neracaRadio = document.getElementById('neraca_radio');
-        const neracaContent = document.getElementById('neraca_content');
-        const labarugiContent = document.getElementById('labarugi_content');
-        const omzetContent = document.getElementById('omzet_content');
+        document.addEventListener('DOMContentLoaded', function() {
+            const neracaRadio = document.getElementById('neraca_radio');
+            const labarugiRadio = document.getElementById('labarugi_radio');
+            const omzetRadio = document.getElementById('omzet_radio');
+            const neracaContent = document.getElementById('neraca_content');
+            const labarugiContent = document.getElementById('labarugi_content');
+            const omzetContent = document.getElementById('omzet_content');
 
-        if (neracaRadio.checked) {
-            neracaContent.classList.remove('hidden');
-            labarugiContent.classList.add('hidden');
-            omzetContent.classList.add('hidden');
+            if (neracaRadio.checked) {
+                neracaContent.classList.remove('hidden');
+                labarugiContent.classList.add('hidden');
+                omzetContent.classList.add('hidden');
+            }
+
+            // Get the selected category from the session
+            const selectCategory = "{{ session('selected_radio', '') }}";
+
+            // Set the correct radio button based on the session value
+            document.querySelectorAll('input[name="kategori"]').forEach(radio => {
+                if (radio.value === selectCategory) {
+                    radio.checked = true;
+                }
+
+                // Show/hide the content based on the selected radio button
+                radio.addEventListener('change', function() {
+                    if (this.value === 'neraca') {
+                        neracaContent.classList.remove('hidden');
+                        labarugiContent.classList.add('hidden');
+                        omzetContent.classList.add('hidden');
+                    } else if (this.value === 'labarugi') {
+                        neracaContent.classList.add('hidden');
+                        labarugiContent.classList.remove('hidden');
+                        omzetContent.classList.add('hidden');
+                    } else if (this.value === 'omzet') {
+                        neracaContent.classList.add('hidden');
+                        labarugiContent.classList.add('hidden');
+                        omzetContent.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Trigger change event for the initially selected radio
+            if (selectCategory) {
+                document.querySelector(`input[value="${selectCategory}"]`).dispatchEvent(new Event('change'));
+            }
+        });
+
+        function exportToExcel(tableID, filename = '') {
+            var downloadLink;
+            var dataType = 'application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+            // Specify file name
+            filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+            // Create download link element
+            downloadLink = document.createElement("a");
+
+            document.body.appendChild(downloadLink);
+
+            if (navigator.msSaveOrOpenBlob) {
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+                // Setting the file name
+                downloadLink.download = filename;
+
+                //triggering the function
+                downloadLink.click();
+            }
         }
 
-        document.querySelectorAll('input[name="kategori"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'neraca') {
-                    neracaContent.classList.remove('hidden');
-                    labarugiContent.classList.add('hidden');
-                    omzetContent.classList.add('hidden');
-                } else if (this.value === 'labarugi') {
-                    neracaContent.classList.add('hidden');
-                    labarugiContent.classList.remove('hidden');
-                    omzetContent.classList.add('hidden');
-                } else {
-                    neracaContent.classList.add('hidden');
-                    labarugiContent.classList.add('hidden');
-                    omzetContent.classList.remove('hidden');
+        function exportToPDF(tableID, filename = '') {
+            var pdf = new jsPDF('p', 'pt', 'a4'); // Ukuran halaman A4
+            var source = document.getElementById(tableID);
+
+            // Scroll ke elemen tabel agar terlihat
+            source.scrollIntoView();
+
+            html2canvas(source, {
+                scale: 3, // Perbesar skala untuk kualitas yang lebih tajam
+                useCORS: true, // Untuk menangani cross-origin issues
+                scrollY: 0, // Atasi scroll vertikal
+                scrollX: 0, // Atasi scroll horizontal
+            }).then(canvas => {
+                var imgData = canvas.toDataURL('image/png');
+
+                var imgWidth = 550; // Lebar gambar sesuai dengan lebar halaman PDF
+                var pageHeight = 840; // Tinggi halaman PDF
+                var imgHeight = canvas.height * imgWidth / canvas.width; // Sesuaikan tinggi gambar dengan lebar
+
+                var position = 40; // Posisi vertikal untuk gambar
+
+                // Jika gambar lebih tinggi dari halaman PDF, buat halaman baru untuk bagian bawah
+                var remainingHeight = imgHeight;
+                while (remainingHeight > 0) {
+                    pdf.addImage(imgData, 'PNG', 40, position, imgWidth, imgHeight);
+                    remainingHeight -= pageHeight;
+                    if (remainingHeight > 0) {
+                        pdf.addPage();
+                        position = 0;
+                    }
                 }
+
+                // Simpan PDF
+                pdf.save(filename + '.pdf');
             });
-        });
+        }
     </script>
+
 
 @endsection()

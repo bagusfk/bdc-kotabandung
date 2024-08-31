@@ -1022,7 +1022,9 @@ class AdminController extends Controller
             Kelola_data_penjualan::create($data);
         }
 
-        return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
+        $selectedRadio = 'labarugi';
+
+        return redirect()->back()->with('selected_radio', $selectedRadio)->with('success', 'Data berhasil diperbarui!');
     }
 
     public function labarugi_destroy($id)
@@ -1049,61 +1051,32 @@ class AdminController extends Controller
             ->make(true);
     }
 
-    public function neraca_update(Request $request, $id)
-    {
-        // dd($id);
-
-        $input_dates = $request->input('input_date');
-        $cashes = $request->input('cash');
-        $receivables = $request->input('receivables');
-        $supplies = $request->input('supplies');
-        $equipment = $request->input('equipment');
-        $debts = $request->input('debt');
-        $capitals = $request->input('capital');
-        $informations = $request->input('information');
-
-        $neraca = Neraca::findOrFail($id);
-        $neraca->input_date = $input_dates;
-        $neraca->cash = $cashes;
-        $neraca->receivables = $receivables;
-        $neraca->supplies = $supplies;
-        $neraca->equipment = $equipment;
-        $neraca->debt = $debts;
-        $neraca->capital = $capitals;
-        $neraca->information = $informations;
-
-        $neraca->update();
-
-        return redirect()->back()->with('status', 'Data Telah Diperbarui');
-    }
-
     public function neraca_store(Request $request)
     {
-        $input_dates = $request->input('input_date');
-        $cashes = $request->input('cash');
-        $receivables = $request->input('receivables');
-        $supplies = $request->input('supplies');
-        $equipment = $request->input('equipment');
-        $debts = $request->input('debt');
-        $capitals = $request->input('capital');
-        $informations = $request->input('information');
+        // Validate the input data
+        $validatedData = $request->validate([
+            'penjualan' => 'required|numeric',
+            'diskon' => 'nullable|numeric',
+            'pendapatan_komisi' => 'nullable|numeric',
+            'jasa_bank' => 'nullable|numeric',
+            'pendapatan_lainnya' => 'nullable|numeric',
+            'persediaan_barang_awal' => 'nullable|numeric',
+            'pembelian_barang' => 'nullable|numeric',
+            'biaya_pengiriman' => 'nullable|numeric',
+            'biaya_lain' => 'nullable|numeric',
+            'persediaan_barang_akhir' => 'nullable|numeric',
+        ]);
 
-        $neraca = new Neraca();
-        $neraca->input_date = $input_dates;
-        $neraca->cash = $cashes;
-        $neraca->receivables = $receivables;
-        $neraca->supplies = $supplies;
-        $neraca->equipment = $equipment;
-        $neraca->debt = $debts;
-        $neraca->capital = $capitals;
-        $neraca->information = $informations;
+        $neraca = Neraca::find(1);
 
-        if ($neraca->save()) {
-            // return redirect()->route('sse'); // Redirect to SSE route on success
-            return redirect()->back()->with('status', 'Data Berhasil Ditambahkan');
+        if ($neraca) {
+            // Jika data ditemukan, lakukan update
+            $neraca->update($validatedData);
+        } else {
+            // Jika data tidak ditemukan, lakukan create
+            Neraca::create($validatedData);
         }
-
-        return redirect()->back()->with('error', 'Failed to save data');
+        return redirect()->back()->with('status', 'Data Berhasil Ditambahkan');
     }
 
     public function neraca_destroy($id)
