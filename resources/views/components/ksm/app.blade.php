@@ -44,47 +44,37 @@
         <nav class="sticky top-0 z-50 h-16 bg-white shadow-sm">
             <div class="flex justify-between h-full px-4 mx-auto max-w-7xl">
                 <div class="flex h-full gap-3 w-fit">
-                    @if (request()->routeIs('dashboard_ksm'))
-                        <a href="/" class="flex items-center justify-center pr-1 my-auto border border-black rounded-full w-9 h-9">
-                            <svg class="w-6 h-6 text-gray-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
-                            </svg>
-                        </a>
-                    @endif
+                    <a href="{{ request()->routeIs('dashboard_ksm') ? '/' : '/dashboard-ksm' }}" class="flex items-center justify-center pr-1 my-auto border border-black rounded-full w-9 h-9">
+                        <svg class="w-6 h-6 text-gray-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+                        </svg>
+                    </a>
                     <div class="flex items-center h-12 my-auto text-3xl font-bold text-gray-700">Dashboard KSM</div>
                 </div>
                 <div class="flex items-center h-full">
-                    <button id="dropdownDelayButton" data-dropdown-toggle="dropdownDelay" data-dropdown-offset-distance="-80" data-dropdown-offset-skidding="150" data-dropdown-placement="left" data-dropdown-delay="0" data-dropdown-trigger="hover" class="flex items-center text-sm font-medium text-gray-900 rounded-full pe-1 hover:bg-gray-100 md:me-0" type="button">
+                    <button id="dropdownDelayButton" data-dropdown-toggle="dropdownDelay" data-dropdown-offset-distance="-80" data-dropdown-offset-skidding="40" data-dropdown-placement="left" data-dropdown-delay="0" data-dropdown-trigger="hover" class="flex items-center text-sm font-medium text-gray-900 rounded-full pe-1 hover:bg-gray-100 md:me-0" type="button">
                         <span class="sr-only">Open user menu</span>
                         <img class="w-8 h-8 rounded-full me-2" src="{{ asset('assets\default\image\default-picture.jpg') }}" alt="user photo">
                         <div class="flex items-center">
                             {{ Auth::user()->name }}
-                            {{-- <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg> --}}
+                            </svg>
                         </div>
                     </button>
                     <!-- Dropdown menu -->
-                    {{-- <div id="dropdownDelay" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow min-w-44 dark:bg-gray-700">
-                        <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                            <div>Bonnie Green</div>
-                            <div class="font-medium truncate">name@flowbite.com</div>
-                          </div>
-                          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUserAvatarButton">
-                            <li>
-                              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                            </li>
-                            <li>
-                              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                            </li>
-                            <li>
-                              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                            </li>
-                          </ul>
-                          <div class="py-2">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-                          </div>
-                    </div> --}}
+                    <div id="dropdownDelay" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow min-w-44 dark:bg-gray-700">
+                        <div class="py-2">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                                                                                        this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                            {{-- <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Logout</a> --}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
