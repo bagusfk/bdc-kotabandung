@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -7,15 +8,17 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key')}}"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ config('services.midtrans.client_key') }}"></script>
 </head>
-<body class="overflow-y-auto scroll">
+
+<body class="scroll overflow-y-auto">
     {{-- navbar --}}
     <div class="sticky top-0 z-50 bg-white shadow-md">
-        <div class="py-4 mx-auto max-w-7xl">
-            <div class="text-2xl font-bold ">
+        <div class="mx-auto max-w-7xl py-4">
+            <div class="text-2xl font-bold">
                 Bussiness Development Center
             </div>
         </div>
@@ -23,66 +26,82 @@
 
     {{-- content --}}
     <div class="bg-gray-50">
-        <div class="py-12 mx-auto max-w-7xl">
+        <div class="mx-auto max-w-7xl py-12">
             <div class="mb-4 text-3xl font-semibold">Pembayaran</div>
-            <div class="grid grid-cols-1 md:gap-4 md:grid-cols-3">
-                <div class="flex flex-col col-span-2 gap-4 mb-4">
-                    <div class="px-4 py-3 bg-white border-2 border-gray-100 rounded-lg">
-                        <div class="mb-2 font-bold text-gray-500 text-md">Alamat Pengiriman</div>
+            <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4">
+                <div class="col-span-2 mb-4 flex flex-col gap-4">
+                    <div class="rounded-lg border-2 border-gray-100 bg-white px-4 py-3">
+                        <div class="text-md mb-2 font-bold text-gray-500">Alamat Pengiriman</div>
                         @if (Auth::user()->city_id == null)
-                            <div class="flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-2xl">
-                                <div class="flex-1">Mohon isi alamat terlebih dahulu di menu profile sebelum melakukan transaksi, Terimakasih!</div>
-                                <a href="{{ route('profile.edit') }}" class="px-2 py-1 text-sm text-white bg-blue-500 rounded-lg h-fit">Lenkapi Alamat</a>
+                            <div class="flex items-center gap-2 rounded-2xl bg-yellow-100 px-4 py-2">
+                                <div class="flex-1">Mohon isi alamat terlebih dahulu di menu profile sebelum melakukan
+                                    transaksi, Terimakasih!</div>
+                                <a href="{{ route('profile.edit') }}"
+                                    class="h-fit rounded-lg bg-blue-500 px-2 py-1 text-sm text-white">Lenkapi Alamat</a>
                             </div>
                         @else
                             <div class="my-2 text-sm font-bold text-gray-700">Penerima : {{ Auth::user()->name }}</div>
                             <p class="mb-4 text-sm text-gray-700">
-                                {{ Auth::user()->address }}, {{ Auth::user()->cities->city_name}}, {{ Auth::user()->cities->province}}
+                                {{ Auth::user()->address }}, {{ Auth::user()->cities->city_name }},
+                                {{ Auth::user()->cities->province }}
                             </p>
                         @endif
                     </div>
-                @foreach ($order as $sellerName => $products)
-                    <div class="px-3 py-2 bg-white border-2 border-gray-100 rounded-lg">
-                        <div class="flex items-center justify-between gap-3 py-2 border-b">
-                            <div class="flex flex-wrap items-center gap-3">
-                                <div class="font-bold">
-                                    {{ $sellerName }}
+                    @foreach ($order as $sellerName => $products)
+                        <div class="rounded-lg border-2 border-gray-100 bg-white px-3 py-2">
+                            <div class="flex items-center justify-between gap-3 border-b py-2">
+                                <div class="flex flex-wrap items-center gap-3">
+                                    <div class="font-bold">
+                                        {{ $sellerName }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    @foreach ($products as $product)
-                        <div class="flex justify-between py-4">
-                            <div class="flex items-start flex-1 gap-3 p-2 bg-gray-100 rounded-lg max-w-96">
-                                <img src="{{asset( $product->item->picture_product )}}" alt="" class="w-16 h-16">
-                                <div>
-                                    <div class="font-bold">{{ $product->item->name }}</div>
-                                    <div class="text-sm text-gray-600">{{ $product->qty }} x Rp {{ $product->item->price }}</div>
+                            @foreach ($products as $product)
+                                <div class="flex justify-between py-4">
+                                    <div class="max-w-96 flex flex-1 items-start gap-3 rounded-lg bg-gray-100 p-2">
+                                        <img src="{{ asset($product->item->product_pictures()->first()->product_picture) }}"
+                                            alt="" class="h-16 w-16">
+                                        <div>
+                                            <div class="font-bold">{{ $product->item->name }}</div>
+                                            <div class="text-sm text-gray-600">{{ $product->qty }} x Rp
+                                                {{ $product->item->price }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-none ps-8">
+                                        <div class="font-medium text-gray-500">
+                                            Rp{{ $product->qty * $product->item->price }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex-none ps-8">
-                                <div class="font-medium text-gray-500">Rp{{ $product->qty * $product->item->price }}</div>
-                            </div>
+                            @endforeach
+                            <div class="border-t py-2 text-end font-medium text-gray-500">Total Pesanan
+                                ({{ $totals[$sellerName]['totalQty'] }}) <span class="font-semibold text-primary">
+                                    Rp{{ $totalPrices[$sellerName] }}</span></div>
                         </div>
                     @endforeach
-                        <div class="py-2 font-medium text-gray-500 border-t text-end">Total Pesanan ({{$totals[$sellerName]['totalQty']}}) <span class="font-semibold text-primary"> Rp{{$totalPrices[$sellerName]}}</span></div>
-                    </div>
-                @endforeach
                 </div>
                 <div class="w-full">
-                    <div class="flex flex-col w-full px-4 py-3 mb-4 bg-white border-2 border-gray-200 rounded-xl">
+                    <div class="mb-4 flex w-full flex-col rounded-xl border-2 border-gray-200 bg-white px-4 py-3">
                         <form class="max-w-sm">
-                            <label for="courier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi {!! Auth::user()->city_id == null ? '<span class="px-2 py-1 text-xs text-gray-500 bg-gray-300 rounded-full">isi alamat terlebih dahulu</span>' : '' !!}</label>
-                            <select id="courier" name="courier" {{ Auth::user()->city_id == null ? 'disabled' : '' }} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <label for="courier"
+                                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Ekspedisi
+                                {!! Auth::user()->city_id == null
+                                    ? '<span class="px-2 py-1 text-xs text-gray-500 bg-gray-300 rounded-full">isi alamat terlebih dahulu</span>'
+                                    : '' !!}</label>
+                            <select id="courier" name="courier" {{ Auth::user()->city_id == null ? 'disabled' : '' }}
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
                                 <option value="">-- Pilih Ekspedisi --</option>
                                 <option value="jne">JNE</option>
                                 <option value="pos">POS</option>
                                 <option value="tiki">Tiki</option>
                             </select>
                         </form>
-                        <form class="max-w-sm mt-2">
-                            <label for="service" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Pengiriman</label>
-                            <select id="service" name="service" {{ Auth::user()->city_id == null ? 'disabled' : '' }} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <form class="mt-2 max-w-sm">
+                            <label for="service"
+                                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Jenis
+                                Pengiriman</label>
+                            <select id="service" name="service" {{ Auth::user()->city_id == null ? 'disabled' : '' }}
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
                             </select>
                         </form>
                         <div class="flex items-center justify-between px-2 pt-3">
@@ -91,7 +110,7 @@
                         </div>
                     </div>
 
-                    <form id="form-payment" class="container p-2 bg-white border-2 border-gray-100 rounded-lg">
+                    <form id="form-payment" class="container rounded-lg border-2 border-gray-100 bg-white p-2">
                         {{-- @csrf --}}
                         <h1 class="mb-3 font-extrabold text-gray-600">Ringkasan Belanja</h1>
                         <div>
@@ -103,15 +122,17 @@
                                 <div class="font-medium text-gray-500">Ongkos Kirim</div>
                                 <div class="font-medium text-gray-500" id="ongkir">0</div>
                             </div>
-                            <div class="flex justify-between pt-2 mt-2 border-t border-gray-400">
+                            <div class="mt-2 flex justify-between border-t border-gray-400 pt-2">
                                 <div class="font-semibold text-gray-500">Total Bayar</div>
-                                <div class="text-2xl font-semibold text-primary">Rp<span id="totalPrice">{{ $subTotalPrice }}</span></div>
+                                <div class="text-2xl font-semibold text-primary">Rp<span
+                                        id="totalPrice">{{ $subTotalPrice }}</span></div>
                             </div>
                         </div>
                         <input type="hidden" value="{{ $transaction_id }}" name="transaction_id" id="transaction_id">
                         <input type="hidden" value="{{ Auth::user()->address }}" name="address" id="address">
                         <input type="hidden" value="{{ Auth::user()->no_wa }}" name="phone" id="phone">
-                        <input type="hidden" value="{{ $totals[$sellerName]['totalQty'] }}" name="total_qty" id="total_qty">
+                        <input type="hidden" value="{{ $totals[$sellerName]['totalQty'] }}" name="total_qty"
+                            id="total_qty">
                         <input type="hidden" id="total_price" value="" name="total_price">
                         <input type="hidden" id="expedition" value="" name="expedition">
                         <input type="hidden" id="expedition_type" value="" name="expedition_type">
@@ -125,7 +146,9 @@
                         {{-- <input type="hidden" value="bank" name="payment_method"> --}}
                         {{-- <input type="hidden" value="pending" name="payment_status"> --}}
                         {{-- <input type="hidden" value="payment" name="order_status"> --}}
-                        <button type="submit" id="pay-button" class="w-full p-2 px-5 mt-2 text-white rounded {{ Auth::user()->city_id == null ? 'bg-gray-500' : 'bg-primary' }}" {{ Auth::user()->city_id == null ? 'disabled' : '' }}>
+                        <button type="submit" id="pay-button"
+                            class="{{ Auth::user()->city_id == null ? 'bg-gray-500' : 'bg-primary' }} mt-2 w-full rounded p-2 px-5 text-white"
+                            {{ Auth::user()->city_id == null ? 'disabled' : '' }}>
                             Pilih Pembayaran
                         </button>
                     </form>
@@ -135,23 +158,25 @@
     </div>
     {{-- footer --}}
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <section class="py-[7rem] px-[3rem]">
-            <div class="grid gap-4 max-md:grid-cols-1 lg:grid-cols-3 max-lg:grid-cols-2">
-                <div class="flex items-start my-4">
+        <section class="px-[3rem] py-[7rem]">
+            <div class="grid gap-4 max-lg:grid-cols-2 max-md:grid-cols-1 lg:grid-cols-3">
+                <div class="my-4 flex items-start">
                     <img class="w-10" src="{{ asset('assets/location-dot-solid.svg') }}" alt="">
-                    <span class="ml-4">Jl. Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta nesciunt, magni
-                        eligendi eum enim, dicta totam, vero dolorem illo unde fugit mollitia reiciendis quaerat culpa. Quae
+                    <span class="ml-4">Jl. Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta nesciunt,
+                        magni
+                        eligendi eum enim, dicta totam, vero dolorem illo unde fugit mollitia reiciendis quaerat culpa.
+                        Quae
                         illum nisi nihil aut.</span>
                 </div>
-                <div class="w-full my-4">
+                <div class="my-4 w-full">
                 </div>
                 <div class="my-4">
-                    <div class="flex items-center h-10 lg:pl-[5rem]">
+                    <div class="flex h-10 items-center lg:pl-[5rem]">
                         <img class="w-10" src="{{ asset('assets/instagram.svg') }}" alt="">
                         <a href="https://www.instagram.com/bdc.bandungjuara/" target="_blank"
                             class="ml-4 align-middle hover:underline">@bdjbandungjuara</a>
                     </div>
-                    <div class="flex items-center h-10 my-4 lg:pl-[5rem]">
+                    <div class="my-4 flex h-10 items-center lg:pl-[5rem]">
                         <img class="w-10" src="{{ asset('assets/whatsapp.svg') }}" alt="">
                         <a href="whatsapp://send?phone=6281222541485" target="_blank"
                             class="ml-4 align-middle hover:underline">0812-2254-1485</a>
@@ -160,16 +185,16 @@
             </div>
         </section>
         <hr class="border-black">
-        <p class="text-center pb-[1rem]">&copy; 2024 BDC Bandung</p>
+        <p class="pb-[1rem] text-center">&copy; 2024 BDC Bandung</p>
     </div>
 
-    <div id="confirmModal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
-        <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+    <div id="confirmModal" class="fixed inset-0 flex hidden items-center justify-center bg-gray-900 bg-opacity-50">
+        <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
             <h2 class="mb-4 text-lg font-semibold">Confirm Navigation</h2>
             <p class="mb-4">Are you sure you want to leave this page? Your order is not completed yet.</p>
             <div class="flex justify-end">
-                <button id="stayButton" class="px-4 py-2 mr-2 text-white bg-blue-500 rounded">Stay</button>
-                <button id="leaveButton" class="px-4 py-2 text-white bg-red-500 rounded">Leave</button>
+                <button id="stayButton" class="mr-2 rounded bg-blue-500 px-4 py-2 text-white">Stay</button>
+                <button id="leaveButton" class="rounded bg-red-500 px-4 py-2 text-white">Leave</button>
             </div>
         </div>
     </div>
@@ -177,14 +202,14 @@
     <script>
         let isModalVisible = false;
 
-        window.addEventListener('beforeunload', function (e) {
+        window.addEventListener('beforeunload', function(e) {
             if (!isModalVisible) {
                 e.preventDefault();
                 e.returnValue = '';
             }
         });
 
-        window.addEventListener('popstate', function (e) {
+        window.addEventListener('popstate', function(e) {
             showModal();
         });
 
@@ -193,13 +218,13 @@
             document.getElementById('confirmModal').classList.remove('hidden');
         }
 
-        document.getElementById('stayButton').addEventListener('click', function () {
+        document.getElementById('stayButton').addEventListener('click', function() {
             isModalVisible = false;
             history.pushState(null, '', location.href);
             document.getElementById('confirmModal').classList.add('hidden');
         });
 
-        document.getElementById('leaveButton').addEventListener('click', function () {
+        document.getElementById('leaveButton').addEventListener('click', function() {
             isModalVisible = false;
             window.history.back();
         });
@@ -245,7 +270,9 @@
                         $('#expedition').val(courier.code);
 
                         $.each(courier.costs, function(index, cost) {
-                            $('#service').append(`<option value="${cost.service}" data-cost="${cost.cost[0].value}" data-etd="${cost.cost[0].etd}">${cost.service} - ${cost.cost[0].value} IDR ( ${cost.cost[0].etd} hari)</option>`);
+                            $('#service').append(
+                                `<option value="${cost.service}" data-cost="${cost.cost[0].value}" data-etd="${cost.cost[0].etd}">${cost.service} - ${cost.cost[0].value} IDR ( ${cost.cost[0].etd} hari)</option>`
+                                );
                         });
                     });
 
@@ -314,7 +341,7 @@
                     transaction_id: $('#transaction_id').val(),
                     address: $('#address').val(),
                     phone: $('#phone').val(),
-                    total_qty :$('#total_qty').val(),
+                    total_qty: $('#total_qty').val(),
                     expedition: $('#expedition').val(),
                     expedition_type: $('#expedition_type').val(),
                     // total_price: $('#totalPrice').html(),
@@ -337,12 +364,12 @@
                         }
                     },
                     error: function(xhr) {
-                        $('#responseMessage').text('Error: ' + xhr.status + ' ' + xhr.statusText);
+                        $('#responseMessage').text('Error: ' + xhr.status + ' ' + xhr
+                            .statusText);
                     }
                 });
             });
         });
-
     </script>
 
     {{-- @if (session('success')) {
@@ -369,6 +396,7 @@
     }
     @endif --}}
 </body>
+
 </html>
 
 {{--

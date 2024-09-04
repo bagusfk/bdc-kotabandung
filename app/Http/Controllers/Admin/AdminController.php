@@ -111,7 +111,7 @@ class AdminController extends Controller
             'id' => 'required',
             'category_id' => 'required',
             'ksm_id' => 'required',
-            'picture_product.*' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Validasi banyak gambar
+            'picture_product.*' => 'required | image | mimes:jpeg,png,jpg | max:2048', // Validasi banyak gambar
             'name' => 'required',
             'weight' => 'required',
             'stock' => 'required',
@@ -417,18 +417,6 @@ class AdminController extends Controller
         $id = $request->get('kelola_data_ksm_id');
         $ksm = Kelola_data_ksm::findOrFail($id);
 
-        if ($ksm->business_entity == 'reseller') {
-            $ksm->cluster = 'D';
-        } else {
-            $ksm->cluster = 'C';
-            if ($ksm->logo_image != null && $ksm->nib_document != null && $ksm->address != null && $ksm->nib != null) {
-                $ksm->cluster = 'B';
-                if ($ksm->permission_letter != null) {
-                    $ksm->cluster = 'A';
-                }
-            }
-        }
-
         DB::transaction(function () use ($ksm, $data, $request) {
             $ksm->update($data);
 
@@ -438,6 +426,21 @@ class AdminController extends Controller
             $this->handleFileUpload($request, 'nib_document', $ksm, 'nib_document');
             $this->handleFileUpload($request, 'permission_letter', $ksm, 'permission_letter');
         });
+
+        $ksm->refresh();
+        // dd($ksm->logo_image, $ksm->nib_document, $ksm->address, $ksm->nib);
+        if ($ksm->business_entity == 'reseller') {
+            $ksm->cluster = 'd';
+        } else {
+            $ksm->cluster = 'c';
+            if ($ksm->logo_image && $ksm->nib_document && $ksm->address && $ksm->nib) {
+                $ksm->cluster = 'b';
+                if ($ksm->permission_letter) {
+                    $ksm->cluster = 'a';
+                }
+            }
+        }
+        $ksm->save();
 
         return redirect('/kelola-ksm');
     }

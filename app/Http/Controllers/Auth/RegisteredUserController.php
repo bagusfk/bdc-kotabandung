@@ -65,11 +65,11 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'owner' => 'required',
-            'brand_name' =>'required',
+            'brand_name' => 'required',
             'category_id' => 'required',
             'no_wa' => 'required',
-            'business_entity' =>'required',
-            'product_sales_address' =>'required',
+            'business_entity' => 'required',
+            'product_sales_address' => 'required',
             'business_description' => 'required',
             'owner_picture' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
@@ -92,13 +92,12 @@ class RegisteredUserController extends Controller
         if ($request->business_entity == 'reseller') {
             $cluster = 'D';
         }
-        // if ($logoPath && $nibPath && $request->address && $request->nib) {
-        //     $cluster = 'B';
-
-        //     if ($permissionPath) {
-        //         $cluster = 'A';
-        //     }
-        // }
+        if ($logoPath && $nibPath && $request->address && $request->nib && $request->business_entity != 'reseller') {
+            $cluster = 'B';
+            if ($permissionPath) {
+                $cluster = 'A';
+            }
+        }
 
         // dd($cluster);
 
@@ -132,8 +131,8 @@ class RegisteredUserController extends Controller
         // dd($ksm);
 
         return redirect()
-        ->route('dashboard_ksm')
-        ->with('success', 'Berhasil terdaftar sebagai anggota KSM, sekarang ayo kita tambahkan produk kamu!');
+            ->route('dashboard_ksm')
+            ->with('success', 'Berhasil terdaftar sebagai anggota KSM, sekarang ayo kita tambahkan produk kamu!');
 
         // dd($request);
 
