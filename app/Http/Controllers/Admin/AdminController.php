@@ -800,19 +800,19 @@ class AdminController extends Controller
         $event->update($item);
 
         // Periksa apakah ada file gambar yang diunggah
-        if ($request->hasFile('picture_product')) {
+        if ($request->hasFile('event_poster')) {
             // Jika ada, simpan path gambar baru
-            $newImagePath = $request->file('picture_product')->store('public/picture_event');
+            $newImagePath = $request->file('event_poster')->store('public/picture_event');
             $newImagePath = str_replace('public/', '', $newImagePath);
 
             // Hapus gambar lama jika ada perubahan gambar
-            if ($event->picture_product && $event->picture_product !== 'storage/default.jpg') {
+            if ($event->event_poster && $event->event_poster !== 'storage/default.jpg') {
                 $oldImage = str_replace('storage/', '', $event->event_poster);
                 Storage::delete('public/' . $oldImage);
             }
 
             // Update path gambar event dengan yang baru
-            $event->picture_product = 'storage/' . $newImagePath;
+            $event->event_poster = 'storage/' . $newImagePath;
             $event->save();
         }
 

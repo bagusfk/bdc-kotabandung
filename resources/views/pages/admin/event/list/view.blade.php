@@ -28,6 +28,9 @@
                         Penyelenggara
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Gambar
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Tempat Event
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -58,12 +61,15 @@
                             {{ $data->event_organizer }}
                         </td>
                         <td class="px-6 py-4">
+                            <img class="w-full" id="image-old" src="{{ $data->event_poster }}">
+                        </td>
+                        <td class="px-6 py-4">
                             {{ $data->location }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->description }}
                         </td>
-                        <td class="px-6 py-4 flex">
+                        <td class="px-6 py-4">
                             <a href="{{ url('/edit-event/' . $data->id) }}"
                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
                             <form method="POST" action="{{ url('/delete-event/' . $data->id) }}"

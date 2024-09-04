@@ -113,15 +113,6 @@
         </div>
         <div class="relative overflow-x-auto my-[1rem] min-h-[20rem]">
             <label for="" class="font-bold text-lg block text-center">Neraca</label>
-            <button type="button"
-                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
-                data-modal-toggle="tableModal1" data-modal-target="tableModal1" id="openModal">Edit</button>
-            <button
-                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
-                onclick="exportToExcel('neraca_table', 'Laporan_Neraca')">Export to Excel</button>
-            <button
-                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
-                onclick="exportToPDF('neraca_table', 'Laporan_Neraca')">Export to PDF</button>
             @foreach ($neraca as $neracas)
                 @php
                     $harga_peroleh =
@@ -130,127 +121,135 @@
                         $neracas->biaya_pengiriman +
                         $neracas->biaya_lain;
                 @endphp
-                <table id="neraca_table" class="table12" width="100%" cellspacing="0" cellpadding="10">
-                    <tr>
-                        <td>KODE</td>
-                        <td>PENJUALAN DAN PENDAPATAN</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>4100</td>
-                        <td>Penjualan</td>
-                        <td></td>
-                        <td>{{ $neracas->penjualan }}</td>
-                    </tr>
-                    <tr>
-                        <td>4120</td>
-                        <td>Diskon</td>
-                        <td></td>
-                        <td>{{ $neracas->diskon }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Jumlah Penjualan</td>
-                        <td></td>
-                        <td>{{ 'Rp' . number_format($neracas->penjualan + $neracas->diskon, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>PENDAPATAN</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>4300</td>
-                        <td>Pendapatan Komisi</td>
-                        <td></td>
-                        <td>{{ $neracas->pendapatan_komisi }}</td>
-                    </tr>
-                    <tr>
-                        <td>4400</td>
-                        <td>Jasa Bank</td>
-                        <td></td>
-                        <td>{{ $neracas->jasa_bank }}</td>
-                    </tr>
-                    <tr>
-                        <td>4500</td>
-                        <td>Pendapatan Lainnya</td>
-                        <td></td>
-                        <td>{{ $neracas->pendapatan_lainnya }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Jumlah Pendapatan</td>
-                        <td></td>
-                        <td>{{ 'Rp . ' . number_format($neracas->jasa_bank + $neracas->pendapatan_lainnya + $neracas->pendapatan_komisi, 0, ',', '.') }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>TOTAL PENJUALAN DAN PENDAPATAN</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Persediaan Barang Dagang Awal</td>
-                        <td></td>
-                        <td>{{ $neracas->persediaan_barang_awal }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Harga Pokok Penjualan</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>5010</td>
-                        <td>Pembelian Barang</td>
-                        <td></td>
-                        <td>{{ $neracas->pembelian_barang }}</td>
-                    </tr>
-                    <tr>
-                        <td>5020</td>
-                        <td>Biaya Pengiriman Barang</td>
-                        <td></td>
-                        <td>{{ $neracas->biaya_pengiriman }}</td>
-                    </tr>
-                    <tr>
-                        <td>5030</td>
-                        <td>Biaya Lain-lain</td>
-                        <td></td>
-                        <td>{{ $neracas->biaya_lain }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Harga Perolehan</td>
-                        <td></td>
-                        <td>{{ 'Rp . ' . number_format($harga_peroleh, 0, ',', '.') }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Persediaan Barang Dagang Akhir</td>
-                        <td></td>
-                        <td>{{ $neracas->persediaan_barang_akhir }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Harga Pokok Penjualan</td>
-                        <td></td>
-                        <td>{{ 'Rp . ' . number_format($harga_peroleh - $neracas->persediaan_barang_akhir, 0, ',', '.') }}
-                        </td>
-                    </tr>
+                <table class="table12 display nowrap" id="dataTable1" width="100%" cellspacing="0" cellpadding="10">
+                    <thead>
+                        <tr>
+                            <td>KODE</td>
+                            <td>PENJUALAN DAN PENDAPATAN</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody id="dataList">
+                        <tr>
+                            <td>4100</td>
+                            <td>Penjualan</td>
+                            <td></td>
+                            <td>{{ $neracas->penjualan }}</td>
+                        </tr>
+                        <tr>
+                            <td>4120</td>
+                            <td>Diskon</td>
+                            <td></td>
+                            <td>{{ $neracas->diskon }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Jumlah Penjualan</td>
+                            <td></td>
+                            <td>{{ 'Rp' . number_format($neracas->penjualan + $neracas->diskon, 0, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>PENDAPATAN</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>4300</td>
+                            <td>Pendapatan Komisi</td>
+                            <td></td>
+                            <td>{{ $neracas->pendapatan_komisi }}</td>
+                        </tr>
+                        <tr>
+                            <td>4400</td>
+                            <td>Jasa Bank</td>
+                            <td></td>
+                            <td>{{ $neracas->jasa_bank }}</td>
+                        </tr>
+                        <tr>
+                            <td>4500</td>
+                            <td>Pendapatan Lainnya</td>
+                            <td></td>
+                            <td>{{ $neracas->pendapatan_lainnya }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Jumlah Pendapatan</td>
+                            <td></td>
+                            <td>{{ 'Rp . ' . number_format($neracas->jasa_bank + $neracas->pendapatan_lainnya + $neracas->pendapatan_komisi, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>TOTAL PENJUALAN DAN PENDAPATAN</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Persediaan Barang Dagang Awal</td>
+                            <td></td>
+                            <td>{{ $neracas->persediaan_barang_awal }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Harga Pokok Penjualan</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>5010</td>
+                            <td>Pembelian Barang</td>
+                            <td></td>
+                            <td>{{ $neracas->pembelian_barang }}</td>
+                        </tr>
+                        <tr>
+                            <td>5020</td>
+                            <td>Biaya Pengiriman Barang</td>
+                            <td></td>
+                            <td>{{ $neracas->biaya_pengiriman }}</td>
+                        </tr>
+                        <tr>
+                            <td>5030</td>
+                            <td>Biaya Lain-lain</td>
+                            <td></td>
+                            <td>{{ $neracas->biaya_lain }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Harga Perolehan</td>
+                            <td></td>
+                            <td>{{ 'Rp . ' . number_format($harga_peroleh, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Persediaan Barang Dagang Akhir</td>
+                            <td></td>
+                            <td>{{ $neracas->persediaan_barang_akhir }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Harga Pokok Penjualan</td>
+                            <td></td>
+                            <td>{{ 'Rp . ' . number_format($harga_peroleh - $neracas->persediaan_barang_akhir, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             @endforeach
         </div>
+
+        <button type="button" class="btn btn-primary" data-modal-toggle="tableModal1" data-modal-target="tableModal1"
+            style="display:none;" id="createModal1">Add</button>
+
         <div id="tableModal1" tabindex="-1" role="dialog"
             class="fixed top-0 modal left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative w-full max-w-2xl max-h-full">
@@ -364,167 +363,167 @@
     <div id="labarugi_content">
         <div class="relative overflow-x-auto my-[1rem] min-h-[20rem]">
             <label for="" class="font-bold text-lg block text-center">Laba / Rugi</label>
-            <button type="button"
-                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
-                data-modal-toggle="createModalButton" data-modal-target="createModalButton"
-                id="createAddButton">Edit</button>
-            <button
-                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
-                onclick="exportToExcel('labarugi_table', 'Laporan_Labarugi')">Export to Excel</button>
-            <button
-                class="p-[.5rem] border-black border rounded-sm mb-[1rem] bg-gradient-to-b from-white to-gray-200 text-black"
-                onclick="exportToPDF('labarugi_table', 'Laporan_Labarugi')">Export to PDF</button>
-            @foreach ($finance as $data)
-                <table class="table12" width="100%" id="labarugi_table" cellspacing="0" cellpadding="10">
+            <table class="table12 display nowrap" id="dataTable2" width="100%" cellspacing="0" cellpadding="10">
+                <thead>
                     <tr style="font-weight: bold">
-                        <td colspan="3" align="center">AKTIVA</td>
-                        <td colspan="3" align="center">PASSIVA</td>
+                        <th></th>
+                        <th>AKTIVA</th>
+                        <th></th>
+                        <th></th>
+                        <th>PASSIVA</th>
+                        <th></th>
                     </tr>
-                    <tr>
-                        <td width="7%">1100</td>
-                        <td width="28%">KAS</td>
-                        <td width="15%">{{ $data->kas }}</td>
-                        <td width="7%">2100</td>
-                        <td width="28%">Hutang</td>
-                        <td width="15%">{{ $data->hutang }}</td>
-                    </tr>
-                    <tr>
-                        <td>1110</td>
-                        <td>Bank BJB</td>
-                        <td>{{ $data->bank_bjb }}</td>
-                        <td>2110</td>
-                        <td>Alokasi BOP Komite</td>
-                        <td>{{ $data->alokasi_bop_komite }}</td>
-                    </tr>
-                    <tr>
-                        <td>1111</td>
-                        <td>Bank BANDUNG</td>
-                        <td>{{ $data->bank_bandung }}</td>
-                        <td>2120</td>
-                        <td>Alokasi BOP Pengelola</td>
-                        <td>{{ $data->alokasi_bop_pengelola }}</td>
-                    </tr>
-                    <tr>
-                        <td>1120</td>
-                        <td>Sewa Bayar Dimuka</td>
-                        <td>{{ $data->sewa_bayar_dimuka }}</td>
-                        <td>2130</td>
-                        <td>Alokasi Gaji Pengelola</td>
-                        <td>{{ $data->alokasi_gaji_pengelola }}</td>
-                    </tr>
-                    <tr>
-                        <td>1130</td>
-                        <td>Piutang</td>
-                        <td>{{ $data->piutang }}</td>
-                        <td>2140</td>
-                        <td>Alokasi Gaji Tenaga Ahli</td>
-                        <td>{{ $data->alokasi_gaji_tenaga_ahli }}</td>
-                    </tr>
-                    <tr>
-                        <td>1140</td>
-                        <td>Persediaan</td>
-                        <td>{{ $data->persediaan }}</td>
-                        <td>2150</td>
-                        <td>Alokasi Pengembangan Kapasitas</td>
-                        <td>{{ $data->alokasi_pengembangan_kapasitas }}</td>
-                    </tr>
-                    <tr>
-                        <td>1150</td>
-                        <td>Inventaris</td>
-                        <td>{{ $data->inventaris }}</td>
-                        <td>2160</td>
-                        <td>Alokasi Sewa Kantor dan Peralatan</td>
-                        <td>{{ $data->alokasi_sewa_kantor_dan_peralatan }}</td>
-                    </tr>
-                    <tr>
-                        <td>1160</td>
-                        <td>Investasi</td>
-                        <td>{{ $data->investasi }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>1170</td>
-                        <td>Harta Tetap</td>
-                        <td>{{ $data->harta_tetap }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>Penyusutan Harta Tetap</td>
-                        <td>{{ $data->penyusutan_harta_tetap }}</td>
-                        <td></td>
-                        <td align="right">Total Hutang</td>
-                        <td>{{ $totalHutang =
-                            $data->hutang +
-                            $data->alokasi_bop_komite +
-                            $data->alokasi_bop_pengelola +
-                            $data->alokasi_gaji_pengelola +
-                            $data->alokasi_gaji_tenaga_ahli +
-                            $data->alokasi_pengembangan_kapasitas +
-                            $data->alokasi_sewa_kantor_dan_peralatan }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>3100</td>
-                        <td>Modal BDC</td>
-                        <td>{{ $data->modal_bdc }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>3110</td>
-                        <td>Modal Awal</td>
-                        <td>{{ $data->modal_awal }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>3120</td>
-                        <td>Pemupukan Modal Dari Laba</td>
-                        <td>{{ $data->pemupukan_modal_dari_laba }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>L/R Tahun Lalu</td>
-                        <td>{{ $data->lr_tahun_lalu }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>L/R Tahun Berjalan</td>
-                        <td>{{ $data->lr_tahun_berjalan }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="right">Total Modal</td>
-                        <td>{{ $totalModal = $data->modal_bdc + $data->modal_awal + $data->pemupukan_modal_dari_laba + $data->lr_tahun_lalu + $data->lr_tahun_berjalan }}
-                        </td>
-                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach ($finance as $data)
+                        <tr>
+                            <td width="7%">1100</td>
+                            <td width="28%">KAS</td>
+                            <td width="15%">{{ $data->kas }}</td>
+                            <td width="7%">2100</td>
+                            <td width="28%">Hutang</td>
+                            <td width="15%">{{ $data->hutang }}</td>
+                        </tr>
+                        <tr>
+                            <td>1110</td>
+                            <td>Bank BJB</td>
+                            <td>{{ $data->bank_bjb }}</td>
+                            <td>2110</td>
+                            <td>Alokasi BOP Komite</td>
+                            <td>{{ $data->alokasi_bop_komite }}</td>
+                        </tr>
+                        <tr>
+                            <td>1111</td>
+                            <td>Bank BANDUNG</td>
+                            <td>{{ $data->bank_bandung }}</td>
+                            <td>2120</td>
+                            <td>Alokasi BOP Pengelola</td>
+                            <td>{{ $data->alokasi_bop_pengelola }}</td>
+                        </tr>
+                        <tr>
+                            <td>1120</td>
+                            <td>Sewa Bayar Dimuka</td>
+                            <td>{{ $data->sewa_bayar_dimuka }}</td>
+                            <td>2130</td>
+                            <td>Alokasi Gaji Pengelola</td>
+                            <td>{{ $data->alokasi_gaji_pengelola }}</td>
+                        </tr>
+                        <tr>
+                            <td>1130</td>
+                            <td>Piutang</td>
+                            <td>{{ $data->piutang }}</td>
+                            <td>2140</td>
+                            <td>Alokasi Gaji Tenaga Ahli</td>
+                            <td>{{ $data->alokasi_gaji_tenaga_ahli }}</td>
+                        </tr>
+                        <tr>
+                            <td>1140</td>
+                            <td>Persediaan</td>
+                            <td>{{ $data->persediaan }}</td>
+                            <td>2150</td>
+                            <td>Alokasi Pengembangan Kapasitas</td>
+                            <td>{{ $data->alokasi_pengembangan_kapasitas }}</td>
+                        </tr>
+                        <tr>
+                            <td>1150</td>
+                            <td>Inventaris</td>
+                            <td>{{ $data->inventaris }}</td>
+                            <td>2160</td>
+                            <td>Alokasi Sewa Kantor dan Peralatan</td>
+                            <td>{{ $data->alokasi_sewa_kantor_dan_peralatan }}</td>
+                        </tr>
+                        <tr>
+                            <td>1160</td>
+                            <td>Investasi</td>
+                            <td>{{ $data->investasi }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>1170</td>
+                            <td>Harta Tetap</td>
+                            <td>{{ $data->harta_tetap }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Penyusutan Harta Tetap</td>
+                            <td>{{ $data->penyusutan_harta_tetap }}</td>
+                            <td></td>
+                            <td align="right">Total Hutang</td>
+                            <td>{{ $totalHutang =
+                                $data->hutang +
+                                $data->alokasi_bop_komite +
+                                $data->alokasi_bop_pengelola +
+                                $data->alokasi_gaji_pengelola +
+                                $data->alokasi_gaji_tenaga_ahli +
+                                $data->alokasi_pengembangan_kapasitas +
+                                $data->alokasi_sewa_kantor_dan_peralatan }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>3100</td>
+                            <td>Modal BDC</td>
+                            <td>{{ $data->modal_bdc }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>3110</td>
+                            <td>Modal Awal</td>
+                            <td>{{ $data->modal_awal }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>3120</td>
+                            <td>Pemupukan Modal Dari Laba</td>
+                            <td>{{ $data->pemupukan_modal_dari_laba }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>L/R Tahun Lalu</td>
+                            <td>{{ $data->lr_tahun_lalu }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>L/R Tahun Berjalan</td>
+                            <td>{{ $data->lr_tahun_berjalan }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td align="right">Total Modal</td>
+                            <td>{{ $totalModal = $data->modal_bdc + $data->modal_awal + $data->pemupukan_modal_dari_laba + $data->lr_tahun_lalu + $data->lr_tahun_berjalan }}
+                            </td>
+                        </tr>
+                </tbody>
+                <tfoot>
                     <tr style="font-weight: bold;">
                         <td colspan="2">TOTAL KEKAYAAN</td>
                         <td>{{ $data->kas + $data->bank_bjb + $data->bank_bandung + $data->sewa_bayar_dimuka + $data->piutang + $data->persediaan + $data->inventaris + $data->investasi + $data->harta_tetap + $data->penyusutan_harta_tetap }}
@@ -533,10 +532,13 @@
                         <td>{{ $totalHutang + $totalModal }}
                         </td>
                     </tr>
-                </table>
-            @endforeach
+                </tfoot>
+                @endforeach
+            </table>
         </div>
 
+        <button type="button" class="btn btn-primary" data-modal-toggle="createModalButton"
+            data-modal-target="createModalButton" style="display:none;" id="createModal2">Add</button>
 
         <div id="createModalButton" tabindex="-1" role="dialog"
             class="fixed top-0 modal left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -904,6 +906,56 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#dataTable1').DataTable({
+                info: false,
+                ordering: false,
+                paging: false,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                text: 'Add',
+                                action: function() {
+                                    // Trigger the hidden button with data-target for create
+                                    $('#createModal1').click();
+                                }
+                            }, {
+                                extend: 'excel',
+                            },
+                            {
+                                extend: 'pdf',
+                            },
+                            {
+                                extend: 'print',
+                            }
+                        ]
+                    }
+                }
+            });
+            $('#dataTable2').DataTable({
+                info: false,
+                ordering: false,
+                paging: false,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                text: 'Add',
+                                action: function() {
+                                    // Trigger the hidden button with data-target for create
+                                    $('#createModal2').click();
+                                }
+                            }, {
+                                extend: 'excel',
+                            },
+                            {
+                                extend: 'pdf',
+                            },
+                            {
+                                extend: 'print',
+                            }
+                        ]
+                    }
+                }
+            });
             $('#dataTable3').DataTable({
                 footerCallback: function(row, data, start, end, display) {
                     var api = this.api();
@@ -1028,74 +1080,6 @@
                 document.querySelector(`input[value="${selectCategory}"]`).dispatchEvent(new Event('change'));
             }
         });
-
-        function exportToExcel(tableID, filename = '') {
-            var downloadLink;
-            var dataType = 'application/vnd.ms-excel';
-            var tableSelect = document.getElementById(tableID);
-            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-
-            // Specify file name
-            filename = filename ? filename + '.xls' : 'excel_data.xls';
-
-            // Create download link element
-            downloadLink = document.createElement("a");
-
-            document.body.appendChild(downloadLink);
-
-            if (navigator.msSaveOrOpenBlob) {
-                var blob = new Blob(['\ufeff', tableHTML], {
-                    type: dataType
-                });
-                navigator.msSaveOrOpenBlob(blob, filename);
-            } else {
-                // Create a link to the file
-                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-
-                // Setting the file name
-                downloadLink.download = filename;
-
-                //triggering the function
-                downloadLink.click();
-            }
-        }
-
-        function exportToPDF(tableID, filename = '') {
-            var pdf = new jsPDF('p', 'pt', 'a4'); // Ukuran halaman A4
-            var source = document.getElementById(tableID);
-
-            // Scroll ke elemen tabel agar terlihat
-            source.scrollIntoView();
-
-            html2canvas(source, {
-                scale: 3, // Perbesar skala untuk kualitas yang lebih tajam
-                useCORS: true, // Untuk menangani cross-origin issues
-                scrollY: 0, // Atasi scroll vertikal
-                scrollX: 0, // Atasi scroll horizontal
-            }).then(canvas => {
-                var imgData = canvas.toDataURL('image/png');
-
-                var imgWidth = 550; // Lebar gambar sesuai dengan lebar halaman PDF
-                var pageHeight = 840; // Tinggi halaman PDF
-                var imgHeight = canvas.height * imgWidth / canvas.width; // Sesuaikan tinggi gambar dengan lebar
-
-                var position = 40; // Posisi vertikal untuk gambar
-
-                // Jika gambar lebih tinggi dari halaman PDF, buat halaman baru untuk bagian bawah
-                var remainingHeight = imgHeight;
-                while (remainingHeight > 0) {
-                    pdf.addImage(imgData, 'PNG', 40, position, imgWidth, imgHeight);
-                    remainingHeight -= pageHeight;
-                    if (remainingHeight > 0) {
-                        pdf.addPage();
-                        position = 0;
-                    }
-                }
-
-                // Simpan PDF
-                pdf.save(filename + '.pdf');
-            });
-        }
     </script>
 
 
