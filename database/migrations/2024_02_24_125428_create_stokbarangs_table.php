@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('weight')->nullable();
             $table->integer('stock')->nullable();
             $table->integer('price')->nullable();
+            $table->date('expired')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

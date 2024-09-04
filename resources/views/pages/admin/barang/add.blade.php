@@ -1,6 +1,15 @@
 @extends('layouts.appadmin')
 @section('title', 'Tambah Barang')
 @section('content')
+    <style>
+        #image-upload-container img {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        #image-upload-container img:hover {
+            transform: scale(1.1);
+        }
+    </style>
     <form class="w-full" action="{{ route('create-item') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -35,6 +44,14 @@
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                     @enderror
                 </div>
+                <div class="mt-[1rem] hidden" id="dateExpired">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Expired</label>
+                    <input type="date" name="expired" id="expired"
+                        class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('expired')
+                        <span class="text-red-500 text-sm"><br />{{ $message }}</span>
+                    @enderror
+                </div>
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga</label>
                     <input type="number" name="price" id="price"
@@ -61,22 +78,31 @@
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                     @enderror
                 </div>
-                <div class="mt-[1rem]">
+
+                <div class="mt-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gambar</label>
-                    <div class="flex items-center justify-center">
-                        <label for="picture_product"
-                            class="relative w-64 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer flex flex-col items-center justify-center">
-                            <input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file"
-                                id="picture_product" name="picture_product[]" multiple onchange="previewImages()">
-                            <div id="preview-container" class="flex flex-wrap"></div>
-                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">Click to upload or drag and drop</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                        </label>
+                    <div id="image-upload-container" class="flex flex-wrap gap-2">
+                        <!-- Preview container for newly uploaded images -->
+                        <div id="preview-container" class="flex flex-wrap gap-2"></div>
+
+                        <!-- Input for new images -->
+                        <div class="w-24 h-24 flex items-center justify-center cursor-pointer bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 hover:bg-gray-200 transition"
+                            id="upload-placeholder" onclick="triggerFileInput()">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8 text-gray-400"
+                                viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                <path
+                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
+                            </svg>
+                            <input type="file" id="picture_product" name="picture_product[]" accept="image/*" multiple
+                                class="hidden" onchange="handleImageUpload(this)">
+                        </div>
                     </div>
+
                     @error('picture_product')
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                     @enderror
                 </div>
+
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
                     <textarea id="description" name="description" rows="8"
@@ -96,48 +122,91 @@
         </div>
     </form>
     <script>
-        function previewImages() {
-            var fileInput = document.getElementById('picture_product');
-            var previewContainer = document.getElementById('preview-container');
-            previewContainer.innerHTML = ""; // Hapus pratinjau sebelumnya
+        function triggerFileInput() {
+            document.getElementById('picture_product').click();
+        }
 
-            var files = fileInput.files;
+        function handleImageUpload(input) {
+            const previewContainer = document.getElementById('preview-container');
+            const files = Array.from(input.files);
 
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                var reader = new FileReader();
+            // Clear existing previews
+            previewContainer.innerHTML = '';
 
-                reader.onload = function(event) {
-                    var previewImage = document.createElement('img');
-                    previewImage.src = event.target.result;
-                    previewImage.className = "w-20 h-20 object-contain m-1";
-
-                    var logo = document.createElement('span');
-                    logo.className =
-                        "w-8 h-8 mt-1 mr-1 p-1.5 rounded-full bg-white opacity-80 hover:opacity-100 absolute top-0 right-0";
-                    logo.innerHTML =
-                        '<svg class="text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path fill-rule="evenodd" d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z" clip-rule="evenodd" /></svg>';
-
-                    var wrapper = document.createElement('div');
-                    wrapper.className = "relative inline-block";
-                    wrapper.appendChild(previewImage);
-                    wrapper.appendChild(logo);
-
-                    previewContainer.appendChild(wrapper);
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.classList.add('relative', 'group', 'w-24', 'h-24');
+                    div.dataset.index = index; // Store index to find it later
+                    div.innerHTML = `
+                <img class="w-full h-full object-cover rounded-md" src="${e.target.result}">
+                <button type="button"
+                    class="absolute top-0 right-0 bg-white text-red-500 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    onclick="removeImage(this, ${index})">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 1 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            `;
+                    previewContainer.appendChild(div);
                 };
-
                 reader.readAsDataURL(file);
-            }
+            });
+        }
+
+        function removeImage(button, index) {
+            // Remove the image from the UI
+            const container = button.closest('div');
+            container.remove();
+
+            // Remove the file from the input
+            const input = document.getElementById('picture_product');
+            const dataTransfer = new DataTransfer();
+
+            // Re-add only the files that weren't removed
+            Array.from(input.files).forEach((file, i) => {
+                if (i !== index) {
+                    dataTransfer.items.add(file);
+                }
+            });
+
+            // Update the input with the new files
+            input.files = dataTransfer.files;
+
+            // Rebuild previews to maintain correct order
+            handleImageUpload(input);
+        }
+
+
+        function removeExistingImage(button, id) {
+            // Remove the image from the UI
+            const container = button.closest('div');
+            container.remove();
+
+            // Add the image ID to the hidden input field
+            const removedImagesInput = document.getElementById('removed_images');
+            let removedImages = removedImagesInput.value ? removedImagesInput.value.split(',') : [];
+            removedImages.push(id);
+            removedImagesInput.value = removedImages.join(',');
         }
 
         document.getElementById('category').addEventListener('change', async function() {
             const selectedCategory = this.value;
 
+            if (selectedCategory == 3) {
+                const expired = document.getElementById('dateExpired');
+                expired.classList.remove('hidden');
+            } else {
+                const expired = document.getElementById('dateExpired');
+                expired.classList.add('hidden');
+            }
+
             if (selectedCategory) {
                 try {
                     const response = await fetch(`/get-owner-ksm/${selectedCategory}`);
                     const ksmData = await response.json();
-                    console.log(ksmData); // Debugging untuk melihat data yang diterima
+                    // console.log(ksmData); // Debugging untuk melihat data yang diterima
 
                     // Kosongkan dropdown Brand Pemilik
                     const ksmSelect = document.getElementById('ksm');
@@ -148,7 +217,7 @@
                         const option = document.createElement('option');
                         option.value = ksm.id; // Set value ke ID KSM
                         option.textContent =
-                        `${ksm.brand_name} - ${ksm.owner}`; // Tampilkan nama brand dan owner
+                            `${ksm.brand_name} - ${ksm.owner}`; // Tampilkan nama brand dan owner
                         ksmSelect.appendChild(option);
                     });
 

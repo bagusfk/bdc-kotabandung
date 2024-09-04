@@ -29,6 +29,9 @@
                         Nama Barang
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Gambar
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Harga
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -64,18 +67,25 @@
                             {{ $data->name }}
                         </td>
                         <td class="px-6 py-4">
+                            <div class=" flex gap-4 overflow-x-auto">
+                                @foreach ($data->product_pictures as $pictures)
+                                    <img class="w-full" id="image-old" src="{{ asset($pictures->product_picture) }}">
+                                @endforeach
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
                             {{ $data->price }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->stock }}
                         </td>
                         <td class="px-6 py-4">
-                            -
+                            {{ $data->expired ? \Carbon\Carbon::parse($data->expired)->format('d-m-Y') : '-' }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $data->category->category }}
                         </td>
-                        <td class="px-6 py-4 flex">
+                        <td class="px-6 py-4">
                             <a href="{{ url('/edit-item/' . $data->id) }}"
                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
                             <form method="POST" action="{{ url('/delete-item/' . $data->id) }}"

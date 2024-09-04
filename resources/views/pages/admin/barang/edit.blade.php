@@ -1,19 +1,29 @@
 @extends('layouts.appadmin')
 @section('title', 'Kelola Barang')
 @section('content')
+    <style>
+        #image-upload-container img {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        #image-upload-container img:hover {
+            transform: scale(1.1);
+        }
+    </style>
     <form class="w-full" action="{{ route('update-item') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="grid grid-cols-2 gap-20 pb-[5rem]">
             <div class="">
-                <input type="hidden" name="id" value="{{ $item->id }}">
+                <input type="hidden" name="id" value="{{ $stokbarang->id }}">
                 <div class="">
                     <label for="category"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori</label>
                     <select id="category" name="category_id"
                         class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach ($category as $data)
-                            <option value="{{ $data->id }}" {{ $data->id == $item->category_id ? 'selected' : '' }}>
+                            <option value="{{ $data->id }}"
+                                {{ $data->id == $stokbarang->category_id ? 'selected' : '' }}>
                                 {{ $data->category }}</option>
                         @endforeach
                     </select>
@@ -25,7 +35,7 @@
                         class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach ($ksm as $ksms)
                             <option value="{{ $ksms->id }}"
-                                {{ $ksms->id == $item->kelola_data_ksm_id ? 'selected' : '' }}>
+                                {{ $ksms->id == $stokbarang->kelola_data_ksm_id ? 'selected' : '' }}>
                                 {{ $ksms->brand_name }} - {{ $ksms->owner }}</option>
                         @endforeach
                     </select>
@@ -34,16 +44,37 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Barang</label>
                     <input type="text" name="name" id="name"
                         class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value="{{ $item->name }}">
+                        value="{{ $stokbarang->name }}">
                     @error('name')
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="mt-[1rem]">
+                    <label
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Berat/<small>gram</small></label>
+                    <input type="number" name="weight" id="weight"
+                        class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        value="{{ $stokbarang->weight }}">
+                    @error('weight')
+                        <span class="text-red-500 text-sm"><br />{{ $message }}</span>
+                    @enderror
+                </div>
+                @if ($stokbarang->category_id == 3)
+                    <div class="mt-[1rem]" id="dateExpired">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Expired</label>
+                        <input type="date" name="expired" id="expired"
+                            class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            value="{{ $stokbarang->expired }}">
+                        @error('expired')
+                            <span class="text-red-500 text-sm"><br />{{ $message }}</span>
+                        @enderror
+                    </div>
+                @endif
+                <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga</label>
                     <input type="number" name="price" id="price"
                         class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value="{{ $item->price }}">
+                        value="{{ $stokbarang->price }}">
                     @error('price')
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                     @enderror
@@ -52,41 +83,56 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Stok</label>
                     <input type="number" name="stock" id="stock"
                         class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value="{{ $item->stock }}">
+                        value="{{ $stokbarang->stock }}">
                     @error('stock')
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gambar</label>
-                    <div class="flex items-center justify-center">
-                        <label for="picture_product"
-                            class="relative w-64 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer flex flex-col items-center justify-center">
-                            <input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file"
-                                id="picture_product" name="picture_product" onchange="previewImage()">
-                            <img class="absolute inset-0 w-full h-full object-contain hidden" id="uploaded-image"
-                                src="" alt="Uploaded Image">
-                            <span
-                                class="absolute top-0 right-0 w-8 h-8 mt-1 mr-1 p-1.5 rounded-full bg-white opacity-80 hover:opacity-100">
-                                <svg class=" text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </span>
-                            <img class="absolute inset-0 w-full h-full object-contain" id="image-old"
-                                src="{{ asset($item->picture_product) }}">
-                        </label>
+                    <div id="image-upload-container" class="flex flex-wrap gap-2">
+                        <!-- Existing images preview -->
+                        <div id="preview-container" class="flex flex-wrap gap-2">
+                            @foreach ($stokbarang->product_pictures as $pictures)
+                                <div class="relative group w-24 h-24" data-id="{{ $pictures->id }}">
+                                    <img class="w-full h-full object-cover rounded-md"
+                                        src="{{ asset($pictures->product_picture) }}">
+                                    <button type="button"
+                                        class="absolute top-0 right-0 bg-white text-red-500 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                                        onclick="removeExistingImage(this, {{ $pictures->id }})">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4"
+                                            viewBox="0 0 16 16">
+                                            <path
+                                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 1 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                        <!-- Input for new images -->
+                        <div class="w-24 h-24 border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer"
+                            id="upload-placeholder" onclick="triggerFileInput()">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8 text-gray-400"
+                                viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                <path
+                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
+                            </svg>
+                            <input type="file" id="picture_product" name="picture_product[]" accept="image/*" multiple
+                                class="hidden" onchange="handleImageUpload(this)">
+                        </div>
                     </div>
                     @error('picture_product')
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                     @enderror
                 </div>
+
+                <!-- Hidden input to store IDs of removed images -->
+                <input type="hidden" id="removed_images" name="removed_images" value="">
+
                 <div class="mt-[1rem]">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
                     <textarea id="description" name="description" rows="8"
-                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ $item->description }}</textarea>
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ $stokbarang->description }}</textarea>
                     @error('description')
                         <span class="text-red-500 text-sm"><br />{{ $message }}</span>
                     @enderror
@@ -102,23 +148,64 @@
     </form>
 
     <script>
-        function previewImage() {
-            var fileInput = document.getElementById('picture_product');
-            var previewImage = document.getElementById('uploaded-image');
-            var imageOld = document.getElementById('image-old');
+        function triggerFileInput() {
+            document.getElementById('picture_product').click();
+        }
 
-            var file = fileInput.files[0];
-            var reader = new FileReader();
-
-            reader.onload = function() {
-                previewImage.src = reader.result;
-                previewImage.classList.remove('hidden'); // Tampilkan gambar yang diunggah
-                imageOld.classList.add('hidden');
-            }
-
-            if (file) {
+        function handleImageUpload(input) {
+            const previewContainer = document.getElementById('preview-container');
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.classList.add('relative', 'group', 'w-24', 'h-24');
+                    div.innerHTML = `
+                <img class="w-full h-full object-cover rounded-md" src="${e.target.result}">
+                <button type="button"
+                    class="absolute top-0 right-0 bg-white text-red-500 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    onclick="removeImage(this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 1 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            `;
+                    previewContainer.appendChild(div);
+                };
                 reader.readAsDataURL(file);
-            }
+            });
+        }
+
+        function removeImage(button, index) {
+            // Remove the image from the UI
+            const container = button.closest('div');
+            container.remove();
+
+            // Remove the file from the input
+            const input = document.getElementById('picture_product');
+            const dataTransfer = new DataTransfer();
+
+            // Re-add only the files that weren't removed
+            Array.from(input.files).forEach((file, i) => {
+                if (i !== index) {
+                    dataTransfer.items.add(file);
+                }
+            });
+
+            // Update the input with the new files
+            input.files = dataTransfer.files;
+        }
+
+
+        function removeExistingImage(button, id) {
+            // Remove the image from the UI
+            const container = button.closest('div');
+            container.remove();
+
+            // Add the image ID to the hidden input field
+            const removedImagesInput = document.getElementById('removed_images');
+            let removedImages = removedImagesInput.value ? removedImagesInput.value.split(',') : [];
+            removedImages.push(id);
+            removedImagesInput.value = removedImages.join(',');
         }
     </script>
 

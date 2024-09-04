@@ -11,7 +11,7 @@ class Stokbarang extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'category_id', 'kelola_data_ksm_id', 'name', 'weight', 'stock', 'price', 'description'];
+    protected $fillable = ['id', 'category_id', 'kelola_data_ksm_id', 'name', 'weight', 'stock', 'price', 'expired', 'description'];
 
     public function category()
     {
@@ -31,5 +31,10 @@ class Stokbarang extends Model
     public function order()
     {
         return $this->hasMany(Order::class, 'product_id');
+    }
+
+    public function product_pictures()
+    {
+        return $this->hasMany(Product_pictures::class, 'product_id');
     }
 }

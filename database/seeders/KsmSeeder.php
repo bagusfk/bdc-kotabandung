@@ -306,5 +306,20 @@ class KsmSeeder extends Seeder
             'address' => 'Jln Raya Ujungberung 74/112 Bandung',
             'nib' => '18112110029856'
         ]);
+        Kelola_data_ksm::create([
+            'cluster' => 'c',
+            'category_id' => 3,
+            'user_id' => 11,
+            'owner' => 'Annisah Said',
+            'owner_picture' => 'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
+            'no_wa' => '08164212124',
+            'brand_name' => 'MEHRUNISSA',
+            'business_entity' => 'Perseorangan',
+            'business_description' => 'Brand adalah sebuah identitas yang memudahkan konsumen untuk mengenal produk usaha  yang kita tawarkan. Atau sebuah tanda yang dikenakan oleh pengusaha/pembisnis pada sebuah barang yang di hasklkan .
+            Brand atau merek akan menjadi awal dari perjalanan bagi pembisnis itu sendiri . ',
+            'product_sales_address' => 'Jln Raya Ujungberung 74/112 Bandung',
+            'address' => 'Jln Raya Ujungberung 74/112 Bandung',
+            'nib' => '18112110029856'
+        ]);
     }
 }

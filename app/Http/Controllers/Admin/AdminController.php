@@ -119,6 +119,15 @@ class AdminController extends Controller
             'description' => 'required',
         ]);
 
+        if ($request->category_id == 3) {
+            $request->validate([
+                'expired' => 'required'
+            ]);
+            $expired = $request->expired;
+        } else {
+            $expired = "-";
+        }
+
         $stokbarang = new Stokbarang();
         $stokbarang->id = $request->id;
         $stokbarang->category_id = $request->category_id;
@@ -127,6 +136,7 @@ class AdminController extends Controller
         $stokbarang->weight = $request->weight;
         $stokbarang->stock = $request->stock;
         $stokbarang->price = $request->price;
+        $stokbarang->expired = $expired;
         $stokbarang->description = $request->description;
         $stokbarang->save();
 
@@ -162,7 +172,7 @@ class AdminController extends Controller
 
     public function edit_item($id)
     {
-        $data['item'] = Stokbarang::findOrFail($id);
+        $data['stokbarang'] = Stokbarang::findOrFail($id);
         $data['ksm'] = Kelola_data_ksm::all();
         $data['category'] = category::all();
         return view('pages.admin.barang.edit', $data);
@@ -170,37 +180,60 @@ class AdminController extends Controller
 
     public function update_item(Request $request)
     {
-
         $id = $request->get('id');
         $stokbarang = Stokbarang::find($id);
 
+        // Validate the request data
         $item = $request->validate([
             'category_id' => 'required',
             'kelola_data_ksm_id' => 'required',
             'name' => 'required',
             'stock' => 'required',
+            'weight' => 'required',
             'price' => 'required',
             'description' => 'required',
         ]);
 
+        if ($request->category_id == 3) {
+            $request->validate([
+                'expired' => 'required'
+            ]);
+            $expired = $request->expired;
+        } else {
+            $expired = "-";
+        }
+
         // Update data Stokbarang
         $stokbarang->update($item);
+        $stokbarang->update([
+            'expired' => $expired
+        ]);
 
-        // Periksa apakah ada file gambar yang diunggah
-        if ($request->hasFile('picture_product')) {
-            // Jika ada, simpan path gambar baru
-            $newImagePath = $request->file('picture_product')->store('public/items');
-            $newImagePath = str_replace('public/', '', $newImagePath);
+        $removedImages = explode(',', $request->input('removed_images'));
+        if (!empty($removedImages)) {
+            foreach ($removedImages as $imageId) {
+                $productPicture = Product_pictures::find($imageId);
+                if ($productPicture) {
+                    // Hapus gambar dari storage
+                    $oldImage = str_replace('storage/', 'public/', $productPicture->product_picture);
+                    Storage::delete($oldImage);
 
-            // Hapus gambar lama jika ada perubahan gambar
-            if ($stokbarang->picture_product && $stokbarang->picture_product !== 'storage/default.jpg') {
-                $oldImage = str_replace('storage/', '', $stokbarang->picture_product);
-                Storage::delete('public/' . $oldImage);
+                    // Hapus dari database
+                    $productPicture->delete();
+                }
             }
+        }
 
-            // Update path gambar Stokbarang dengan yang baru
-            $stokbarang->picture_product = 'storage/' . $newImagePath;
-            $stokbarang->save();
+        // Handle new uploaded images
+        if ($request->hasFile('picture_product')) {
+            foreach ($request->file('picture_product') as $file) {
+                $imagePath = $file->store('public/items');
+                $imagePath = str_replace('public/', 'storage/', $imagePath);
+                Product_pictures::create([
+                    'product_id' => $id,
+                    'product_picture' => $imagePath,
+                ]);
+            }
         }
 
         return redirect('/kelola-barang');
