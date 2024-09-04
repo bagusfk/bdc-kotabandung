@@ -111,7 +111,7 @@ class AdminController extends Controller
             'id' => 'required',
             'category_id' => 'required',
             'ksm_id' => 'required',
-            'picture_product.*' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Validasi banyak gambar
+            'picture_product.*' => 'required | image | mimes:jpeg,png,jpg | max:2048', // Validasi banyak gambar
             'name' => 'required',
             'weight' => 'required',
             'stock' => 'required',

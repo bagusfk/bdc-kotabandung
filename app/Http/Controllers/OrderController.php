@@ -23,9 +23,9 @@ class OrderController extends Controller
     {
         // dd($request);
         $req = $request->validate([
-                    'selected_carts.*' => 'required',
-                    'qty.*' => 'required|integer|min:1'
-                ]);
+            'selected_carts.*' => 'required',
+            'qty.*' => 'required|integer|min:1'
+        ]);
 
         // dd($req);
         if ($request->selected_carts === null) {
@@ -41,7 +41,7 @@ class OrderController extends Controller
 
         $buyer_id = Auth::user()->id;
         // Membuat invoice
-        $invoice = 'INV-'.uniqid().'-'.time().$buyer_id;
+        $invoice = 'INV-' . uniqid() . '-' . time() . $buyer_id;
         // dd($invoice);
 
         $transaction = Transaction::create([
@@ -83,12 +83,12 @@ class OrderController extends Controller
             'total_weight' => $totalWeight,
         ]);
 
-        $order = Order::with('item','transaction')
-        ->where('transaction_id', $transaction->id)
-        ->get()
-        ->groupBy(function($item) {
-            return $item->item->ksm->brand_name;
-        });
+        $order = Order::with('item', 'transaction')
+            ->where('transaction_id', $transaction->id)
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->item->ksm->brand_name;
+            });
 
         // Menghitung total harga dari produk di setiap toko
         $totalPrices = [];
@@ -112,7 +112,6 @@ class OrderController extends Controller
             });
             $totalQty = $orders->sum('qty');
             $totals[$sellerName] = ['totalPrice' => $totalPrice, 'totalQty' => $totalQty];
-
         }
 
         $transaction_id = $transaction->id;
@@ -126,7 +125,7 @@ class OrderController extends Controller
             }
         }
 
-        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices', 'totalWeight'));
+        return view('pages.pembeli.transaction.index', compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices', 'totalWeight'));
     }
 
     public function continueCheckout($id)
@@ -139,12 +138,12 @@ class OrderController extends Controller
 
         $transaction_id = $transaction->id;
 
-        $order = Order::with('item','transaction')
-        ->where('transaction_id', $transaction->id)
-        ->get()
-        ->groupBy(function($item) {
-            return $item->item->ksm->brand_name;
-        });
+        $order = Order::with('item', 'transaction')
+            ->where('transaction_id', $transaction->id)
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->item->ksm->brand_name;
+            });
 
         $totalPrices = [];
         foreach ($order as $sellerName => $products) {
@@ -167,10 +166,9 @@ class OrderController extends Controller
             });
             $totalQty = $orders->sum('qty');
             $totals[$sellerName] = ['totalPrice' => $totalPrice, 'totalQty' => $totalQty];
-
         }
 
-        return view('pages.pembeli.transaction.index' , compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices', 'totalWeight'));
+        return view('pages.pembeli.transaction.index', compact('subTotalPrice', 'order', 'totals', 'transaction_id', 'totalPrices', 'totalWeight'));
     }
 
     function getCourierServices(Request $request)
@@ -194,7 +192,7 @@ class OrderController extends Controller
         // ]);
 
         $req = "origin=501&destination=114&weight=1700&courier=jne";
-        $req = 'origin='.$origin.'&destination='.$destination.'&weight='.$weight.'&courier=' . $courier;
+        $req = 'origin=' . $origin . '&destination=' . $destination . '&weight=' . $weight . '&courier=' . $courier;
 
         $curl = curl_init();
 
@@ -209,7 +207,7 @@ class OrderController extends Controller
             CURLOPT_POSTFIELDS => $req,
             CURLOPT_HTTPHEADER => array(
                 "content-type: application/x-www-form-urlencoded",
-                "key:".config('services.rajaongkir.api_key')
+                "key:" . config('services.rajaongkir.api_key')
             ),
         ));
 
@@ -221,9 +219,9 @@ class OrderController extends Controller
         // dd(json_decode($response,true)['rajaongkir']['results']);
 
         if ($err) {
-        echo "cURL Error #:" . $err;
+            echo "cURL Error #:" . $err;
         } else {
-            $data = json_decode($response,true)['rajaongkir']['results'];
+            $data = json_decode($response, true)['rajaongkir']['results'];
             return $data;
         }
 
@@ -235,14 +233,14 @@ class OrderController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'transaction_id' =>'required',
-            'address' =>'required',
-            'phone' =>'required',
-            'total_qty' =>'required',
+            'transaction_id' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+            'total_qty' => 'required',
             'expedition' => 'required',
             'expedition_type' => 'required',
-            'total_price' =>'required',
-            'shipping_cost' =>'required'
+            'total_price' => 'required',
+            'shipping_cost' => 'required'
         ]);
 
         // dd($request->total_price);
@@ -253,7 +251,7 @@ class OrderController extends Controller
         $desa = 'cicukur';
         $kec = 'cikarang barat';
 
-        $address = $request->input('address').', desa '.$desa.', kec.'.$kec.', '.$user->cities->type.' '.$user->cities->city_name.', '.$user->cities->province;
+        $address = $request->input('address') . ', desa ' . $desa . ', kec.' . $kec . ', ' . $user->cities->type . ' ' . $user->cities->city_name . ', ' . $user->cities->province;
 
         // dd($address);
 
@@ -277,8 +275,8 @@ class OrderController extends Controller
         // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
 
-        $params =[
-            'transaction_details'=>[
+        $params = [
+            'transaction_details' => [
                 'order_id' => uniqid(),
                 'gross_amount' => $transaction->total_price,
             ]
@@ -292,7 +290,7 @@ class OrderController extends Controller
         $snapToken = \Midtrans\Snap::getSnapToken($params);
 
 
-        $response = response()->json([ 'status' => 'success', 'snapToken' => $snapToken ]);
+        $response = response()->json(['status' => 'success', 'snapToken' => $snapToken]);
 
         // return view('pages.pembeli.transaction.payment', compact('snapToken'));
         return $response;
@@ -314,14 +312,14 @@ class OrderController extends Controller
         //         'accept' => 'application/json',
         //     ],
         //   ]);
-          $response = Http::withHeaders([
-            'Authorization' => 'Basic '. base64_encode(config('services.midtrans.server_key') . ':'),
+        $response = Http::withHeaders([
+            'Authorization' => 'Basic ' . base64_encode(config('services.midtrans.server_key') . ':'),
             'accept' => 'application/json',
             'content-type' => 'application/json',
-          ])->get("https://api.sandbox.midtrans.com/v2/{$order_id}/status");
+        ])->get("https://api.sandbox.midtrans.com/v2/{$order_id}/status");
 
         $payment_type = $response->json();
-        $va = is_array($payment_type['va_numbers'] ?? null)? $payment_type['va_numbers'] : [];
+        $va = is_array($payment_type['va_numbers'] ?? null) ? $payment_type['va_numbers'] : [];
         //   dd($payment_methode);
         $transaction->update([
             'payment_type' => $payment_type['payment_type'],
@@ -346,10 +344,10 @@ class OrderController extends Controller
         // dd($order);
 
         $transactions = Transaction::where('buyer_id', $buyer_id)
-        ->with('orders')
-        ->orderBy('created_at', 'desc')
-        ->get();
-        // dd($transactions);
+            // ->with('orders')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        // dd($transactions->first()->orders);
 
         // $transactions = $transactions->map(function ($transaction) {
         //     $totalItems = $transaction->orders->sum('qty');
