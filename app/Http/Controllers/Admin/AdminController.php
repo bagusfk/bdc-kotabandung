@@ -119,15 +119,6 @@ class AdminController extends Controller
             'description' => 'required',
         ]);
 
-        if ($request->category_id == 3) {
-            $request->validate([
-                'expired' => 'required'
-            ]);
-            $expired = $request->expired;
-        } else {
-            $expired = "-";
-        }
-
         $stokbarang = new Stokbarang();
         $stokbarang->id = $request->id;
         $stokbarang->category_id = $request->category_id;
@@ -135,8 +126,15 @@ class AdminController extends Controller
         $stokbarang->name = $request->name;
         $stokbarang->weight = $request->weight;
         $stokbarang->stock = $request->stock;
+        if ($request->category_id == 3) {
+            $request->validate([
+                'expired' => 'required'
+            ]);
+            $expired = $request->expired;
+
+            $stokbarang->expired = $expired;
+        }
         $stokbarang->price = $request->price;
-        $stokbarang->expired = $expired;
         $stokbarang->description = $request->description;
         $stokbarang->save();
 
