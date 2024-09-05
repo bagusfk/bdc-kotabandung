@@ -20,10 +20,54 @@
             </a>
             <section class="bg-white">
                 <div class="flex flex-wrap justify-center gap-4 py-[1rem]">
-                    <div class="flex h-[450px] w-[450px] items-center overflow-hidden rounded-xl border-2 bg-red-300">
+                    {{-- galery --}}
+                    <div class="-z-0 mt-4 flex h-[450px] items-center justify-center">
+                        <div id="custom-controls-gallery" class="relative w-full" data-carousel="slide">
+                            <!-- Carousel wrapper -->
+                            <div class="relative h-[450px] w-[450px] overflow-hidden rounded-xl">
+                                {{-- @dd($item->product_pictures) --}}
+                                @foreach ($item->product_pictures as $image)
+                                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                                        <img src="{{ asset($image->product_picture) }}"
+                                            class="absolute left-1/2 top-1/2 block h-auto max-w-full -translate-x-1/2 -translate-y-1/2"
+                                            alt="">
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="flex items-center justify-center pt-4">
+                                <button type="button"
+                                    class="group me-4 flex h-full cursor-pointer items-center justify-center focus:outline-none"
+                                    data-carousel-prev>
+                                    <span
+                                        class="text-gray-400 hover:text-gray-900 group-focus:text-gray-900 dark:hover:text-white dark:group-focus:text-white">
+                                        <svg class="h-5 w-5 rtl:rotate-180" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4" />
+                                        </svg>
+                                        <span class="sr-only">Previous</span>
+                                    </span>
+                                </button>
+                                <button type="button"
+                                    class="group flex h-full cursor-pointer items-center justify-center focus:outline-none"
+                                    data-carousel-next>
+                                    <span
+                                        class="text-gray-400 hover:text-gray-900 group-focus:text-gray-900 dark:hover:text-white dark:group-focus:text-white">
+                                        <svg class="h-5 w-5 rtl:rotate-180" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                        </svg>
+                                        <span class="sr-only">Next</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <div class="flex h-[450px] w-[450px] items-center overflow-hidden rounded-xl border-2 bg-red-300">
                         <img class="w-full" src="{{ asset($item->product_pictures()->first()->product_picture) }}"
                             alt="" />
-                    </div>
+                    </div> --}}
                     <div class="flex flex-1 flex-col gap-4 px-8 py-8">
                         <h5 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $item->name }}
                         </h5>
