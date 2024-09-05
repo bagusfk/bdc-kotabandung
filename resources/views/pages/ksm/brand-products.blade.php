@@ -141,7 +141,7 @@
                 </div>
                 <p>hubungi admin via WhatsApp untuk menambahkan produk di brand yang kamu buat</p>
                 {{-- isi no telp admin --}}
-                <a href="https://wa.me/{no telp admin}?text=Hello%20Admin" target="_blank"
+                <a href="https://wa.me/081222541485?text=Hello%20Admin" target="_blank"
                     class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white">Hubungi Admin</a>
             </div>
         @endif
