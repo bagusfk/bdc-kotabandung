@@ -27,12 +27,12 @@
                                 </div>
                             </div>
                             <div class="flex items-center justify-end gap-8">
-                                <a href="#" class="font-medium text-red-500">Hapus</a>
+                                <a href="{{ route('cart.destroy', $cart) }}" class="font-medium text-red-500">Hapus</a>
                                 <div class="quantity flex items-center">
                                     <div class="font-medium">Jumlah : </div>
                                     <input id="qty-{{ $cart->id }}" type="number" name="qty[{{ $cart->id }}]"
-                                        value="{{ $cart->qty }}" min="1" max="{{ $cart->stokbarang->stock }}"
-                                        class="cart-qty">
+                                        value="{{ $cart->qty }}" min="1"
+                                        max="{{ $cart->stokbarang->stock }}" class="cart-qty">
                                 </div>
                             </div>
                         @endforeach
