@@ -162,11 +162,7 @@
             <div class="grid gap-4 max-lg:grid-cols-2 max-md:grid-cols-1 lg:grid-cols-3">
                 <div class="my-4 flex items-start">
                     <img class="w-10" src="{{ asset('assets/location-dot-solid.svg') }}" alt="">
-                    <span class="ml-4">Jl. Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta nesciunt,
-                        magni
-                        eligendi eum enim, dicta totam, vero dolorem illo unde fugit mollitia reiciendis quaerat culpa.
-                        Quae
-                        illum nisi nihil aut.</span>
+                    <span class="ml-4">Jl. Wastukencana No.2, Babakan Ciamis, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40117</span>
                 </div>
                 <div class="my-4 w-full">
                 </div>
@@ -174,7 +170,7 @@
                     <div class="flex h-10 items-center lg:pl-[5rem]">
                         <img class="w-10" src="{{ asset('assets/instagram.svg') }}" alt="">
                         <a href="https://www.instagram.com/bdc.bandungjuara/" target="_blank"
-                            class="ml-4 align-middle hover:underline">@bdjbandungjuara</a>
+                            class="ml-4 align-middle hover:underline">@bdc.bandungjuara</a>
                     </div>
                     <div class="my-4 flex h-10 items-center lg:pl-[5rem]">
                         <img class="w-10" src="{{ asset('assets/whatsapp.svg') }}" alt="">
