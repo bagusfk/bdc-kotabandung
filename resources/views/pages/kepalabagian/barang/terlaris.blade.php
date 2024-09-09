@@ -16,6 +16,13 @@
     </style>
     @php
         $url = request()->segment(2);
+        $routeUrls = [
+            'terlaris_id' => 0,
+            'laris_id' => 1,
+            'kurang_laris_id' => 2,
+        ];
+        $currentRoute = Route::currentRouteName();
+        // dd($currentRoute);
     @endphp
     <h3 class="text-sm">Produk Fashion Terjual</h3>
     <div class="flex items-center justify-between">
@@ -23,8 +30,12 @@
             <div class="">
                 <ul class="bg-slate-200">
                     @foreach ($category as $categories)
+                        @php
+                            $selectedUrlIndex = $routeUrls[$currentRoute] ?? 0;
+                            // dd($selectedUrlIndex);
+                        @endphp
                         <li>
-                            <a href="{{ url($categories->category_url) }}"
+                            <a href="{{ url($categories->url[$selectedUrlIndex]) }}"
                                 class="flex items-center w-full py-4 px-2 text-gray-900 transition duration-75 group hover:rounded-none hover:bg-primary dark:hover:bg-gray-700">
                                 <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->

@@ -15,17 +15,23 @@ class CategorySeeder extends Seeder
     {
         category::create([
             'category' => 'Fashion',
-            'url' => 'terlaris/1'
+            'url' => json_encode([
+                'terlaris/1', 'laris/1', 'kurang_laris/1'
+            ])
         ]);
 
         category::create([
             'category' => 'Kriya',
-            'url' => 'terlaris/2'
+            'url' => json_encode([
+                'terlaris/2', 'laris/2', 'kurang_laris/2'
+            ])
         ]);
 
         category::create([
             'category' => 'Kuliner',
-            'url' => 'terlaris/3'
+            'url' => json_encode([
+                'terlaris/3', 'laris/3', 'kurang_laris/3'
+            ])
         ]);
     }
 }

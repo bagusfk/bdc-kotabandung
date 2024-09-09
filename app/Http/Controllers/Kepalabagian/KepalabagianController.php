@@ -95,11 +95,11 @@ class KepalabagianController extends Controller
 
     public function terlaris_kg($id)
     {
-        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+        $category = category::select('category', 'url', DB::raw('SUM(orders.qty) as total_qty'))
             ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
             ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
             ->whereNotNull('transaction_id')
-            ->groupBy('category_name', 'category_url')
+            ->groupBy('category', 'url')
             ->orderBy('total_qty', 'desc')
             ->get();
 
@@ -109,17 +109,23 @@ class KepalabagianController extends Controller
             ->where('categories.id', $id)
             ->whereNotNull('transaction_id')
             ->groupBy('stokbarangs.name')
+            ->having('total_qty', '>', 5)
             ->get();
+
+        foreach ($category as $cat) {
+            $cat->url = json_decode($cat->url); // Decode JSON to access properties
+        }
+
         return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
     }
 
     public function laris_kg($id)
     {
-        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+        $category = category::select('category', 'url', DB::raw('SUM(orders.qty) as total_qty'))
             ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
             ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
             ->whereNotNull('transaction_id')
-            ->groupBy('category_name', 'category_url')
+            ->groupBy('category', 'url')
             ->orderBy('total_qty', 'desc')
             ->get();
 
@@ -129,17 +135,24 @@ class KepalabagianController extends Controller
             ->where('categories.id', $id)
             ->whereNotNull('transaction_id')
             ->groupBy('stokbarangs.name')
+            ->having('total_qty', '>', 2)
+            ->having('total_qty', '<', 5)
             ->get();
+
+        foreach ($category as $cat) {
+            $cat->url = json_decode($cat->url); // Decode JSON to access properties
+        }
+
         return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
     }
 
     public function kurang_laris_kg($id)
     {
-        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+        $category = category::select('category', 'url', DB::raw('SUM(orders.qty) as total_qty'))
             ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
             ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
             ->whereNotNull('transaction_id')
-            ->groupBy('category_name', 'category_url')
+            ->groupBy('category', 'url')
             ->orderBy('total_qty', 'desc')
             ->get();
 
@@ -149,7 +162,13 @@ class KepalabagianController extends Controller
             ->where('categories.id', $id)
             ->whereNotNull('transaction_id')
             ->groupBy('stokbarangs.name')
+            ->having('total_qty', '<', 2)
             ->get();
+
+        foreach ($category as $cat) {
+            $cat->url = json_decode($cat->url); // Decode JSON to access properties
+        }
+
         return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
     }
 
@@ -290,26 +309,6 @@ class KepalabagianController extends Controller
         $finance = Kelola_data_penjualan::all();
         $neraca = Neraca::all();
 
-        $currentMonth = Carbon::now()->format('m'); // For numeric representation
-        // or
-        $currentMonthName = Carbon::now()->translatedFormat('F'); // For full month name
-        $debtData = Omzet::select(
-            'kelola_data_ksm_id',
-            'kelola_data_ksms.owner as ksm_owner', // Add the column from kelola_data_ksm table
-            DB::raw('SUM(omzet) as total_omzet'),
-            DB::raw('DATE_FORMAT(omzets.created_at, "%m") as month')
-        )
-            ->join('kelola_data_ksms', 'kelola_data_ksms.id', '=', 'omzets.kelola_data_ksm_id') // Adjust if needed
-            ->whereMonth('omzets.created_at', $currentMonth)
-            ->groupBy('month', 'kelola_data_ksm_id', 'ksm_owner')
-            ->get();
-
-        // Extract total_omzet values
-        $debt = $debtData->pluck('total_omzet')->toArray();
-        // Extract month labels and KSM names
-        $labels = $debtData->map(function ($item) {
-            return $item->ksm_owner; // Combine KSM name and month
-        })->toArray();
-        return view('pages.kepalabagian.finance.view', compact('neraca', 'finance', 'labels', 'debt', 'currentMonthName', 'ksm', 'omzet'));
+        return view('pages.kepalabagian.finance.view', compact('neraca', 'finance', 'ksm', 'omzet'));
     }
 }

@@ -258,11 +258,11 @@ class AdminController extends Controller
     public function terlaris_id($id)
     {
 
-        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+        $category = category::select('category', 'url', DB::raw('SUM(orders.qty) as total_qty'))
             ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
             ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
             ->whereNotNull('transaction_id')
-            ->groupBy('category_name', 'category_url')
+            ->groupBy('category', 'url')
             ->orderBy('total_qty', 'desc')
             ->get();
 
@@ -272,7 +272,12 @@ class AdminController extends Controller
             ->where('categories.id', $id)
             ->whereNotNull('transaction_id')
             ->groupBy('stokbarangs.name')
+            ->having('total_qty', '>', 5)
             ->get();
+
+        foreach ($category as $cat) {
+            $cat->url = json_decode($cat->url); // Decode JSON to access properties
+        }
 
         return view('pages.admin.barang.fashion.view', compact('order', 'category'));
     }
@@ -280,11 +285,11 @@ class AdminController extends Controller
     public function laris_id($id)
     {
 
-        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+        $category = category::select('category', 'url', DB::raw('SUM(orders.qty) as total_qty'))
             ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
             ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
             ->whereNotNull('transaction_id')
-            ->groupBy('category_name', 'category_url')
+            ->groupBy('category', 'url')
             ->orderBy('total_qty', 'desc')
             ->get();
 
@@ -294,7 +299,13 @@ class AdminController extends Controller
             ->where('categories.id', $id)
             ->whereNotNull('transaction_id')
             ->groupBy('stokbarangs.name')
+            ->having('total_qty', '>', 2)
+            ->having('total_qty', '<', 5)
             ->get();
+
+        foreach ($category as $cat) {
+            $cat->url = json_decode($cat->url); // Decode JSON to access properties
+        }
 
         return view('pages.admin.barang.fashion.view', compact('order', 'category'));
     }
@@ -302,11 +313,11 @@ class AdminController extends Controller
     public function kurang_laris_id($id)
     {
 
-        $category = category::select('category as category_name', 'url as category_url', DB::raw('SUM(orders.qty) as total_qty'))
+        $category = category::select('category', 'url', DB::raw('SUM(orders.qty) as total_qty'))
             ->join('stokbarangs', 'stokbarangs.category_id', '=', 'categories.id')
             ->join('orders', 'stokbarangs.id', '=', 'orders.product_id')
             ->whereNotNull('transaction_id')
-            ->groupBy('category_name', 'category_url')
+            ->groupBy('category', 'url')
             ->orderBy('total_qty', 'desc')
             ->get();
 
@@ -316,7 +327,12 @@ class AdminController extends Controller
             ->where('categories.id', $id)
             ->whereNotNull('transaction_id')
             ->groupBy('stokbarangs.name')
+            ->having('total_qty', '<', 2)
             ->get();
+
+        foreach ($category as $cat) {
+            $cat->url = json_decode($cat->url); // Decode JSON to access properties
+        }
 
         return view('pages.admin.barang.fashion.view', compact('order', 'category'));
     }
@@ -968,27 +984,25 @@ class AdminController extends Controller
 
     public function manage_finance()
     {
-
-
         $ksm = Kelola_data_ksm::all();
         $omzet = Omzet::all();
         $finance = Kelola_data_penjualan::all();
         $neraca = Neraca::all();
 
-        // $bulanIndonesia = [
-        //     '01' => 'Januari',
-        //     '02' => 'Februari',
-        //     '03' => 'Maret',
-        //     '04' => 'April',
-        //     '05' => 'Mei',
-        //     '06' => 'Juni',
-        //     '07' => 'Juli',
-        //     '08' => 'Agustus',
-        //     '09' => 'September',
-        //     '10' => 'Oktober',
-        //     '11' => 'November',
-        //     '12' => 'Desember',
-        // ];
+        $bulan = [
+            'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember',
+        ];
 
         // $currentMonth = Carbon::now()->format('m'); // For numeric representation
 
@@ -997,7 +1011,7 @@ class AdminController extends Controller
         // or
         $currentMonthName = Carbon::now()->translatedFormat('F'); // For full month name
 
-        return view('pages.admin.finance.view', compact('neraca', 'finance', 'currentMonthName', 'ksm', 'omzet'));
+        return view('pages.admin.finance.view', compact('neraca', 'finance', 'currentMonthName', 'ksm', 'omzet', 'bulan'));
     }
 
     public function omzet_store(Request $request)
@@ -1010,55 +1024,67 @@ class AdminController extends Controller
         ]);
 
         Omzet::create($add);
-        return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
+
+        $selectedRadio = 'omzet';
+        return redirect()->back()->with('selected_radio', $selectedRadio)->with('status', 'Data berhasil ditambahkan!');
+    }
+
+    public function omzet_update(Request $request, $id)
+    {
+        $data = $request->validate([
+            'month' => 'required',
+            'omzet' => 'required',
+            'total_omzet' => 'required',
+            'profit' => 'required',
+        ]);
+
+        $omzet = Omzet::find($id);
+        $omzet->update($data);
+
+        $selectedRadio = 'omzet';
+        return redirect()->back()->with('selected_radio', $selectedRadio)->with('status', 'Data berhasil diperbarui!');
     }
 
     public function omzet_destroy($id)
     {
         Omzet::findOrFail($id)->delete();
-        return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
+
+        $selectedRadio = 'omzet';
+        return redirect()->back()->with('selected_radio', $selectedRadio)->with('delete', 'Data berhasil dihapus!');
     }
 
     public function labarugi_store(Request $request)
     {
         $data = $request->validate([
-            'kas' => 'nullable|numeric',
-            'bank_bjb' => 'nullable|numeric',
-            'bank_bandung' => 'nullable|numeric',
-            'sewa_bayar_dimuka' => 'nullable|numeric',
-            'piutang' => 'nullable|numeric',
-            'persediaan' => 'nullable|numeric',
-            'inventaris' => 'nullable|numeric',
-            'investasi' => 'nullable|numeric',
-            'harta_tetap' => 'nullable|numeric',
-            'penyusutan_harta_tetap' => 'nullable|numeric',
-            'hutang' => 'nullable|numeric',
-            'alokasi_bop_komite' => 'nullable|numeric',
-            'alokasi_bop_pengelola' => 'nullable|numeric',
-            'alokasi_gaji_pengelola' => 'nullable|numeric',
-            'alokasi_gaji_tenaga_ahli' => 'nullable|numeric',
-            'alokasi_pengembangan_kapasitas' => 'nullable|numeric',
-            'alokasi_sewa_kantor_dan_peralatan' => 'nullable|numeric',
-            'modal_bdc' => 'nullable|numeric',
-            'modal_awal' => 'nullable|numeric',
-            'pemupukan_modal_dari_laba' => 'nullable|numeric',
-            'lr_tahun_lalu' => 'nullable|numeric',
-            'lr_tahun_berjalan' => 'nullable|numeric',
+            'kode' => 'required',
+            'dated' => 'required',
+            'description' => 'required',
+            'debit' => 'nullable|numeric',
+            'kredit' => 'nullable|numeric',
         ]);
 
-        $penjualan = Kelola_data_penjualan::find(1);
-
-        if ($penjualan) {
-            // Jika data ditemukan, lakukan update
-            $penjualan->update($data);
-        } else {
-            // Jika data tidak ditemukan, lakukan create
-            Kelola_data_penjualan::create($data);
-        }
+        Kelola_data_penjualan::create($data);
 
         $selectedRadio = 'labarugi';
 
-        return redirect()->back()->with('selected_radio', $selectedRadio)->with('success', 'Data berhasil diperbarui!');
+        return redirect()->back()->with('selected_radio', $selectedRadio)->with('status', 'Data berhasil ditambahkan!');
+    }
+
+    public function labarugi_update(Request $request, $id)
+    {
+        $data = $request->validate([
+            'kode' => 'required',
+            'dated' => 'required',
+            'description' => 'required',
+            'debit' => 'nullable|numeric',
+            'kredit' => 'nullable|numeric',
+        ]);
+
+        $labarugi = Kelola_data_penjualan::find($id);
+        $labarugi->update($data);
+
+        $selectedRadio = 'labarugi';
+        return redirect()->back()->with('selected_radio', $selectedRadio)->with('status', 'Data berhasil diperbarui');
     }
 
     public function labarugi_destroy($id)
@@ -1066,7 +1092,8 @@ class AdminController extends Controller
         $transaction = Kelola_data_penjualan::findOrFail($id);
         $transaction->delete();
 
-        return redirect()->route('manage-finance')->with('delete', 'Data Berhasil Dihapus');
+        $selectedRadio = 'labarugi';
+        return redirect()->back()->with('selected_radio', $selectedRadio)->with('delete', 'Data berhasil dihapus');
     }
 
     public function neraca()
@@ -1088,29 +1115,53 @@ class AdminController extends Controller
     public function neraca_store(Request $request)
     {
         // Validate the input data
+        // $validatedData = $request->validate([
+        //     'penjualan' => 'required|numeric',
+        //     'diskon' => 'nullable|numeric',
+        //     'pendapatan_komisi' => 'nullable|numeric',
+        //     'jasa_bank' => 'nullable|numeric',
+        //     'pendapatan_lainnya' => 'nullable|numeric',
+        //     'persediaan_barang_awal' => 'nullable|numeric',
+        //     'pembelian_barang' => 'nullable|numeric',
+        //     'biaya_pengiriman' => 'nullable|numeric',
+        //     'biaya_lain' => 'nullable|numeric',
+        //     'persediaan_barang_akhir' => 'nullable|numeric',
+        // ]);
+        // $neraca = Neraca::find(1);
+
+        // if ($neraca) {
+        //     // Jika data ditemukan, lakukan update
+        //     $neraca->update($validatedData);
+        // } else {
+        //     // Jika data tidak ditemukan, lakukan create
+        //     Neraca::create($validatedData);
+        // }
+
         $validatedData = $request->validate([
-            'penjualan' => 'required|numeric',
-            'diskon' => 'nullable|numeric',
-            'pendapatan_komisi' => 'nullable|numeric',
-            'jasa_bank' => 'nullable|numeric',
-            'pendapatan_lainnya' => 'nullable|numeric',
-            'persediaan_barang_awal' => 'nullable|numeric',
-            'pembelian_barang' => 'nullable|numeric',
-            'biaya_pengiriman' => 'nullable|numeric',
-            'biaya_lain' => 'nullable|numeric',
-            'persediaan_barang_akhir' => 'nullable|numeric',
+            'kode' => 'required',
+            'dated' => 'required',
+            'description' => 'required',
+            'debit' => 'nullable|numeric',
+            'kredit' => 'nullable|numeric',
         ]);
 
-        $neraca = Neraca::find(1);
+        Neraca::create($validatedData);
+        return redirect()->back()->with('status', 'Data berhasil ditambahkan');
+    }
 
-        if ($neraca) {
-            // Jika data ditemukan, lakukan update
-            $neraca->update($validatedData);
-        } else {
-            // Jika data tidak ditemukan, lakukan create
-            Neraca::create($validatedData);
-        }
-        return redirect()->back()->with('status', 'Data Berhasil Ditambahkan');
+    public function neraca_update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'kode' => 'required',
+            'dated' => 'required',
+            'description' => 'required',
+            'debit' => 'nullable|numeric',
+            'kredit' => 'nullable|numeric',
+        ]);
+
+        $neraca = Neraca::find($id);
+        $neraca->update($validatedData);
+        return redirect()->back()->with('status', 'Data berhasil diperbarui');
     }
 
     public function neraca_destroy($id)
@@ -1118,7 +1169,7 @@ class AdminController extends Controller
         $transaction = Neraca::findOrFail($id);
         $transaction->delete();
 
-        return redirect()->back()->with('delete', 'Data Berhasil Dihapus');
+        return redirect()->back()->with('delete', 'Data berhasil dihapus');
         // return response()->json(['success' => 'Transaction deleted successfully']);
     }
 

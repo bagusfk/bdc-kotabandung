@@ -103,8 +103,10 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/kelola-keuangan', [AdminController::class, 'manage_finance'])->name('manage-finance');
         Route::get('/tambah-kolom', [AdminController::class, 'neraca'])->name('neraca');
         Route::put('/omzet_store', [AdminController::class, 'omzet_store'])->name('omzet_store');
-        Route::put('/labarugi_store', [AdminController::class, 'labarugi_store'])->name('labarugi_store');
+        Route::put('/omzet_update/{id}', [AdminController::class, 'omzet_update'])->name('omzet_update');
         Route::delete('/omzet_destroy/{id}', [AdminController::class, 'omzet_destroy'])->name('omzet_destroy');
+        Route::put('/labarugi_store', [AdminController::class, 'labarugi_store'])->name('labarugi_store');
+        Route::put('/labarugi_update/{id}', [AdminController::class, 'labarugi_update'])->name('labarugi_update');
         Route::delete('/labarugi_destroy/{id}', [AdminController::class, 'labarugi_destroy'])->name('labarugi_destroy');
         // Route::match(['get', 'post'], '/neraca-store', [AdminController::class, 'neraca_store'])->name('neraca_store');
         Route::put('/neraca-store', [AdminController::class, 'neraca_store'])->name('neraca_store');
