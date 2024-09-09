@@ -107,6 +107,8 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-        //
+        // dd($cart);
+        $cart->delete();
+        return redirect()->route('cart')->with('success', 'Produk berhasil dihapus dari keranjang.');
     }
 }

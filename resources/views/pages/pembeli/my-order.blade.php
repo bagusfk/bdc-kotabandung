@@ -264,7 +264,7 @@
                             <!-- Modal footer -->
                             <div
                                 class="flex items-center rounded-b border-t border-gray-200 p-4 dark:border-gray-600 md:p-5">
-                                <a href="https://wa.me/{no telp admin}?text=Hello%20Admin" target="_blank"
+                                <a href="https://wa.me/081222541485?text=Hello%20Admin" target="_blank"
                                     data-modal-hide="default-modal" type="button"
                                     class="w-full rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-500">Tanya
                                     Admin</a>
