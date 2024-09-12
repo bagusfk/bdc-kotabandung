@@ -35,7 +35,7 @@
                                 @elseif ($transaction->payment_status == 'paid' && $transaction->order_status == 'selesai')
                                     <div class="rounded-md bg-green-500 px-2 py-1 text-sm text-white">Selesai</div>
                                 @elseif ($transaction->order_status == 'cancel')
-                                    <div class="rounded-md bg-red-500 px-2 py-1 text-sm text-white">Cancle</div>
+                                    <div class="rounded-md bg-red-500 px-2 py-1 text-sm text-white">Cancel</div>
                                 @endif
                             </div>
                             {{-- <a href="" class="text-primary">Lacak Pesanan></a> --}}

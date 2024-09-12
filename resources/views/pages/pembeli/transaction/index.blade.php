@@ -162,7 +162,7 @@
             <div class="grid gap-4 max-lg:grid-cols-2 max-md:grid-cols-1 lg:grid-cols-3">
                 <div class="my-4 flex items-start">
                     <img class="w-10" src="{{ asset('assets/location-dot-solid.svg') }}" alt="">
-                    <span class="ml-4">Jl. Wastukencana No.2, Babakan Ciamis, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40117</span>
+                    <span class="ml-4"><span class="text-lg font-bold">Bagian Perekonomian<br>Balaikota Bandung</span><br> Babakan Ciamis, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40117</span>
                 </div>
                 <div class="my-4 w-full">
                 </div>
