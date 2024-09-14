@@ -42,6 +42,7 @@
                         </div>
                         <div class="flex justify-between py-4">
                             <div class="flex items-start gap-3">
+                                {{-- @dd($transaction) --}}
                                 <img src="{{ asset($transaction->orders->first()->item->product_pictures()->first()->product_picture) }}"
                                     alt="" class="h-16 w-16">
                                 <div>
