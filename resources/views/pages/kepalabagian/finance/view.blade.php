@@ -26,35 +26,35 @@
 
     <div class="flex justify-between">
         <div class="flex items-center">
-            <svg class="w-6 h-6 inline-flex" xmlns="http://www.w3.org/2000/svg"
+            <svg class="inline-flex h-6 w-6" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
                 <path
                     d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zm64 320H64V320c35.3 0 64 28.7 64 64zM64 192V128h64c0 35.3-28.7 64-64 64zM448 384c0-35.3 28.7-64 64-64v64H448zm64-192c-35.3 0-64-28.7-64-64h64v64zM176 256a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zm76-48c0 9.7 6.9 17.7 16 19.6V276h-4c-11 0-20 9-20 20s9 20 20 20h24 24c11 0 20-9 20-20s-9-20-20-20h-4V208c0-11-9-20-20-20H272c-11 0-20 9-20 20z" />
             </svg>
-            <span class="text-2xl font-semibold ml-[1rem]">Kelola Keuangan</span>
+            <span class="ml-[1rem] text-2xl font-semibold">Kelola Keuangan</span>
         </div>
     </div>
 
-    <div class="w-fit flex mt-[1rem]">
-        <label class="inline-flex items-center mr-4">
-            <input class="rounded-full mr-2" type="radio" name="kategori" id="neraca_radio" value="neraca" checked>
+    <div class="mt-[1rem] flex w-fit">
+        <label class="mr-4 inline-flex items-center">
+            <input class="mr-2 rounded-full" type="radio" name="kategori" id="neraca_radio" value="neraca" checked>
             <p>Neraca</p>
         </label>
-        <label class="inline-flex items-center mr-4">
-            <input class="rounded-full mr-2" type="radio" name="kategori" id="labarugi_radio" value="labarugi">
+        <label class="mr-4 inline-flex items-center">
+            <input class="mr-2 rounded-full" type="radio" name="kategori" id="labarugi_radio" value="labarugi">
             <p>Laba/Rugi</p>
         </label>
         <label class="inline-flex items-center">
-            <input class="rounded-full mr-2" type="radio" name="kategori" id="omzet_radio" value="omzet">
+            <input class="mr-2 rounded-full" type="radio" name="kategori" id="omzet_radio" value="omzet">
             <p>Omzet</p>
         </label>
     </div>
     <div id="neraca_content">
-        <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
-            <label for="" class="font-bold text-lg block text-center">Neraca</label>
-            <table class="display nowrap text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 pt-[.5rem]"
+        <div class="relative my-[1rem] min-h-[20rem] overflow-x-auto sm:rounded-lg">
+            <label for="" class="block text-center text-lg font-bold">Neraca</label>
+            <table class="display nowrap pt-[.5rem] text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400"
                 id="dataTable1" width="100%" cellspacing="0" cellpadding="10">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead class="bg-gray-300 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center">NO</th>
                         <th scope="col" class="px-6 py-3 text-center">TANGGAL</th>
@@ -102,11 +102,11 @@
     </div>
 
     <div id="labarugi_content">
-        <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
-            <label for="" class="font-bold text-lg block text-center">Laba / Rugi</label>
-            <table class="display nowrap text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 pt-[.5rem]"
+        <div class="relative my-[1rem] min-h-[20rem] overflow-x-auto sm:rounded-lg">
+            <label for="" class="block text-center text-lg font-bold">Laba / Rugi</label>
+            <table class="display nowrap pt-[.5rem] text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400"
                 id="dataTable2" style="width: 100%;">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead class="bg-gray-300 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center">NO</th>
                         <th scope="col" class="px-6 py-3 text-center">TANGGAL</th>
@@ -158,11 +158,11 @@
     </div>
 
     <div id="omzet_content" class="relative">
-        <div class="relative overflow-x-auto sm:rounded-lg my-[1rem] min-h-[20rem]">
-            <label for="" class="font-bold text-lg block text-center">Omzet</label>
-            <table class="display nowrap text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 pt-[.5rem]"
+        <div class="relative my-[1rem] min-h-[20rem] overflow-x-auto sm:rounded-lg">
+            <label for="" class="block text-center text-lg font-bold">Omzet</label>
+            <table class="display nowrap pt-[.5rem] text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400"
                 id="dataTable3" style="width: 100%;">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead class="bg-gray-300 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center">
                             No
@@ -295,12 +295,6 @@
                 layout: {
                     topStart: {
                         buttons: [{
-                                text: 'Add',
-                                action: function() {
-                                    // Trigger the hidden button with data-target for create
-                                    $('#createModal1').click();
-                                }
-                            }, {
                                 extend: 'excel',
                                 title: 'Neraca',
                                 exportOptions: {
