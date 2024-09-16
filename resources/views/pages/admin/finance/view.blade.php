@@ -202,21 +202,48 @@
                             },
                             {
                                 extend: 'pdf',
-                                title: 'Neraca',
+                                title: 'Neraca\n12 Agustus 2021', // Title with line break
                                 exportOptions: {
                                     columns: ':not(:first-child):not(:last-child)' // Exclude the first and last columns
+                                },
+                                customize: function(doc) {
+                                    // Center the title in the PDF
+                                    doc.styles.title = {
+                                        alignment: 'center', // Center alignment
+                                        fontSize: 18, // Font size for title
+                                        bold: true // Bold the title
+                                    };
+                                    // Optional: Add custom styling for the table
+                                    doc.content[1].table.widths = ['*', '*', '*', '*',
+                                        '*'
+                                    ]; // Adjust table column widths
                                 }
                             },
                             {
                                 extend: 'print',
-                                title: 'Neraca',
+                                title: '',
                                 exportOptions: {
-                                    columns: ':not(:first-child):not(:last-child)' // Exclude the first and last columns
+                                    columns: ':not(:first-child):not(:last-child)' // Exclude first and last columns
+                                },
+                                customize: function(win) {
+                                    // Get the month from the first filtered row
+                                    // var filteredMonth = table.column(1, {
+                                    //     search: 'applied'
+                                    // }).data()[0];
+                                    // Insert dynamic month in the print header
+                                    $(win.document.body).prepend(
+                                        '<h3 style="text-align:center;">Laporan Neraca<br></h3>'
+                                    );
+                                    $(win.document.body).find('table').addClass('display').css(
+                                        'width', '100%');
                                 }
                             }
                         ]
                     }
                 }
+            });
+            $('#dataTable1_filter input').on('keyup', function() {
+                table.search(this.value).draw(); // Default DataTables search
             });
             $('#dataTable2').DataTable({
                 footerCallback: function(row, data, start, end, display) {

@@ -183,7 +183,7 @@
 
 <div id="tableModal1" tabindex="-1" role="dialog"
     class="fixed top-0 modal left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative w-full max-w-2xl max-h-full">
+    <div class="relative max-w-6xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -207,30 +207,33 @@
                 <form id="createForm" action="{{ route('neraca_store') }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="mb-4">
-                        <label for="dated" class="block text-sm font-medium text-gray-700">Tanggal</label>
-                        <input type="date" name="dated" id="dated"
-                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="kode" class="block text-sm font-medium text-gray-700">Kode</label>
-                        <input type="text" name="kode" id="kode"
-                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="description" class="block text-sm font-medium text-gray-700">Keterangan</label>
-                        <input type="text" name="description" id="description"
-                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="debit" class="block text-sm font-medium text-gray-700">Debit</label>
-                        <input type="number" name="debit" id="debit"
-                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="kredit" class="block text-sm font-medium text-gray-700">Kredit</label>
-                        <input type="number" name="kredit" id="kredit"
-                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <div class="flex gap-4">
+                        <div class="mb-4">
+                            <label for="dated" class="block text-sm font-medium text-gray-700">Tanggal</label>
+                            <input type="date" name="dated" id="dated"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label for="kode" class="block text-sm font-medium text-gray-700">Kode</label>
+                            <input type="text" name="kode" id="kode"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label for="description"
+                                class="block text-sm font-medium text-gray-700">Keterangan</label>
+                            <input type="text" name="description" id="description"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label for="debit" class="block text-sm font-medium text-gray-700">Debit</label>
+                            <input type="number" name="debit" id="debit"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label for="kredit" class="block text-sm font-medium text-gray-700">Kredit</label>
+                            <input type="number" name="kredit" id="kredit"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
                     </div>
                     <div class="flex justify-end mt-6">
                         <button type="button"

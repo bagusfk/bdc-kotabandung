@@ -295,12 +295,6 @@
                 layout: {
                     topStart: {
                         buttons: [{
-                                text: 'Add',
-                                action: function() {
-                                    // Trigger the hidden button with data-target for create
-                                    $('#createModal1').click();
-                                }
-                            }, {
                                 extend: 'excel',
                                 title: 'Neraca',
                                 exportOptions: {
@@ -379,12 +373,6 @@
                 layout: {
                     topStart: {
                         buttons: [{
-                                text: 'Add',
-                                action: function() {
-                                    // Trigger the hidden button with data-target for create
-                                    $('#createModal2').click();
-                                }
-                            }, {
                                 extend: 'excel',
                                 title: 'Laba / Rugi',
                                 exportOptions: {
@@ -455,13 +443,6 @@
                 layout: {
                     topStart: {
                         buttons: [{
-                                text: 'Add',
-                                action: function() {
-                                    // Trigger the hidden button with data-target for create
-                                    $('#createAddOmzet').click();
-                                }
-                            },
-                            {
                                 extend: 'excel',
                                 title: 'Omzet',
                                 exportOptions: {
