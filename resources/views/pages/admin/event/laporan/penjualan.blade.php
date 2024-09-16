@@ -8,14 +8,14 @@
     </style>
 
     <div class="table_1">
-        <div class="w-fit mt-[1rem]">
-            <h2 class="text-lg font-semibold border-b-2 border-black">Penjualan Event</h2>
+        <div class="mt-[1rem] w-fit">
+            <h2 class="border-b-2 border-black text-lg font-semibold">Penjualan Event</h2>
         </div>
 
-        <div class="relative overflow-x-auto my-[1rem]">
+        <div class="relative my-[1rem] overflow-x-auto">
             <table id="dataTable"
-                class="display no-wrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                class="display no-wrap w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
                             No
@@ -50,7 +50,7 @@
                     @foreach ($laporan as $data)
                         <tr>
                             <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                                 {{ $no++ }}
                             </th>
                             <td class="px-6 py-4">
@@ -73,19 +73,21 @@
                             <td class="px-6 py-4">
                                 {{ $data->sales_result }}
                             </td>
-                            <td class="px-6 py-4 flex">
-                                <a href="{{ url('/edit-laporan/' . $data->id) }}"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</a>
-                                <form method="POST" action="{{ url('/delete-laporan/' . $data->id) }}"
-                                    enctype="multipart/form-data">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit"
-                                        class="font-medium text-red-700 dark:text-blue-500 hover:underline"
-                                        onclick="return confirm('Are you sure')">
-                                        Delete
-                                    </button>
-                                </form>
+                            <td class="px-6 py-4">
+                                <div class="flex">
+                                    <a href="{{ url('/edit-laporan/' . $data->id) }}"
+                                        class="mr-2 font-medium text-blue-600 hover:underline dark:text-blue-500">Edit</a>
+                                    <form method="POST" action="{{ url('/delete-laporan/' . $data->id) }}"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit"
+                                            class="font-medium text-red-700 hover:underline dark:text-blue-500"
+                                            onclick="return confirm('Are you sure')">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

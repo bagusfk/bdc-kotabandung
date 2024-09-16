@@ -35,13 +35,14 @@
                                 @elseif ($transaction->payment_status == 'paid' && $transaction->order_status == 'selesai')
                                     <div class="rounded-md bg-green-500 px-2 py-1 text-sm text-white">Selesai</div>
                                 @elseif ($transaction->order_status == 'cancel')
-                                    <div class="rounded-md bg-red-500 px-2 py-1 text-sm text-white">Cancle</div>
+                                    <div class="rounded-md bg-red-500 px-2 py-1 text-sm text-white">Cancel</div>
                                 @endif
                             </div>
                             {{-- <a href="" class="text-primary">Lacak Pesanan></a> --}}
                         </div>
                         <div class="flex justify-between py-4">
                             <div class="flex items-start gap-3">
+                                {{-- @dd($transaction) --}}
                                 <img src="{{ asset($transaction->orders->first()->item->product_pictures()->first()->product_picture) }}"
                                     alt="" class="h-16 w-16">
                                 <div>

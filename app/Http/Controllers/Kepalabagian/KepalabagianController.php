@@ -115,8 +115,9 @@ class KepalabagianController extends Controller
         foreach ($category as $cat) {
             $cat->url = json_decode($cat->url); // Decode JSON to access properties
         }
-
-        return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
+        // dd($category);
+        $status = 'Terlaris';
+        return view('pages.kepalabagian.barang.terlaris', compact('category', 'order', 'status'));
     }
 
     public function laris_kg($id)
@@ -142,8 +143,8 @@ class KepalabagianController extends Controller
         foreach ($category as $cat) {
             $cat->url = json_decode($cat->url); // Decode JSON to access properties
         }
-
-        return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
+        $status = 'Laris';
+        return view('pages.kepalabagian.barang.terlaris', compact('category', 'order', 'status'));
     }
 
     public function kurang_laris_kg($id)
@@ -168,8 +169,8 @@ class KepalabagianController extends Controller
         foreach ($category as $cat) {
             $cat->url = json_decode($cat->url); // Decode JSON to access properties
         }
-
-        return view('pages.kepalabagian.barang.terlaris', compact('category', 'order'));
+        $status = 'Kurang Laris';
+        return view('pages.kepalabagian.barang.terlaris', compact('category', 'order', 'status'));
     }
 
     public function manage_ksm()

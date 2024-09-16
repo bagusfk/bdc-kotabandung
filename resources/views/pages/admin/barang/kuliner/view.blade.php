@@ -1,7 +1,7 @@
 @extends('layouts.appadmin')
 @section('title', 'Kuliner')
 @section('content')
-    <style>
+    {{-- <style>
         table,
         th {
             border: 1px solid black;
@@ -13,20 +13,22 @@
             text-align: center;
             padding: 0 40px 0 40px;
         }
-    </style>
+    </style> --}}
     <h3 class="text-sm">Produk Kuliner Terjual</h3>
     <div class="flex">
         <div class="w-full">
-            <table>
+            <table class="w-full border-collapse border border-slate-500">
                 <thead>
-                    <th>Produk</th>
-                    <th>Terjual</th>
+                    <tr>
+                        <th class="border border-slate-600 px-16 text-center">Produk</th>
+                        <th class="border border-slate-600 px-16 text-center">Terjual</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($order as $orders)
                         <tr>
-                            <td>{{ $orders->product_name }}</td>
-                            <td>{{ $orders->total_qty }}</td>
+                            <td class="border border-slate-600 px-16 text-center">{{ $orders->product_name }}</td>
+                            <td class="border border-slate-600 px-16 text-center">{{ $orders->total_qty }}</td>
                         </tr>
                     @endforeach
                 </tbody>

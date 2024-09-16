@@ -252,7 +252,8 @@ class AdminController extends Controller
             ->groupBy('category_name', 'category_url')
             ->orderBy('total_qty', 'desc')
             ->get();
-        return view('pages.admin.barang.fashion.view', compact('category'));
+        $status = "Terlaris";
+        return view('pages.admin.barang.fashion.view', compact('category', 'status'));
     }
 
     public function terlaris_id($id)
@@ -278,8 +279,8 @@ class AdminController extends Controller
         foreach ($category as $cat) {
             $cat->url = json_decode($cat->url); // Decode JSON to access properties
         }
-
-        return view('pages.admin.barang.fashion.view', compact('order', 'category'));
+        $status = "Terlaris";
+        return view('pages.admin.barang.fashion.view', compact('order', 'category', 'status'));
     }
 
     public function laris_id($id)
@@ -306,8 +307,8 @@ class AdminController extends Controller
         foreach ($category as $cat) {
             $cat->url = json_decode($cat->url); // Decode JSON to access properties
         }
-
-        return view('pages.admin.barang.fashion.view', compact('order', 'category'));
+        $status = "Laris";
+        return view('pages.admin.barang.fashion.view', compact('order', 'category', 'status'));
     }
 
     public function kurang_laris_id($id)
@@ -333,8 +334,8 @@ class AdminController extends Controller
         foreach ($category as $cat) {
             $cat->url = json_decode($cat->url); // Decode JSON to access properties
         }
-
-        return view('pages.admin.barang.fashion.view', compact('order', 'category'));
+        $status = "Kurang Laris";
+        return view('pages.admin.barang.fashion.view', compact('order', 'category', 'status'));
     }
 
     // public function kriya()

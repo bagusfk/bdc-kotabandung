@@ -3,7 +3,7 @@
         <div class="grid gap-4 max-md:grid-cols-1 lg:grid-cols-3 max-lg:grid-cols-2">
             <div class="flex items-start my-4">
                 <img class="w-4" src="{{ asset('assets/location-dot-solid.svg') }}" alt="">
-                <span class="ml-4"><span class="text-lg font-bold">Auditorium - Balaikota Bandung</span><br> Babakan Ciamis, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40117</span>
+                <span class="ml-4"><span class="text-lg font-bold">Bagian Perekonomian<br>Balaikota Bandung</span><br> Babakan Ciamis, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40117</span>
             </div>
             <div class="w-full my-4">
                 <a href="{{route('company_profile')}}" class="w-full flex items-center pl-[3.5rem] hover:underline max-md:py-2">
