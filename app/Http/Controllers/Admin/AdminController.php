@@ -524,11 +524,11 @@ class AdminController extends Controller
 
     public function delete_ksm($id)
     {
-        $user = User::find($id);
-        $user->role = 'pembeli';
+        // $user = User::find($id);
+        // $user->role = 'pembeli';
 
         // Simpan perubahan
-        $user->save();
+        // $user->save();
 
         $kelolaDataKsm = Kelola_data_ksm::where('id', $id)->first();
         if ($kelolaDataKsm) {

@@ -105,7 +105,7 @@
                         <div class="h-28 w-28 overflow-hidden rounded-full bg-blue-300">
                             {{-- replace to image --}}
                             <div class="h-full w-full overflow-clip bg-red-300">
-                                <img class="me-2 h-full rounded-full"
+                                <img class="me-2 h-28 w-28 rounded-full"
                                     src="{{ asset(Auth::user()->ksm()->first()->owner_picture ?? 'assets\default\image\default-picture.jpg') }}"
                                     alt="">
                             </div>
