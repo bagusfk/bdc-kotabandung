@@ -203,7 +203,7 @@
                                     </div>
                                     <div class="mb-2 flex justify-between">
                                         <div class="flex items-start gap-3">
-                                            <div class="font-bold">Aamat</div>
+                                            <div class="font-bold">Alamat</div>
                                         </div>
                                         <div class="flex flex-col items-end">
                                             <div class="price font-bold">{{ Auth::user()->name }}</div>
