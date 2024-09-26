@@ -15,7 +15,14 @@ class EventController extends Controller
      */
     public function index()
     {
-        $ksmId = Auth::id();
+        if (!Auth::check()) {
+            $ksmId = Auth::id();
+        } elseif (Auth::user()->ksm->isNotEmpty()) {
+            $ksmId = Auth::user()->ksm->first()->id;
+            // dd($ksmId);
+        } else {
+            $ksmId = Auth::id();
+        }
         $data['register_event'] = Register_event::where('ksm_id', $ksmId)->get();
         $data['users'] = User::all();
         $data['event'] = Event::all();
@@ -35,7 +42,9 @@ class EventController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $user = Auth::id();
+        // $user = Auth::id();
+        $user = Auth::user()->ksm->first()->id;
+        // dd($user);
         $event = new Register_event();
         $event->ksm_id = $user;
         $event->event_id = $id;
