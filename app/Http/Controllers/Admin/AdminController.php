@@ -27,6 +27,8 @@ use App\Models\Kelola_data_penjualan;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Transaction;
+use App\Services\KMeansClusteringService;
+use Illuminate\Support\Facades\Cache;
 
 class AdminController extends Controller
 {
@@ -1238,5 +1240,38 @@ class AdminController extends Controller
         Transaction::find($id)->update(['no_resi' => $request->input('no_resi')]);
 
         return redirect()->back()->with('status', 'Status Order Berhasil Diubah');
+    }
+
+    public function clusteringProduk()
+    {
+        // Ambil semua produk dengan data penjualan
+        $products = Stokbarang::all(['id', 'name', 'sales'])->toArray();
+
+        // Jalankan K-Means Clustering
+        $kMeans = new KMeansClusteringService($products);
+        $clusters = $kMeans->run();
+
+        $terlaris = Stokbarang::with(['product_pictures', 'ksm', 'category'])
+            ->whereIn('id', array_column($clusters[2], 'id'))
+            ->orderBy('sales', 'desc')
+            ->get();
+        $laris = Stokbarang::with(['product_pictures', 'ksm', 'category'])
+            ->whereIn('id', array_column($clusters[1], 'id'))
+            ->orderBy('sales', 'desc')
+            ->get();
+        $kurangLaris = Stokbarang::with(['product_pictures', 'ksm', 'category'])
+            ->whereIn('id', array_column($clusters[0], 'id'))
+            ->orderBy('sales', 'desc')
+            ->get();
+
+        $salesByCategory = Stokbarang::selectRaw('categories.category as category_name, SUM(stokbarangs.sales) as total_sales')
+            ->join('categories', 'stokbarangs.category_id', '=', 'categories.id')
+            ->groupBy('categories.category')
+            ->get();
+
+        // dd($items);
+
+        // dd($terlaris, $laris, $kurangLaris);
+        return view('pages.admin.barang.clustering.index', compact('terlaris', 'laris', 'kurangLaris', 'salesByCategory'));
     }
 }

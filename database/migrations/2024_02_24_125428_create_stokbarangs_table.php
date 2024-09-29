@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('price')->nullable();
             $table->date('expired')->nullable();
             $table->text('description')->nullable();
+            $table->integer('sales')->nullable();
             $table->timestamps();
         });
     }

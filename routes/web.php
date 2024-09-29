@@ -46,6 +46,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/dashboard-admin', [AdminController::class, 'index'])->name('index');
         // items
         Route::get('/kelola-barang', [AdminController::class, 'manage_items'])->name('manage-items');
+        Route::get('/clustering-produk', [AdminController::class, 'clusteringProduk'])->name('clustering.produk');
         Route::get('/tambah-barang', [AdminController::class, 'add_item'])->name('add-item');
         Route::put('/create-item', [AdminController::class, 'create_item'])->name('create-item');
         Route::get('/edit-item/{id}', [AdminController::class, 'edit_item'])->name('edit-item');
