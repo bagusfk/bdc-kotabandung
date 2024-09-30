@@ -107,7 +107,7 @@
                                 class="w-full border border-gray-200 bg-white p-[0.5rem] shadow dark:border-gray-700 dark:bg-gray-800 sm:p-[1rem]">
                                 <div class="h-40 w-40 overflow-clip">
                                     <img class="h-full w-full object-cover"
-                                        src="{{ asset($item->product_pictures()->first()->product_picture) }}"
+                                        src="{{ asset($item->product_pictures()->first()->product_picture ?? 'assets/default/image/default-product.jpg') }}"
                                         alt="" />
                                 </div>
                                 <h5

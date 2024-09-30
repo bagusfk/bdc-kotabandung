@@ -20,7 +20,7 @@ class ItemSeeder extends Seeder
         foreach (range(1, 50) as $index) {
             DB::table('stokbarangs')->insert([
                 'category_id' => $faker->numberBetween(1, 3), // asumsi category_id antara 1 sampai 3
-                'kelola_data_ksm_id' => $faker->numberBetween(1, 20), // asumsi kelola_data_ksm_id antara 1 sampai 5
+                'kelola_data_ksm_id' => $faker->numberBetween(2, 24), // asumsi kelola_data_ksm_id antara 1 sampai 5
                 'name' => $faker->word,
                 'weight' => $faker->numberBetween(100, 1000), // berat antara 100 - 1000 gram
                 'stock' => $faker->numberBetween(1, 100),

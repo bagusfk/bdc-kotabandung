@@ -125,6 +125,7 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
     Route::middleware('role:kepalabagian')->group(function () {
         Route::get('/dashboard/kepalabagian', [KepalabagianController::class, 'index'])->name('kepalabagiandashboard');
         Route::get('/kelola_barang', [KepalabagianController::class, 'manage_items_kg'])->name('manage_items_kg');
+        Route::get('/clustering-produk-kabag', [KepalabagianController::class, 'clusteringProduk'])->name('clustering.produk.kabag');
         Route::get('/terlaris_/{id}', [KepalabagianController::class, 'terlaris_kg'])->name('terlaris_kg');
         Route::get('/laris_/{id}', [KepalabagianController::class, 'laris_kg'])->name('laris_kg');
         Route::get('/kurang_laris_/{id}', [KepalabagianController::class, 'kurang_laris_kg'])->name('kurang_laris_kg');
