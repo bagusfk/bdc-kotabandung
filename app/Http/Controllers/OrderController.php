@@ -302,7 +302,14 @@ class OrderController extends Controller
         // dd($request->query('order_id'));
         $order_id = $request->query('order_id');
         // return response($order_id);
-        $transaction = Transaction::where('order_id', $order_id);
+        $transaction = Transaction::where('order_id', $order_id)->first();
+        $orders = Order::where('transaction_id', $transaction->id)->get();
+
+        foreach ($orders as $order) {
+            $order->item->update([
+                'stock' => $order->item->stock - 1
+            ]);
+        }
 
         // $client = new Client();
 
@@ -325,6 +332,7 @@ class OrderController extends Controller
             'payment_type' => $payment_type['payment_type'],
             'payment_status' => 'paid',
         ]);
+
         return view('pages.pembeli.transaction.finish-payment');
 
         // return response()->json([
