@@ -166,11 +166,73 @@
                     <img src="{{ asset('assets/default/image/no-product.png') }}" alt="">
                     <div>Belum ada produk</div>
                 </div>
-                <p>hubungi admin via WhatsApp untuk menambahkan produk di brand yang kamu buat</p>
+                <p>Tambahkan produk kamu sekarang secara mandiri</p>
                 {{-- isi no telp admin --}}
-                <a href="https://wa.me/081222541485?text=Hello%20Admin" target="_blank"
-                    class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white">Hubungi Admin</a>
+                <a href="{{ route('add-item-ksm', $brand->id) }}"
+                    class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white">Tambah Produk</a>
             </div>
         @endif
+    </div>
+    <div class="flex justify-between rounded-xl bg-white px-4 py-4 text-lg font-bold leading-none text-gray-800">
+        <div>Laporan Event</div>
+    </div>
+    <div class="grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
+        @forelse ($events as $event)
+            <div
+                class="flex w-full cursor-pointer flex-col rounded-xl bg-white p-2 active:scale-[0.99] active:bg-gray-50">
+                <div class="flex flex-wrap gap-2">
+                    <div class="h-16 w-16 rounded-lg bg-gray-100">
+                        <img class="h-full w-full rounded-lg object-cover"
+                            src="{{ asset($event->event->event_poster ?? 'assets/default/image/default-product.jpg') }}">
+                    </div>
+                    <div class="flex flex-1 rounded-xl">
+                        <div class="text-wrap flex-1 pr-4 text-lg font-semibold leading-none">
+                            {{ $event->event->event_name }}
+                        </div>
+                        <div class="flex items-center">
+                            <span
+                                class="{{ $event->status_validation == 'agree' ? 'bg-green-400 text-white' : 'border-primary' }} rounded-md border px-4 py-1 text-sm">{{ $event->status_validation }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between gap-2 px-2 py-2 text-xs">
+                    <div>Penyelenggara: {{ $event->event->event_organizer }}</div>
+                    <div>Lokasi: {{ $event->event->location }}</div>
+                    <div>Tgl: {{ $event->event->event_date_start }} / {{ $event->event->event_date_end }}</div>
+                </div>
+                <div class="p-2">
+                    <div class="text-xs font-medium">Deskripsi:</div>
+                    <div class="line-clamp-2 text-xs">
+                        {{ $event->event->description }}
+                    </div>
+                </div>
+                @if ($event->status_validation == 'agree')
+                    <form action="{{ route('laporan-event-ksm', $event->id) }}" method="POST"
+                        enctype="multipart/form-data" class="bg-gray-100 px-2 py-2">
+                        @csrf
+                        @method('POST')
+                        <label for="event-report">Masukan Penghasilan Saat Event</label>
+                        <input type="hidden" name="laporanId"
+                            value="{{ $event->laporanEvent()->first()->id ?? '' }}">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">Rp.</span>
+                            <input id="event-report" type="number" name="salesResult"
+                                value="{{ $event->laporanEvent->isNotEmpty() ? $event->laporanEvent()->first()->sales_result : '' }}"
+                                class="w-full rounded-md border-transparent" placeholder="Contoh: 4000000" required>
+                            <button type="submit"
+                                class="rounded-md border border-primary px-2 py-1 font-medium text-primary hover:bg-primary hover:text-white dark:text-blue-500">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                @else
+                    <div class="bg-gray-100 px-2 py-2 text-sm">
+                        Tunggu sampai disetujui
+                    </div>
+                @endif
+            </div>
+        @empty
+            <p>Tidak ada event yang diikuti.</p>
+        @endforelse
     </div>
 </x-ksm.app>

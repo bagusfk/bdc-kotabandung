@@ -11,9 +11,23 @@ class Kelola_data_ksm extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id', 'user_id', 'owner', 'brand_name', 'category_id', 'no_wa', 'link_ig', 'nib',
-        'business_entity', 'address', 'product_sales_address', 'business_description',
-        'owner_picture', 'logo_image', 'nib_document', 'permission_letter', 'cluster'
+        'id',
+        'user_id',
+        'owner',
+        'brand_name',
+        'category_id',
+        'no_wa',
+        'link_ig',
+        'nib',
+        'business_entity',
+        'address',
+        'product_sales_address',
+        'business_description',
+        'owner_picture',
+        'logo_image',
+        'nib_document',
+        'permission_letter',
+        'cluster'
     ];
 
     public function category()
@@ -34,5 +48,10 @@ class Kelola_data_ksm extends Model
     public function cart()
     {
         return $this->hasMany(Cart::class);
+    }
+
+    public function register_event()
+    {
+        return $this->hasMany(Register_event::class, 'ksm_id', 'id');
     }
 }

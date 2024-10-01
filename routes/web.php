@@ -153,6 +153,8 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/dashboard-ksm/edit-item/{id}', [KelolaDataKsmController::class, 'edit_item'])->name('edit-item-ksm');
         Route::put('/dashboard-ksm/update-item', [KelolaDataKsmController::class, 'update_item'])->name('update-item-ksm');
         Route::delete('/dashboard-ksm/delete-item/{id}', [KelolaDataKsmController::class, 'delete_item'])->name('delete-item-ksm');
+
+        Route::post('/dashboard-ksm/laporan-event/{id}', [KelolaDataKsmController::class, 'laporan_event'])->name('laporan-event-ksm');
     });
 
     Route::middleware('role:pembeli,ksm')->group(function () {

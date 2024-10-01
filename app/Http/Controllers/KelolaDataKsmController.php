@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\category;
 use App\Models\Kelola_data_ksm;
 use App\Models\Stokbarang;
+use App\Models\Register_event;
+use App\Models\Event;
+use App\Models\Laporan_kegiatan_event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -58,6 +61,9 @@ class KelolaDataKsmController extends Controller
         $data['products'] = Stokbarang::where('kelola_data_ksm_id', $id)->get();
         // dd($data['products']);
         $data['brand_id'] = $id;
+
+        $data['events'] = $data['brand']->register_event()->get();
+        // dd($data['events']);
 
         return view('pages.ksm.brand-products', $data);
     }
@@ -252,5 +258,26 @@ class KelolaDataKsmController extends Controller
     {
         Stokbarang::findOrFail($id)->delete();
         return redirect()->back();
+    }
+
+    public function laporan_event(Request $request, Register_event $id)
+    {
+        $request->validate([
+            'salesResult' => 'required',
+        ]);
+        // dd($request->request, $id);
+        if ($request->laporanId != null) {
+            $laporan = Laporan_kegiatan_event::findOrFail($request->laporanId);
+            $laporan->update([
+                'sales_result' => $request->salesResult
+            ]);
+            return redirect()->back()->with('berhasil', 'Laporan berhasil diubah');
+        } else {
+            Laporan_kegiatan_event::create([
+                'regist_id' => $id->id,
+                'sales_result' => $request->salesResult
+            ]);
+            return redirect()->back()->with('berhasil', 'Laporan berhasil dibuat');
+        }
     }
 }
