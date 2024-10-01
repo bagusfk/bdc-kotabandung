@@ -147,6 +147,12 @@ Route::middleware(['auth', 'revalidate'])->group(function () {
         Route::get('/dashboard-ksm/brand-products/details/{id}', [KelolaDataKsmController::class, 'showDetail'])->name('product_detail_ksm');
         Route::get('/register-event/{id}', [EventController::class, 'store'])->name('register_event');
         Route::get('/view-pdf/{path}', [KelolaDataKsmController::class, 'viewPdf'])->name('view_pdf');
+
+        Route::get('/dashboard-ksm/tambah-barang/{id}', [KelolaDataKsmController::class, 'add_item'])->name('add-item-ksm');
+        Route::put('/dashboard-ksm/create-item', [KelolaDataKsmController::class, 'create_item'])->name('create-item-ksm');
+        Route::get('/dashboard-ksm/edit-item/{id}', [KelolaDataKsmController::class, 'edit_item'])->name('edit-item-ksm');
+        Route::put('/dashboard-ksm/update-item', [KelolaDataKsmController::class, 'update_item'])->name('update-item-ksm');
+        Route::delete('/dashboard-ksm/delete-item/{id}', [KelolaDataKsmController::class, 'delete_item'])->name('delete-item-ksm');
     });
 
     Route::middleware('role:pembeli,ksm')->group(function () {

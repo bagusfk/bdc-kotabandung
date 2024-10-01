@@ -11,9 +11,9 @@
     </div>
     <div class="gap-4 rounded-xl bg-white px-4 py-4 text-lg font-bold leading-none text-gray-800">
         <div class="flex flex-wrap gap-2">
-            <div class="h-72 w-72 rounded-lg bg-red-300">
+            <div class="h-72 w-72 rounded-lg bg-gray-100">
                 <img class="h-full w-full rounded-lg object-cover"
-                    src="{{ asset($product->product_pictures()->first()->product_picture) }}">
+                    src="{{ asset($product->product_pictures()->first()->product_picture ?? 'assets/default/image/default-product.jpg') }}">
             </div>
             <div class="flex flex-1 flex-col rounded-xl">
                 <div class="text-wrap pr-4 text-3xl font-semibold leading-none">{{ $product->name }}</div>

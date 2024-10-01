@@ -98,40 +98,67 @@
             </div>
         </div>
     </div>
-    <div class="rounded-xl bg-white px-4 py-4 text-lg font-bold leading-none text-gray-800">Daftar Produk</div>
+    <div class="flex justify-between rounded-xl bg-white px-4 py-4 text-lg font-bold leading-none text-gray-800">
+        <div>Daftar Produk</div>
+        <a href="{{ route('add-item-ksm', $brand->id) }}"
+            class="rounded-md border border-blue-500 px-2 py-1 text-sm font-medium text-blue-500">
+            Tambah produk
+        </a>
+    </div>
     <div class="grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
         @if ($products->count() > 0)
             @foreach ($products as $product)
-                <a href="{{ route('product_detail_ksm', $product->id) }}"
+                <div
                     class="flex w-full cursor-pointer flex-col rounded-xl bg-white p-2 active:scale-[0.99] active:bg-gray-50">
-                    <div class="flex flex-wrap gap-2">
-                        <div class="h-16 w-16 rounded-lg bg-red-300">
-                            <img class="h-full w-full rounded-lg object-cover"
-                                src="{{ asset($product->product_pictures()->first()->product_picture) }}">
-                        </div>
-                        <div class="flex flex-1 rounded-xl">
-                            <div class="text-wrap flex-1 pr-4 text-lg font-semibold leading-none">{{ $product->name }}
+                    <a href="{{ route('product_detail_ksm', $product->id) }}">
+                        <div class="flex flex-wrap gap-2">
+                            <div class="h-16 w-16 rounded-lg bg-gray-100">
+                                <img class="h-full w-full rounded-lg object-cover"
+                                    src="{{ asset($product->product_pictures()->first()->product_picture ?? 'assets/default/image/default-product.jpg') }}">
                             </div>
-                            <div class="flex items-center">
-                                <svg class="h-[24px] w-[24px] text-gray-800 dark:text-white" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="3" d="m9 5 7 7-7 7" />
-                                </svg>
+                            <div class="flex flex-1 rounded-xl">
+                                <div class="text-wrap flex-1 pr-4 text-lg font-semibold leading-none">
+                                    {{ $product->name }}
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="h-[24px] w-[24px] text-gray-800 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="3" d="m9 5 7 7-7 7" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
+                        <div class="flex justify-between gap-2 px-4 py-2 text-xs">
+                            <div>Harga: {{ $product->price }}</div>
+                            <div>Weight: {{ $product->weight }}</div>
+                            <div>Stok: {{ $product->stock }}</div>
+                        </div>
+                        <div class="p-2">
+                            <div class="text-xs font-medium">Deskripsi:</div>
+                            <div class="line-clamp-2 text-xs">
+                                {{ $product->description }}
+                                {{-- <a href="#">Edit</a> --}}
+                            </div>
+                        </div>
+                    </a>
+                    <div class="flex justify-end gap-2 bg-gray-100 px-2 py-2">
+                        <div>
+                            <a href="{{ route('edit-item-ksm', $product->id) }}"
+                                class="rounded-md bg-green-400 px-4 py-1 text-white">Edit</a>
+                        </div>
+                        <form action="{{ route('delete-item-ksm', $product->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="font-medium text-red-700 dark:text-blue-500"
+                                onclick="return confirm('Are you sure you want to delete product?')">
+                                Delete
+                            </button>
+                        </form>
                     </div>
-                    <div class="flex justify-between gap-2 px-4 py-2 text-xs">
-                        <div>Harga: {{ $product->price }}</div>
-                        <div>Weight: {{ $product->weight }}</div>
-                        <div>Stok: {{ $product->stock }}</div>
-                    </div>
-                    <div class="p-2">
-                        <div class="text-xs font-medium">Deskripsi:</div>
-                        <div class="line-clamp-2 text-xs">{{ $product->description }}</div>
-                    </div>
-                </a>
+                </div>
             @endforeach
         @else
             <div class="col-span-2 flex flex-col items-center gap-4 rounded-xl bg-white py-16">
