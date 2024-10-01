@@ -209,8 +209,23 @@
                             {{-- @foreach ($users as $user) --}}
                             @if (!$alreadyRegistered && $user->ksm && $user->id == $auth)
                                 <div class="my-8">
-                                    <a href="{{ url('register-event/' . $data->id) }}"
-                                        class="register-btn flex w-full justify-center rounded-xl bg-primary px-3 py-2 text-white">Daftar</a>
+                                    <form action="{{ route('register-event', $data->id) }}" method="post"
+                                        class="flex flex-col gap-4 rounded-xl bg-gray-100 p-4">
+                                        @csrf
+                                        @method('post')
+                                        <div class="">
+                                            <label for="select_ksm">Pilih Brand yang ingin kamu daftarkan</label>
+                                            <select name="ksm_id" id="select_ksm" class="w-full rounded-md">
+                                                <option value="">Pilih KSM</option>
+                                                @foreach ($user->ksm as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->brand_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit"
+                                            class="register-btn flex w-full justify-center rounded-xl bg-primary px-3 py-2 text-white">Daftar</button>
+                                    </form>
                                 </div>
                             @elseif($alreadyRegistered)
                                 <div class="my-8">

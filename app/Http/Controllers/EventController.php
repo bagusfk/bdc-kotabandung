@@ -42,11 +42,14 @@ class EventController extends Controller
      */
     public function store(Request $request, $id)
     {
-        // $user = Auth::id();
-        $user = Auth::user()->ksm->first()->id;
-        // dd($user);
+        $request->validate([
+            'ksm_id' => 'required',
+        ]);
+
+        $ksmId = $request->ksm_id;
+
         $event = new Register_event();
-        $event->ksm_id = $user;
+        $event->ksm_id = $ksmId;
         $event->event_id = $id;
         $event->save();
 
