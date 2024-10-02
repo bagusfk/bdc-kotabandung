@@ -571,7 +571,7 @@ class AdminController extends Controller
     public function laporan_event()
     {
         $data['laporan'] = Laporan_kegiatan_event::all();
-        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
+        $data['register_event'] = Register_event::all();
 
         return view('pages.admin.laporan.laporanevent', $data);
     }
