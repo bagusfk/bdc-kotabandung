@@ -11,7 +11,10 @@ class Laporan_kegiatan_event extends Model
 
     protected $fillable = [
         'regist_id',
-        'sales_result'
+        'sales_result',
+        'stock_sold',
+        'starting_price',
+        'price_at_event',
     ];
 
     public function register_event()

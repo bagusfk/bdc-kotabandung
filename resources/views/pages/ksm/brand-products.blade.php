@@ -177,8 +177,9 @@
         <div>Laporan Event</div>
     </div>
     <div class="grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
+        {{-- @dd($events) --}}
         @forelse ($events as $event)
-            <div
+            <div x-data="{ show: false }"
                 class="flex w-full cursor-pointer flex-col rounded-xl bg-white p-2 active:scale-[0.99] active:bg-gray-50">
                 <div class="flex flex-wrap gap-2">
                     <div class="h-16 w-16 rounded-lg bg-gray-100">
@@ -207,24 +208,75 @@
                     </div>
                 </div>
                 @if ($event->status_validation == 'agree')
-                    <form action="{{ route('laporan-event-ksm', $event->id) }}" method="POST"
-                        enctype="multipart/form-data" class="bg-gray-100 px-2 py-2">
-                        @csrf
-                        @method('POST')
-                        <label for="event-report">Masukan Penghasilan Saat Event</label>
-                        <input type="hidden" name="laporanId"
-                            value="{{ $event->laporanEvent()->first()->id ?? '' }}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-lg">Rp.</span>
-                            <input id="event-report" type="number" name="salesResult"
-                                value="{{ $event->laporanEvent->isNotEmpty() ? $event->laporanEvent()->first()->sales_result : '' }}"
-                                class="w-full rounded-md border-transparent" placeholder="Contoh: 4000000" required>
-                            <button type="submit"
-                                class="rounded-md border border-primary px-2 py-1 font-medium text-primary hover:bg-primary hover:text-white dark:text-blue-500">
-                                Simpan
-                            </button>
-                        </div>
-                    </form>
+                    <button @click="show = !show" class="rounded-md bg-primary px-4 py-2 text-white">
+                        Lihat Laporan
+                    </button>
+                    <div x-show="show" class="mt-2 rounded-lg bg-gray-100 px-2 py-2">
+                        <form action="{{ route('laporan-event-ksm', $event->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @method('POST')
+                            <div class="mt-[1rem]">
+                                <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Stock
+                                    Terjual</label>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg">Rp.</span>
+                                    <input type="number" name="stock_sold" id="stock_sold_{{ $event->id }}"
+                                        placeholder="stok terjual" data-event-id="{{ $event->id }}"
+                                        value="{{ $event->laporanEvent->isNotEmpty() ? $event->laporanEvent()->first()->stock_sold : '' }}"
+                                        class="block w-full rounded-lg border bg-gray-50 p-2 text-lg text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+                                </div>
+                                @error('stock_sold')
+                                    <span class="text-sm text-red-500"><br />{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mt-[1rem]">
+                                <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Harga Awal
+                                    Produk</label>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg">Rp.</span>
+                                    <input type="number" name="starting_price" id="starting_price"
+                                        placeholder="harga awal produk"
+                                        value="{{ $event->laporanEvent->isNotEmpty() ? $event->laporanEvent()->first()->starting_price : '' }}"
+                                        class="block w-full rounded-lg border bg-gray-50 p-2 text-lg text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+                                </div>
+                                @error('starting_price')
+                                    <span class="text-sm text-red-500"><br />{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mt-[1rem]">
+                                <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Harga Di
+                                    Event</label>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg">Rp.</span>
+                                    <input type="number" name="price_at_event"
+                                        id="price_at_event_{{ $event->id }}" placeholder="harga saat event"
+                                        data-event-id="{{ $event->id }}"
+                                        value="{{ $event->laporanEvent->isNotEmpty() ? $event->laporanEvent()->first()->price_at_event : '' }}"
+                                        class="block w-full rounded-lg border bg-gray-50 p-2 text-lg text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+                                </div>
+                                @error('price_at_event')
+                                    <span class="text-sm text-red-500"><br />{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <label for="event-report"
+                                class="my-2 block text-sm font-medium text-gray-900 dark:text-white">Penghasilan
+                                Event <span class="text-sm italic text-gray-400">*otomatis terisi</span></label>
+                            <input type="hidden" name="laporanId"
+                                value="{{ $event->laporanEvent()->first()->id ?? '' }}">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg">Rp.</span>
+                                <input id="event-report_{{ $event->id }}" type="number" name="salesResult"
+                                    value="{{ $event->laporanEvent->isNotEmpty() ? $event->laporanEvent()->first()->sales_result : '' }}"
+                                    class="w-full rounded-md border-transparent" placeholder="total penjualan"
+                                    required>
+                                <button type="submit"
+                                    class="rounded-md border border-primary px-2 py-1 font-medium text-primary hover:bg-primary hover:text-white dark:text-blue-500">
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 @else
                     <div class="bg-gray-100 px-2 py-2 text-sm">
                         Tunggu sampai disetujui
@@ -234,5 +286,21 @@
         @empty
             <p>Tidak ada event yang diikuti.</p>
         @endforelse
+        <script>
+            document.querySelectorAll('[id^="price_at_event_"], [id^="stock_sold_"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    const eventId = this.dataset.eventId;
+                    const priceAtEvent = document.getElementById(`price_at_event_${eventId}`).value;
+                    const stockSold = document.getElementById(`stock_sold_${eventId}`).value;
+
+                    if (priceAtEvent && stockSold) {
+                        const totalSales = priceAtEvent * stockSold;
+                        document.getElementById(`event-report_${eventId}`).value = totalSales;
+                    } else {
+                        document.getElementById(`event-report_${eventId}`).value = '';
+                    }
+                });
+            });
+        </script>
     </div>
 </x-ksm.app>

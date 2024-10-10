@@ -14,7 +14,7 @@
 
         <div class="relative my-[1rem] overflow-x-auto">
             <table id="dataTable"
-                class="display no-wrap w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                class="display nowrap w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
@@ -36,7 +36,16 @@
                             Peserta
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Hasil Penjualan
+                            Stok Terjual
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Harga Produk
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Harga di Event
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            total Penjualan
                         </th>
                         <th scope="col" class="px-6 py-3">
                             #
@@ -70,8 +79,17 @@
                             <td class="px-6 py-4">
                                 {{ $data->register_event->ksm->owner }}
                             </td>
+                            <td class="px-6 py-3">
+                                {{ $data->stock_sold }}
+                            </td>
+                            <td class="px-6 py-3">
+                                Rp.{{ $data->starting_price }}
+                            </td>
+                            <td class="px-6 py-3">
+                                Rp.{{ $data->price_at_event }}
+                            </td>
                             <td class="px-6 py-4">
-                                {{ $data->sales_result }}
+                                Rp.{{ $data->sales_result }}
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex">

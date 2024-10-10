@@ -8,14 +8,14 @@
     </style>
 
     <div class="table_1">
-        <div class="w-fit mt-[1rem]">
-            <h2 class="text-lg font-semibold border-b-2 border-black">Penjualan Event</h2>
+        <div class="mt-[1rem] w-fit">
+            <h2 class="border-b-2 border-black text-lg font-semibold">Penjualan Event</h2>
         </div>
 
-        <div class="relative overflow-x-auto my-[1rem]">
+        <div class="relative my-[1rem] overflow-x-auto">
             <table id="dataTable"
-                class="display no-wrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                class="display nowrap w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
                             No
@@ -36,6 +36,15 @@
                             Peserta
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Stok Terjual
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Harga Produk
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Harga di Event
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Hasil Penjualan
                         </th>
                     </tr>
@@ -47,7 +56,7 @@
                     @foreach ($laporan as $data)
                         <tr>
                             <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                                 {{ $no++ }}
                             </th>
                             <td class="px-6 py-4">
@@ -67,8 +76,17 @@
                             <td class="px-6 py-4">
                                 {{ $data->register_event->ksm->owner }}
                             </td>
+                            <td class="px-6 py-3">
+                                {{ $data->stock_sold }}
+                            </td>
+                            <td class="px-6 py-3">
+                                Rp.{{ $data->starting_price }}
+                            </td>
+                            <td class="px-6 py-3">
+                                Rp.{{ $data->price_at_event }}
+                            </td>
                             <td class="px-6 py-4">
-                                {{ $data->sales_result }}
+                                Rp.{{ $data->sales_result }}
                             </td>
                         </tr>
                     @endforeach
@@ -78,14 +96,14 @@
     </div>
 
     <div class="table_2">
-        <div class="w-fit mt-[1rem]">
-            <h2 class="text-lg font-semibold border-b-2 border-black">Daftar Event</h2>
+        <div class="mt-[1rem] w-fit">
+            <h2 class="border-b-2 border-black text-lg font-semibold">Daftar Event</h2>
         </div>
 
-        <div class="relative overflow-x-auto my-[1rem]">
+        <div class="relative my-[1rem] overflow-x-auto">
             <table id="dataTable2"
-                class="w-full text-sm text-left text-gray-500 display nowrap rtl:text-right dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                class="display nowrap w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
                             No
@@ -126,7 +144,7 @@
                     @foreach ($register_event as $data)
                         <tr>
                             <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                                 {{ $no++ }}
                             </th>
                             <td class="px-6 py-4">
@@ -170,10 +188,10 @@
                             <td class="px-6 py-4">
                                 @if ($data->status_validation == 'prosess')
                                     <button type="button"
-                                        class="agree-button text-white bg-primary hover:bg-primary focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-primary dark:hover:bg-primary focus:outline-none dark:focus:ring-blue-800"
+                                        class="agree-button mb-2 me-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-primary dark:hover:bg-primary dark:focus:ring-blue-800"
                                         data-id="{{ $data->id }}">Izinkan</button>
                                     <button type="button" data-id="{{ $data->id }}"
-                                        class="reject-button text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Tolak</button>
+                                        class="reject-button mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tolak</button>
                                 @elseif ($data->status_validation == 'agree')
                                     Izinkan
                                 @else

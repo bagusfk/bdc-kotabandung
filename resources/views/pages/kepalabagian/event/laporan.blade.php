@@ -7,14 +7,13 @@
         }
     </style>
 
-    <div class="w-fit mt-[1rem]">
-        <h2 class="text-lg font-semibold border-b-2 border-black">Laporan Event</h2>
+    <div class="mt-[1rem] w-fit">
+        <h2 class="border-b-2 border-black text-lg font-semibold">Laporan Event</h2>
     </div>
 
-    <div class="relative overflow-x-auto my-[1rem]">
-        <table id="dataTable"
-            class="display min-h-[20rem] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div class="relative my-[1rem] overflow-x-auto">
+        <table id="dataTable" class="display nowrap w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+            <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
                         No
@@ -32,6 +31,15 @@
                         Peserta
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Stok Terjual
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Harga Produk
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Harga di Event
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Hasil Penjualan
                     </th>
                 </tr>
@@ -42,7 +50,7 @@
                 @endphp
                 @foreach ($laporan as $data)
                     <tr>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4">
@@ -57,8 +65,17 @@
                         <td class="px-6 py-4">
                             {{ $data->register_event->ksm->owner }}
                         </td>
+                        <td class="flex justify-center px-6 py-3">
+                            {{ $data->stock_sold }}
+                        </td>
+                        <td class="px-6 py-3">
+                            Rp.{{ $data->starting_price }}
+                        </td>
+                        <td class="px-6 py-3">
+                            Rp.{{ $data->price_at_event }}
+                        </td>
                         <td class="px-6 py-4">
-                            {{ $data->sales_result }}
+                            Rp.{{ $data->sales_result }}
                         </td>
                     </tr>
                 @endforeach

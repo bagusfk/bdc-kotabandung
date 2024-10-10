@@ -264,19 +264,30 @@ class KelolaDataKsmController extends Controller
     {
         $request->validate([
             'salesResult' => 'required',
+            'stock_sold' => 'required',
+            'starting_price' => 'required',
+            'price_at_event' => 'required'
         ]);
         // dd($request->request, $id);
         if ($request->laporanId != null) {
             $laporan = Laporan_kegiatan_event::findOrFail($request->laporanId);
             $laporan->update([
-                'sales_result' => $request->salesResult
+                'sales_result' => $request->salesResult,
+                'stock_sold' => $request->stock_sold,
+                'starting_price' => $request->starting_price,
+                'price_at_event' => $request->price_at_event,
             ]);
             return redirect()->back()->with('berhasil', 'Laporan berhasil diubah');
         } else {
             Laporan_kegiatan_event::create([
                 'regist_id' => $id->id,
-                'sales_result' => $request->salesResult
+                'sales_result' => $request->salesResult,
+                'stock_sold' => $request->stock_sold,
+                'starting_price' => $request->starting_price,
+                'price_at_event' => $request->price_at_event,
             ]);
+            $id->report = 'yes';
+            $id->save();
             return redirect()->back()->with('berhasil', 'Laporan berhasil dibuat');
         }
     }
