@@ -555,7 +555,7 @@ class AdminController extends Controller
 
     public function daftar_event()
     {
-        $data['register_event'] = Register_event::paginate(3, ['*'], 'register_event');
+        $data['register_event'] = Register_event::all();
 
         return view('pages.admin.event.daftar.view', $data);
     }
@@ -700,6 +700,9 @@ class AdminController extends Controller
         $request->validate([
             "regist_id" => 'required',
             "sales_result" => 'required',
+            "stock_sold" => 'required',
+            "starting_price" => 'required',
+            "price_at_event" => 'required',
         ]);
 
         $registerEvent = Register_event::findOrFail($request->regist_id);
@@ -710,8 +713,11 @@ class AdminController extends Controller
         $laporan = new Laporan_kegiatan_event();
         $laporan->regist_id = $request->regist_id;
         $laporan->sales_result = $request->sales_result;
+        $laporan->stock_sold = $request->stock_sold;
+        $laporan->starting_price = $request->starting_price;
+        $laporan->price_at_event = $request->price_at_event;
         $laporan->save();
-
+        // dd($laporan);
 
         return redirect('/penjualan-event');
     }
@@ -733,13 +739,19 @@ class AdminController extends Controller
         $request->validate([
             "regist_id" => 'required',
             "sales_result" => 'required',
+            "stock_sold" => 'required',
+            "starting_price" => 'required',
+            "price_at_event" => 'required',
         ]);
         $laporan = Laporan_kegiatan_event::find($request->id);
         $laporan->regist_id = $request->regist_id;
         $laporan->sales_result = $request->sales_result;
+        $laporan->stock_sold = $request->stock_sold;
+        $laporan->starting_price = $request->starting_price;
+        $laporan->price_at_event = $request->price_at_event;
         $laporan->save();
 
-        return redirect('/laporan-event');
+        return redirect('/penjualan-event');
     }
 
     public function delete_laporan_event($id)
