@@ -707,6 +707,9 @@ class AdminController extends Controller
 
         $registerEvent = Register_event::findOrFail($request->regist_id);
         $registerEvent->report = 'yes';
+        $registerEvent->ksm->item()->first()->update([
+            'stock' => $registerEvent->ksm->item()->first()->stock - $request->stock_sold,
+        ]);
         $registerEvent->save();
 
 
@@ -744,6 +747,8 @@ class AdminController extends Controller
             "price_at_event" => 'required',
         ]);
         $laporan = Laporan_kegiatan_event::find($request->id);
+        $previousStockSold = $laporan->stock_sold;
+
         $laporan->regist_id = $request->regist_id;
         $laporan->sales_result = $request->sales_result;
         $laporan->stock_sold = $request->stock_sold;
@@ -751,6 +756,13 @@ class AdminController extends Controller
         $laporan->price_at_event = $request->price_at_event;
         $laporan->save();
 
+        $stockDifference = $request->stock_sold - $previousStockSold;
+
+        // Kurangi stok produk hanya dengan selisih stok terjual
+        $product = $laporan->register_event->ksm->item()->first();
+        $product->update([
+            'stock' => $product->stock - $stockDifference,
+        ]);
         return redirect('/penjualan-event');
     }
 

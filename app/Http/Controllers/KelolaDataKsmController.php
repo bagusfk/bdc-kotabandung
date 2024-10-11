@@ -268,18 +268,31 @@ class KelolaDataKsmController extends Controller
             'starting_price' => 'required',
             'price_at_event' => 'required'
         ]);
-        // dd($request->request, $id);
+        // dd($request->request, $id->ksm->item()->first()->stock);
         if ($request->laporanId != null) {
             $laporan = Laporan_kegiatan_event::findOrFail($request->laporanId);
+            // Periksa stok terjual sebelumnya
+            $previousStockSold = $laporan->stock_sold;
             $laporan->update([
                 'sales_result' => $request->salesResult,
                 'stock_sold' => $request->stock_sold,
                 'starting_price' => $request->starting_price,
                 'price_at_event' => $request->price_at_event,
             ]);
+
+            // Hitung selisih stok terjual baru dengan yang sebelumnya
+            $stockDifference = $request->stock_sold - $previousStockSold;
+
+            // Kurangi stok produk hanya dengan selisih stok terjual
+            $product = $id->ksm->item()->first();
+            $product->update([
+                'stock' => $product->stock - $stockDifference,
+            ]);
+            // dd($data);
             return redirect()->back()->with('berhasil', 'Laporan berhasil diubah');
         } else {
-            Laporan_kegiatan_event::create([
+            $createLaporan = new Laporan_kegiatan_event;
+            $createLaporan->create([
                 'regist_id' => $id->id,
                 'sales_result' => $request->salesResult,
                 'stock_sold' => $request->stock_sold,
@@ -288,6 +301,11 @@ class KelolaDataKsmController extends Controller
             ]);
             $id->report = 'yes';
             $id->save();
+            //mengurangi stok produknya
+            $data = $id->ksm->item()->first()->update([
+                'stock' => $id->ksm->item()->first()->stock - $request->stock_sold,
+            ]);
+            // dd($data);
             return redirect()->back()->with('berhasil', 'Laporan berhasil dibuat');
         }
     }

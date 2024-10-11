@@ -307,8 +307,8 @@ class OrderController extends Controller
 
         foreach ($orders as $order) {
             $order->item->update([
-                'stock' => $order->item->stock - 1,
-                'sales' => $order->item->sales + 1
+                'stock' => $order->item->stock - $order->qty,
+                'sales' => $order->item->sales + $order->qty
             ]);
         }
 

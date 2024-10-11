@@ -220,11 +220,11 @@
                                 <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Stock
                                     Terjual</label>
                                 <div class="flex items-center gap-2">
-                                    <span class="text-lg">Rp.</span>
                                     <input type="number" name="stock_sold" id="stock_sold_{{ $event->id }}"
                                         placeholder="stok terjual" data-event-id="{{ $event->id }}"
                                         value="{{ $event->laporanEvent->isNotEmpty() ? $event->laporanEvent()->first()->stock_sold : '' }}"
                                         class="block w-full rounded-lg border bg-gray-50 p-2 text-lg text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+                                    <span class="text-lg">Pcs</span>
                                 </div>
                                 @error('stock_sold')
                                     <span class="text-sm text-red-500"><br />{{ $message }}</span>
